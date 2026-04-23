@@ -428,11 +428,13 @@
   };
 
   window.confirmRegister = function(name, table) {
-    const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.random().toString(36).substring(2,6);
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g,"") + "_" + Math.random().toString(36).substring(2,6);
     currentPlayer = { name, table, id };
-    localStorage.setItem('alex50_player', JSON.stringify(currentPlayer));
-    document.getElementById('register-msg').innerHTML = `<div class="msg msg-success">Bienvenue <strong>${name}</strong> ! 🤠</div>`;
-    setTimeout(() => showPanel('quiz'), 900);
+    answers = {};
+    localStorage.setItem("alex50_player", JSON.stringify(currentPlayer));
+    localStorage.removeItem("alex50_answers_" + id);
+    document.getElementById("register-msg").innerHTML = `<div class="msg msg-success">Bienvenue <strong>${name}</strong> ! 🤠</div>`;
+    setTimeout(() => showPanel("quiz"), 900);
   };
 
   // ═══ QUIZ ═══
