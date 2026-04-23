@@ -405,15 +405,33 @@
   };
 
   // ═══ REGISTER ═══
-  window.registerPlayer = function() {
+  window.registerPlayer = async function() {
     const name = document.getElementById('player-name').value.trim();
     const table = document.getElementById('player-table').value.trim();
     const msg = document.getElementById('register-msg');
     if (!name) { msg.innerHTML = '<div class="msg msg-error">Entrez votre prénom !</div>'; return; }
+
+    // Vérifie si le prénom existe déjà dans Firebase
+    const existing = Object.values(allScores).find(p => p.name.toLowerCase() === name.toLowerCase());
+    if (existing && !document.getElementById('confirm-duplicate')) {
+      msg.innerHTML = `<div class="msg" style="background:#fff3cd;color:#856404;border:1px solid #ffe69c;">
+        <strong>${name}</strong> est déjà inscrit(e) !<br>
+        Si c'est vous, cliquez <strong>Continuer quand même</strong>.<br>
+        Sinon, ajoutez un surnom pour vous différencier.
+        <div style="display:flex;gap:0.5rem;margin-top:0.6rem;justify-content:center;flex-wrap:wrap;">
+          <button id="confirm-duplicate" class="btn" style="width:auto;font-size:0.8rem;padding:0.4rem 0.9rem" onclick="confirmRegister('${name.replace(/'/g,"\\'")}','${table.replace(/'/g,"\\'")}')">Continuer quand même</button>
+        </div>
+      </div>`;
+      return;
+    }
+    confirmRegister(name, table);
+  };
+
+  window.confirmRegister = function(name, table) {
     const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.random().toString(36).substring(2,6);
     currentPlayer = { name, table, id };
     localStorage.setItem('alex50_player', JSON.stringify(currentPlayer));
-    msg.innerHTML = `<div class="msg msg-success">Bienvenue <strong>${name}</strong> ! 🤠</div>`;
+    document.getElementById('register-msg').innerHTML = `<div class="msg msg-success">Bienvenue <strong>${name}</strong> ! 🤠</div>`;
     setTimeout(() => showPanel('quiz'), 900);
   };
 
@@ -525,25 +543,18 @@
     }
 
     let html = `<table class="leaderboard-table"><thead><tr>
-      <th>#</th><th>Cowboy / Cowgirl</th><th>Score</th><th>Progression</th>
+      <th>#</th><th>Cowboy / Cowgirl</th><th>Score</th>
     </tr></thead><tbody>`;
 
     players.forEach((p, i) => {
       const rank = i + 1;
       const rankClass = rank <= 3 ? 'rank-' + rank : 'rank-other';
       const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
-      const pct = p.totalQuestions ? Math.round(p.answered / p.totalQuestions * 100) : 0;
       const isCurrent = currentPlayer && p.name === currentPlayer.name && p.table === (currentPlayer.table||'');
       html += `<tr style="${isCurrent ? 'background:rgba(201,147,10,0.15);' : ''}">
         <td><span class="rank-badge ${rankClass}">${rankEmoji}</span></td>
         <td class="name-cell">${esc(p.name)}${p.table ? `<br><span style="font-size:0.72rem;color:#888;font-weight:400">${esc(p.table)}</span>` : ''}${isCurrent ? ' <span style="font-size:0.7rem;color:var(--gold);font-weight:700">(moi)</span>' : ''}</td>
         <td class="score-cell">${p.score}<span style="font-size:0.7rem;color:#aaa">/${MAX_SCORE}</span></td>
-        <td>
-          <div class="progress-bar" style="margin:0;width:70px;display:inline-block;vertical-align:middle">
-            <div class="progress-fill" style="width:${pct}%"></div>
-          </div>
-          <span style="font-size:0.72rem;color:#888;margin-left:4px">${pct}%</span>
-        </td>
       </tr>`;
     });
 
