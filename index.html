@@ -245,7 +245,6 @@
             font-family: 'Lato', sans-serif;
         }
 
-        /* SECRET DES RÉPONSES : Pas de vert/rouge, juste du gris Shérif */
         .opt-btn.selected {
             background: var(--brown) !important;
             color: white !important;
@@ -266,7 +265,6 @@
             margin: 10px 0;
         }
 
-        /* Scrollbar Stylisée Far West */
         .lb-scroll::-webkit-scrollbar { width: 12px; }
         .lb-scroll::-webkit-scrollbar-track { background: var(--cream-dark); border-radius: 10px; }
         .lb-scroll::-webkit-scrollbar-thumb { 
@@ -454,7 +452,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- BASE DE DONNÉES DES QUESTIONS (INTÉGRALE) ---
+        // --- BASE DE DONNÉES DES QUESTIONS ---
         const QUESTIONS_DB = {
             vins: [
                 { id: 'v1', label: 'Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], answer: 1 },
@@ -494,6 +492,7 @@
         const MAX_SCORE = 46;
 
         let player = JSON.parse(localStorage.getItem('alex_50_p'));
+        // AJOUT : Clé unique par ID de joueur pour éviter les réponses grisées entre utilisateurs
         let answers = player ? (JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {}) : {};
         let liveScores = {};
 
@@ -514,7 +513,6 @@
 
             if(!name) { alert("Nom d'équipe obligatoire !"); return; }
 
-            // Sécurité Doublon
             const exists = Object.values(liveScores).find(s => s.name.toLowerCase() === name.toLowerCase());
             if(exists && !confirm("Cette équipe existe déjà. Continuer quand même ?")) return;
 
@@ -522,6 +520,9 @@
             player = { id, name, table };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
             
+            // On charge les réponses spécifiques à ce nouvel ID (vide par défaut)
+            answers = JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {};
+
             document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi ! Transfert au Quiz...</b>";
             setTimeout(() => showPanel('quiz'), 1200);
         };
@@ -601,6 +602,14 @@
                 done: Object.keys(answers).length,
                 lastUpdate: Date.now()
             });
+
+            // AJOUT : Popup de résultat quand tout est répondu (24 questions)
+            if(Object.keys(answers).length === 24) {
+                setTimeout(() => {
+                    alert("🌵 ANALYSE TERMINÉE, COWBOY !\n\nFélicitations, vous avez complété la dégustation.\n\nScore final : " + score + " / 46 points.\n\nAllez voir votre rang dans le classement !");
+                    showPanel('leaderboard');
+                }, 500);
+            }
         };
 
         function updateQuizProgress() {
@@ -640,7 +649,6 @@
             }
             document.getElementById('lb-display').innerHTML = html + `</table>`;
 
-            // Stats des Moyennes
             renderCategoryStats(list);
         }
 
