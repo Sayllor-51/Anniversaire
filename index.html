@@ -367,8 +367,8 @@
                 <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
                 <div class="card-body">
                     <div class="union-box">
-                        <strong>L'UNION FAIT LA FORCE !</strong><br>
-                        "Les adultes dégustent les vins, les enfants identifient les chips Bret's ! Formez une équipe mixte pour gagner."
+                        <strong>L’UNION FAIT LA FORCE POUR LES 50 ANS D’ALEXANDRE !</strong><br>
+                        "Les parents sur le vin, les enfants sur les chips : jouez en équipe pour gagner le trophée du Saloon !"
                     </div>
                     
                     <div class="input-group">
@@ -492,11 +492,9 @@
         const MAX_SCORE = 46;
 
         let player = JSON.parse(localStorage.getItem('alex_50_p'));
-        // AJOUT : Clé unique par ID de joueur pour éviter les réponses grisées entre utilisateurs
         let answers = player ? (JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {}) : {};
         let liveScores = {};
 
-        // --- NAVIGATION ---
         window.showPanel = (panelId) => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('panel-' + panelId).classList.add('active');
@@ -506,7 +504,6 @@
             window.scrollTo(0,0);
         };
 
-        // --- INSCRIPTION ---
         window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
@@ -519,15 +516,12 @@
             const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*10000);
             player = { id, name, table };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
-            
-            // On charge les réponses spécifiques à ce nouvel ID (vide par défaut)
             answers = JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {};
 
             document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi ! Transfert au Quiz...</b>";
             setTimeout(() => showPanel('quiz'), 1200);
         };
 
-        // --- RENDU DU QUIZ ---
         function renderQuiz() {
             if(!player) { showPanel('register'); return; }
             document.getElementById('q-player-name').textContent = "🤠 Équipe : " + player.name;
@@ -572,7 +566,6 @@
             updateQuizProgress();
         }
 
-        // --- VOTE ---
         window.handleVote = async (qId, cat, choiceIdx) => {
             if(answers[qId] !== undefined) return;
 
@@ -580,7 +573,6 @@
             localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
             renderQuiz();
 
-            // Calcul du score en temps réel
             let score = 0;
             let byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
 
@@ -593,7 +585,6 @@
                 });
             }
 
-            // Envoi Firebase
             await setDoc(doc(db, "scores", player.id), {
                 name: player.name,
                 table: player.table,
@@ -603,10 +594,9 @@
                 lastUpdate: Date.now()
             });
 
-            // AJOUT : Popup de résultat quand tout est répondu (24 questions)
             if(Object.keys(answers).length === 24) {
                 setTimeout(() => {
-                    alert("🌵 ANALYSE TERMINÉE, COWBOY !\n\nFélicitations, vous avez complété la dégustation.\n\nScore final : " + score + " / 46 points.\n\nAllez voir votre rang dans le classement !");
+                    alert("🌵 ANALYSE TERMINÉE, COWBOY !\n\nFélicitations, vous avez complété la dégustation.\n\nScore final : " + score + " / 46 points.");
                     showPanel('leaderboard');
                 }, 500);
             }
@@ -616,12 +606,14 @@
             const total = 24;
             const done = Object.keys(answers).length;
             const pct = Math.round((done / total) * 100);
-            document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-percent').textContent = pct + "%";
-            document.getElementById('q-main-fill').style.width = pct + "%";
+            const doneCountEl = document.getElementById('q-done-count');
+            const pctEl = document.getElementById('q-percent');
+            const mainFillEl = document.getElementById('q-main-fill');
+            if(doneCountEl) doneCountEl.textContent = done;
+            if(pctEl) pctEl.textContent = pct + "%";
+            if(mainFillEl) mainFillEl.style.width = pct + "%";
         }
 
-        // --- RENDU CLASSEMENT ---
         function renderLeaderboard() {
             const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
             let html = `<table class="lb-table">`;
@@ -648,7 +640,6 @@
                 });
             }
             document.getElementById('lb-display').innerHTML = html + `</table>`;
-
             renderCategoryStats(list);
         }
 
@@ -657,7 +648,6 @@
             const cats = { vins: 12, fromages: 16, charcuteries: 12, chips: 6 };
             const labels = { vins: '🍷 Vins', fromages: '🧀 Fromages', charcuteries: '🥩 Charcuterie', chips: '🥔 Chips' };
             let html = "";
-
             for(const c in cats) {
                 const avg = (list.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / list.length).toFixed(1);
                 const pct = (avg / cats[c]) * 100;
@@ -675,18 +665,12 @@
             return div.innerHTML;
         }
 
-        // --- ÉCOUTE TEMPS RÉEL FIREBASE ---
         onSnapshot(collection(db, "scores"), (snapshot) => {
             liveScores = {};
-            snapshot.forEach(doc => {
-                liveScores[doc.id] = doc.data();
-            });
-            if(document.getElementById('panel-leaderboard').classList.contains('active')) {
-                renderLeaderboard();
-            }
+            snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
+            if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
         });
 
-        // Init automatique
         if(player) showPanel('quiz');
     </script>
 </body>
