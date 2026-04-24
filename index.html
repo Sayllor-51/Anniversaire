@@ -305,6 +305,36 @@
             transform: scale(1.1);
         }
 
+        /* --- MODALE WANTED (RÉSULTATS) --- */
+        .modal-overlay {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        
+        .wanted-card {
+            background: #e3c08d;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 30px;
+            border: 15px solid #5C3A1E;
+            border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 10px, #8B5E3C 10px, #8B5E3C 20px) 20;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+            position: relative;
+        }
+
+        .wanted-card h2 { font-family: 'Rye', serif; font-size: 2.5rem; color: #2C1810; margin-bottom: 10px; text-transform: uppercase; border-bottom: 2px solid #2C1810; }
+        .wanted-card .score-big { font-family: 'Rye', serif; font-size: 5rem; color: var(--red); margin: 20px 0; text-shadow: 2px 2px 0px white; }
+        .wanted-card p { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.2rem; color: #2C1810; margin-bottom: 20px; }
+
         /* --- PROGRESS BARS --- */
         .pg-container { margin-bottom: 15px; }
         .pg-label {
@@ -434,6 +464,16 @@
 
     </div>
 
+    <div class="modal-overlay" id="result-modal">
+        <div class="wanted-card">
+            <h2>REWARD</h2>
+            <p>VOTRE SCORE FINAL EST DE :</p>
+            <div class="score-big" id="final-score-val">0</div>
+            <p>POINTS SUR 46</p>
+            <button class="btn-gold" onclick="closeResultModal()">VOIR LE CLASSEMENT</button>
+        </div>
+    </div>
+
     <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre - 2024 🎉</div>
 
     <script type="module">
@@ -452,7 +492,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- BASE DE DONNÉES DES QUESTIONS ---
         const QUESTIONS_DB = {
             vins: [
                 { id: 'v1', label: 'Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], answer: 1 },
@@ -507,136 +546,89 @@
         window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
-
             if(!name) { alert("Nom d'équipe obligatoire !"); return; }
-
-            const exists = Object.values(liveScores).find(s => s.name.toLowerCase() === name.toLowerCase());
-            if(exists && !confirm("Cette équipe existe déjà. Continuer quand même ?")) return;
-
             const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*10000);
             player = { id, name, table };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
             answers = JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {};
-
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi ! Transfert au Quiz...</b>";
-            setTimeout(() => showPanel('quiz'), 1200);
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi !</b>";
+            setTimeout(() => showPanel('quiz'), 1000);
         };
 
         function renderQuiz() {
             if(!player) { showPanel('register'); return; }
             document.getElementById('q-player-name').textContent = "🤠 Équipe : " + player.name;
-            
             let html = "";
-            const catTitles = { 
-                vins: '🍷 LES VINS (3 pts)', 
-                fromages: '🧀 LES FROMAGES (2 pts)', 
-                charcuteries: '🥩 LA CHARCUTERIE (2 pts)', 
-                chips: '🥔 CHIPS BRET\'S (1 pt)' 
-            };
-
+            const catTitles = { vins: '🍷 LES VINS (3 pts)', fromages: '🧀 LES FROMAGES (2 pts)', charcuteries: '🥩 LA CHARCUTERIE (2 pts)', chips: '🥔 CHIPS BRET\'S (1 pt)' };
             for(const cat in QUESTIONS_DB) {
-                html += `<div class="card">
-                    <div class="card-header">${catTitles[cat]}</div>
-                    <div class="card-body">`;
-                
+                html += `<div class="card"><div class="card-header">${catTitles[cat]}</div><div class="card-body">`;
                 QUESTIONS_DB[cat].forEach(q => {
                     const userAns = answers[q.id];
                     const isLocked = userAns !== undefined;
-                    
-                    html += `<div class="q-block">
-                        <div class="q-title">${q.label}</div>
-                        <div class="opt-grid">`;
-                    
+                    html += `<div class="q-block"><div class="q-title">${q.label}</div><div class="opt-grid">`;
                     q.options.forEach((opt, idx) => {
                         let btnClass = "opt-btn";
-                        if(isLocked) {
-                            btnClass += " locked";
-                            if(idx === userAns) btnClass += " selected";
-                        }
+                        if(isLocked) { btnClass += " locked"; if(idx === userAns) btnClass += " selected"; }
                         html += `<button class="${btnClass}" onclick="handleVote('${q.id}', '${cat}', ${idx})">${opt}</button>`;
                     });
-                    
                     html += `</div></div>`;
                 });
-                
                 html += `</div></div>`;
             }
-            
             document.getElementById('quiz-render-area').innerHTML = html;
             updateQuizProgress();
         }
 
         window.handleVote = async (qId, cat, choiceIdx) => {
             if(answers[qId] !== undefined) return;
-
             answers[qId] = choiceIdx;
             localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
             renderQuiz();
 
             let score = 0;
             let byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
-
             for(const c in QUESTIONS_DB) {
                 QUESTIONS_DB[c].forEach(q => {
-                    if(answers[q.id] === q.answer) {
-                        score += BAREME[c];
-                        byCat[c] += BAREME[c];
-                    }
+                    if(answers[q.id] === q.answer) { score += BAREME[c]; byCat[c] += BAREME[c]; }
                 });
             }
 
             await setDoc(doc(db, "scores", player.id), {
-                name: player.name,
-                table: player.table,
-                score: score,
-                byCat: byCat,
-                done: Object.keys(answers).length,
-                lastUpdate: Date.now()
+                name: player.name, table: player.table, score: score, byCat: byCat,
+                done: Object.keys(answers).length, lastUpdate: Date.now()
             });
 
             if(Object.keys(answers).length === 24) {
-                setTimeout(() => {
-                    alert("🌵 ANALYSE TERMINÉE, COWBOY !\n\nFélicitations, vous avez complété la dégustation.\n\nScore final : " + score + " / 46 points.");
-                    showPanel('leaderboard');
-                }, 500);
+                document.getElementById('final-score-val').textContent = score;
+                document.getElementById('result-modal').classList.add('active');
             }
+        };
+
+        window.closeResultModal = () => {
+            document.getElementById('result-modal').classList.remove('active');
+            showPanel('leaderboard');
         };
 
         function updateQuizProgress() {
             const total = 24;
             const done = Object.keys(answers).length;
             const pct = Math.round((done / total) * 100);
-            const doneCountEl = document.getElementById('q-done-count');
-            const pctEl = document.getElementById('q-percent');
-            const mainFillEl = document.getElementById('q-main-fill');
-            if(doneCountEl) doneCountEl.textContent = done;
-            if(pctEl) pctEl.textContent = pct + "%";
-            if(mainFillEl) mainFillEl.style.width = pct + "%";
+            if(document.getElementById('q-done-count')) document.getElementById('q-done-count').textContent = done;
+            if(document.getElementById('q-percent')) document.getElementById('q-percent').textContent = pct + "%";
+            if(document.getElementById('q-main-fill')) document.getElementById('q-main-fill').style.width = pct + "%";
         }
 
         function renderLeaderboard() {
             const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
             let html = `<table class="lb-table">`;
-
-            if(list.length === 0) {
-                html += `<tr><td align="center">Aucun Cowboy n'est encore entré dans le Saloon !</td></tr>`;
-            } else {
+            if(list.length === 0) { html += `<tr><td align="center">Recherche des scores...</td></tr>`; } 
+            else {
                 list.forEach((p, index) => {
                     const rank = index + 1;
-                    const pillClass = rank === 1 ? "rank-pill top1" : "rank-pill";
                     const displayRank = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
-
-                    html += `<tr>
-                        <td width="50"><span class="${pillClass}">${displayRank}</span></td>
-                        <td>
-                            <div style="font-weight:900; font-size:1rem; color:var(--brown);">${escapeHtml(p.name)}</div>
-                            <div style="font-size:0.75rem; color:var(--brown-light);">${escapeHtml(p.table)}</div>
-                        </td>
-                        <td align="right">
-                            <div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div>
-                            <div style="font-size:0.6rem; color:#999; text-transform:uppercase;">Sur 46</div>
-                        </td>
-                    </tr>`;
+                    html += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${displayRank}</span></td>
+                        <td><div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div><div style="font-size:0.75rem;">${escapeHtml(p.table)}</div></td>
+                        <td align="right"><div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div></td></tr>`;
                 });
             }
             document.getElementById('lb-display').innerHTML = html + `</table>`;
@@ -650,24 +642,16 @@
             let html = "";
             for(const c in cats) {
                 const avg = (list.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / list.length).toFixed(1);
-                const pct = (avg / cats[c]) * 100;
-                html += `<div class="pg-container">
-                    <div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg} / ${cats[c]}</span></div>
-                    <div class="pg-bar"><div class="pg-fill" style="width:${pct}%"></div></div>
-                </div>`;
+                html += `<div class="pg-container"><div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg}</span></div>
+                    <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c])*100}%"></div></div></div>`;
             }
             document.getElementById('category-stats-area').innerHTML = html;
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
         onSnapshot(collection(db, "scores"), (snapshot) => {
-            liveScores = {};
-            snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
+            liveScores = {}; snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
             if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
         });
 
