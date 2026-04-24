@@ -149,7 +149,7 @@
         .panel.active { display: block; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* --- ÉQUIPE / REGISTER --- */
+        /* --- INSCRIPTION & INPUTS --- */
         .union-box {
             background: var(--red);
             color: white;
@@ -157,7 +157,7 @@
             border-radius: 10px;
             text-align: center;
             margin-bottom: 25px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             line-height: 1.5;
             border: 2px solid var(--gold);
             box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
@@ -203,7 +203,7 @@
 
         .btn-gold:active { transform: translateY(3px); box-shadow: 0 2px 0 #8c6607; }
 
-        /* --- QUIZ --- */
+        /* --- QUIZ & BOUTONS --- */
         .q-block {
             margin-bottom: 2rem;
             border-bottom: 1px dashed var(--brown-light);
@@ -237,6 +237,7 @@
             font-size: 0.9rem;
             transition: all 0.2s;
             font-family: 'Lato', sans-serif;
+            box-shadow: 0 2px 0 var(--cream-dark);
         }
 
         .opt-btn.selected {
@@ -291,24 +292,15 @@
             border: 3px solid var(--brown);
         }
 
-        .lb-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        .lb-table { width: 100%; border-collapse: collapse; }
         .lb-table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
-
-        .lb-table td {
-            padding: 15px 10px;
-            border-bottom: 1px solid var(--cream-dark);
-        }
+        .lb-table td { padding: 15px 10px; border-bottom: 1px solid var(--cream-dark); }
 
         .rank-pill {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 35px;
-            height: 35px;
+            width: 35px; height: 35px;
             border-radius: 50%;
             font-weight: bold;
             font-family: 'Rye', serif;
@@ -398,8 +390,8 @@
                 <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
                 <div class="card-body">
                     <div class="union-box">
-                        <strong>L'UNION FAIT LA FORCE !</strong><br>
-                        "Les adultes dégustent les vins, les enfants identifient les chips Bret's ! Formez une équipe mixte pour gagner."
+                        <strong>PAS DE CAVALIER SEUL !</strong><br>
+                        "Alliez l'expertise des aînés pour les vins aux papilles des plus jeunes pour les Bret's ! Pour gagner, jouez en famille."
                     </div>
                     
                     <div class="input-group">
@@ -409,7 +401,7 @@
 
                     <div class="input-group">
                         <label>VOTRE TABLE</label>
-                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table du Grand Canyon">
+                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table Arizona">
                     </div>
 
                     <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
@@ -535,12 +527,17 @@
             if(!name) { alert("Nom d'équipe obligatoire !"); return; }
 
             const exists = Object.values(liveScores).find(s => s.name.toLowerCase() === name.toLowerCase());
-            if(exists && !confirm("Ce nom existe déjà. Créer un nouveau profil séparé ?")) return;
+            if(exists && !confirm("Ce nom existe déjà au Saloon. Créer un nouveau profil séparé ?")) return;
 
             const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*100000);
             player = { id, name, table };
+            answers = {}; // Reset local immédiat
+            
             localStorage.setItem('alex_50_p', JSON.stringify(player));
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi !</b>";
+            localStorage.removeItem('alex_50_ans_' + id);
+            
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Bienvenue au Saloon !</b>";
+            renderQuiz(); 
             setTimeout(() => showPanel('quiz'), 1000);
         };
 
@@ -604,11 +601,11 @@
         function renderLeaderboard() {
             const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
             let html = `<table class="lb-table">`;
-            if(list.length === 0) html += "<tr><td>Aucun score au saloon...</td></tr>";
+            if(list.length === 0) html += "<tr><td colspan='3' style='text-align:center; padding:20px;'>Aucun cowboy n'a encore tiré...</td></tr>";
             list.forEach((p, index) => {
                 const rank = index + 1;
                 html += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${rank===1?'🥇':rank}</span></td>
-                <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.75rem; color:#666;">${p.table}</div></td>
+                <td><div style="font-weight:900; color:var(--brown);">${p.name}</div><div style="font-size:0.75rem; color:#666;">${p.table}</div></td>
                 <td align="right"><div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div></td></tr>`;
             });
             document.getElementById('lb-display').innerHTML = html + `</table>`;
