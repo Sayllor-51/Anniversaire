@@ -136,7 +136,6 @@
     renderCategory('chips', 'quiz-chips');
   }
 
-  // Rendu ultra-sécurisé
   function renderCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     let html = '';
@@ -152,7 +151,7 @@
         let cls = 'opt-btn';
         if (selected !== undefined) {
           cls += ' locked';
-          if (oi === selected) cls += ' correct';   // Seulement le choix du joueur
+          if (oi === selected) cls += ' correct';
         }
         html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},this)">${opt}</button>`;
       });
@@ -164,7 +163,7 @@
     container.innerHTML = html;
   }
 
-  // Sélection - Version renforcée (aucune bonne réponse ne s'affiche)
+  // Fonction selectAnswer corrigée et sécurisée
   window.selectAnswer = async function(qId, cat, optionIdx, btn) {
     if (answers[qId] !== undefined) return;
 
@@ -174,7 +173,6 @@
     const grid = btn.closest('.options-grid');
 
     grid.querySelectorAll('.opt-btn').forEach(b => {
-      // Récupération plus sûre de l'index
       const onclickStr = b.getAttribute('onclick') || '';
       const match = onclickStr.match(/,(\d+),this/);
       const oi = match ? parseInt(match[1]) : -1;
@@ -182,27 +180,6 @@
       b.classList.add('locked');
       b.classList.remove('correct', 'wrong');
 
-      // Vert UNIQUEMENT sur le choix du joueur
-      if (oi === optionIdx) {
-        b.classList.add('correct');
-      }
-    });
-
-    updateProgress();
-    await pushScore();
-
-    if (Object.keys(answers).length === TOTAL_Q) {
-      setTimeout(showFinalScorePopup, 600);
-    }
-  };
-
-    // On verrouille tout et on retire TOUTES les classes correct/wrong
-    grid.querySelectorAll('.opt-btn').forEach(b => {
-      const oi = parseInt(b.getAttribute('onclick').match(/,(\d+),this/)[1]);
-      b.classList.add('locked');
-      b.classList.remove('correct', 'wrong');
-
-      // On met "correct" UNIQUEMENT sur le choix du joueur
       if (oi === optionIdx) {
         b.classList.add('correct');
       }
