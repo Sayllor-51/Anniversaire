@@ -1,430 +1,349 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤠 Alexandre a 50 ans !</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --brown: #5C3A1E;
-            --brown-light: #8B5E3C;
-            --gold: #C9930A;
-            --gold-light: #F0B429;
-            --cream: #F5EDD6;
-            --cream-dark: #E8D9B5;
-            --red: #8B1A1A;
-            --text-dark: #2C1810;
-            --shadow: rgba(0,0,0,0.35);
-        }
-
-        /* STRUCTURE GLOBALE */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--brown);
-            background-image:
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px),
-                repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px);
-            font-family: 'Lato', sans-serif;
-            color: var(--text-dark);
-            min-height: 100vh;
-        }
-
-        /* HEADER PREMIUM */
-        .header {
-            background: linear-gradient(135deg, var(--red) 0%, var(--brown) 50%, var(--red) 100%);
-            border-bottom: 6px solid var(--gold);
-            text-align: center;
-            padding: 2.5rem 1rem;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-
-        .header-stars { font-size: 1.5rem; letter-spacing: 12px; color: var(--gold-light); margin-bottom: 12px; }
-
-        .header h1 {
-            font-family: 'Rye', serif;
-            font-size: clamp(1.8rem, 7vw, 3.8rem);
-            color: var(--gold-light);
-            text-shadow: 3px 3px 0 var(--brown), 5px 5px 12px rgba(0,0,0,0.6);
-            margin: 0.5rem 0;
-            text-transform: uppercase;
-        }
-
-        .header-sub {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(0.9rem, 3vw, 1.5rem);
-            color: var(--cream);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        /* NAVIGATION STICKY */
-        .nav {
-            display: flex;
-            justify-content: center;
-            background: var(--brown);
-            border-bottom: 4px solid var(--gold);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            color: var(--cream-dark);
-            font-family: 'Lato', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 1.2rem 1.5rem;
-            cursor: pointer;
-            border-bottom: 4px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .nav-btn.active {
-            color: var(--gold-light);
-            border-bottom-color: var(--gold-light);
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* CONTENU */
-        .main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .card {
-            background: var(--cream);
-            border-radius: 15px;
-            border: 3px solid var(--gold);
-            box-shadow: 0 8px 25px var(--shadow);
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-
-        .card-header {
-            background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
-            color: var(--gold-light);
-            font-family: 'Rye', serif;
-            padding: 1rem 1.5rem;
-            font-size: 1.3rem;
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .card-body { padding: 1.5rem; }
-
-        .panel { display: none; animation: fadeIn 0.4s ease; }
-        .panel.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* MODAL FINAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: var(--cream);
-            margin: 15% auto;
-            padding: 3rem;
-            border: 5px solid var(--gold);
-            width: 90%;
-            max-width: 500px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        /* FORMULAIRE */
-        .input-group { margin-bottom: 1.5rem; }
-        .input-group label { display: block; font-weight: 700; color: var(--brown); margin-bottom: 8px; font-size: 0.9rem; }
-        input[type="text"] { width: 100%; padding: 1rem; border: 3px solid var(--brown-light); border-radius: 10px; font-size: 1.1rem; }
-
-        .btn {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            color: var(--brown); border: none; border-radius: 10px;
-            font-family: 'Rye', serif; font-size: 1.2rem; padding: 1rem;
-            cursor: pointer; width: 100%; box-shadow: 0 5px 0 #8c6607;
-            text-transform: uppercase;
-        }
-
-        /* QUIZ GRID */
-        .question-block { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--cream-dark); }
-        .question-title { font-weight: 700; color: var(--brown); margin-bottom: 1rem; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-
-        .opt-btn {
-            background: white; border: 2px solid var(--cream-dark);
-            border-radius: 10px; padding: 1rem 0.5rem; cursor: pointer;
-            font-size: 0.95rem; transition: all 0.2s;
-        }
-
-        .opt-btn.locked { pointer-events: none; opacity: 0.6; }
-        .opt-btn.selected-secret { background: var(--brown-light); color: white; border-color: var(--brown); font-weight: 700; }
-
-        .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 15px; overflow: hidden; margin: 1.2rem 0; }
-        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.6s ease; }
-
-        /* CLASSEMENT */
-        .leaderboard-table { width: 100%; border-collapse: collapse; }
-        .leaderboard-table th { background: var(--brown); color: var(--gold-light); font-family: 'Rye', serif; padding: 15px; text-align: left; }
-        .leaderboard-table td { padding: 15px; border-bottom: 1px solid var(--cream-dark); font-size: 1.1rem; }
-        .score-cell { font-family: 'Rye', serif; color: var(--red); font-size: 1.4rem; text-align: center; }
-
-        .footer { text-align: center; padding: 3rem; color: var(--cream-dark); font-size: 0.9rem; text-transform: uppercase; }
-
-        @media (max-width: 500px) { .options-grid { grid-template-columns: 1fr; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤠 Alexandre a 50 ans !</title>
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown: #5C3A1E;
+    --brown-light: #8B5E3C;
+    --gold: #C9930A;
+    --gold-light: #F0B429;
+    --cream: #F5EDD6;
+    --cream-dark: #E8D9B5;
+    --red: #8B1A1A;
+    --green-dark: #2D4A1E;
+    --text-dark: #2C1810;
+    --shadow: rgba(0,0,0,0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--brown);
+    background-image:
+      repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px),
+      repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px);
+    font-family: 'Lato', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+  .header {
+    background: linear-gradient(135deg, var(--red) 0%, var(--brown) 50%, var(--red) 100%);
+    border-bottom: 6px solid var(--gold);
+    text-align: center;
+    padding: 1.5rem 1rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-stars { font-size: 1.4rem; letter-spacing: 8px; color: var(--gold-light); position: relative; }
+  .header h1 {
+    font-family: 'Rye', serif;
+    font-size: clamp(1.8rem, 6vw, 3.2rem);
+    color: var(--gold-light);
+    text-shadow: 3px 3px 0 var(--brown), 5px 5px 8px rgba(0,0,0,0.5);
+    margin: 0.3rem 0;
+    line-height: 1.1;
+  }
+  .header-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(0.9rem, 3vw, 1.3rem);
+    color: var(--cream);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .nav {
+    display: flex;
+    justify-content: center;
+    background: var(--brown);
+    border-bottom: 3px solid var(--gold);
+    position: sticky; top: 0; z-index: 1000;
+  }
+  .nav-btn {
+    background: none; border: none;
+    color: var(--cream-dark);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.8rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 0.9rem 1.2rem; cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-btn.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
+  .main { max-width: 760px; margin: 0 auto; padding: 1rem; }
+  .card {
+    background: var(--cream);
+    border-radius: 12px; border: 2px solid var(--gold);
+    box-shadow: 0 6px 20px var(--shadow);
+    margin-bottom: 1rem; overflow: hidden;
+  }
+  .card-header {
+    background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
+    color: var(--gold-light); font-family: 'Rye', serif;
+    font-size: 1rem; padding: 0.7rem 1.1rem;
+    letter-spacing: 1px;
+  }
+  .card-body { padding: 1rem; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .input-group { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+  .input-group label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--brown); }
+  input[type="text"] { padding: 0.65rem; border: 2px solid var(--brown-light); border-radius: 8px; }
+  .btn {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: var(--brown); border: none; border-radius: 8px;
+    font-family: 'Rye', serif; font-size: 0.95rem; padding: 0.75rem;
+    cursor: pointer; width: 100%; box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+  .question-block { margin-bottom: 1.2rem; }
+  .question-title { font-weight: 700; font-size: 0.9rem; color: var(--brown); margin-bottom: 0.5rem; text-transform: uppercase; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .opt-btn {
+    background: white; border: 2px solid var(--cream-dark);
+    border-radius: 8px; padding: 0.55rem; cursor: pointer;
+    font-size: 0.82rem; transition: all 0.2s;
+  }
+  .opt-btn.correct { border-color: var(--green-dark); background: #e8f5e2; color: var(--green-dark); font-weight: 700; pointer-events: none; }
+  .opt-btn.wrong { border-color: var(--red); background: #ffe8e8; color: var(--red); font-weight: 700; pointer-events: none; }
+  .opt-btn.locked { pointer-events: none; opacity: 0.7; }
+  .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 0.5rem; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); transition: width 0.4s; }
+  .leaderboard-table { width: 100%; border-collapse: collapse; }
+  .leaderboard-table th { background: var(--brown); color: var(--gold-light); font-family: 'Rye', serif; padding: 0.7rem; text-align: left; }
+  .leaderboard-table td { padding: 0.7rem; border-bottom: 1px solid var(--cream-dark); }
+  .score-cell { font-family: 'Rye', serif; font-size: 1.1rem; }
+  .live-dot { display: inline-block; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+  .footer { text-align: center; padding: 2rem; color: rgba(245,237,214,0.3); font-size: 0.8rem; }
+  @media (max-width: 420px) { .options-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 
-    <div id="finishModal" class="modal">
-        <div class="modal-content">
-            <h2 style="font-family:'Rye'; color:var(--brown); font-size: 2rem;">🌵 BRAVO COWBOY ! 🌵</h2>
-            <p id="finalScoreMsg" style="font-size:1.5rem; font-weight:700; margin: 2rem 0; color: var(--red);"></p>
-            <button class="btn" onclick="closeModal()">Voir le classement</button>
+<div class="header">
+  <div class="header-stars">✦ ✦ ✦ ✦ ✦</div>
+  <h1>🤠 Alexandre a 50 ans !</h1>
+  <div class="header-sub">Dégustation Live</div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" id="btn-reg" onclick="showPanel('register')">Équipe</button>
+  <button class="nav-btn" id="btn-quiz" onclick="showPanel('quiz')">Dégustation</button>
+  <button class="nav-btn" id="btn-lb" onclick="showPanel('leaderboard')">Scores</button>
+</nav>
+
+<div class="main">
+
+  <div id="panel-register" class="panel active">
+    <div class="card">
+      <div class="card-header">🐎 Bienvenue au Saloon</div>
+      <div class="card-body">
+        <p style="margin-bottom:1.5rem; font-weight:700; color:var(--brown); text-align:center; font-size: 1rem; border: 2px dashed var(--gold); padding: 15px; border-radius: 10px;">
+          💡 "L'union fait la force : les adultes misent sur le vin, les enfants sur les chips Bret's ! Mettez-vous en équipe (ex: Marie & Evangéline)."
+        </p>
+        <div class="input-group">
+          <label>Nom de l'équipe / Cowboy</label>
+          <input type="text" id="player-name" placeholder="ex. Les Sept Mercenaires">
         </div>
+        <div class="input-group">
+          <label>VOTRE TABLE</label>
+          <input type="text" id="player-table" placeholder="ex. Table du Ranch">
+        </div>
+        <button class="btn" onclick="registerPlayer()">🌵 Lancer le concours</button>
+        <div id="register-msg"></div>
+      </div>
     </div>
-
-    <div class="header">
-        <div class="header-stars">✦ ✦ ✦ ✦ ✦</div>
-        <h1>🤠 Alexandre a 50 ans !</h1>
-        <div class="header-sub">Concours de Dégustation Live</div>
+    <div class="card">
+      <div class="card-header">📜 Règlement du Shérif</div>
+      <div class="card-body" style="font-size:0.9rem; line-height:1.6; color:var(--brown);">
+        <p>🍷 <strong>4 vins</strong> (3 pts / bon vin)</p>
+        <p>🧀 <strong>8 fromages</strong> (2 pts / fromage)</p>
+        <p>🥩 <strong>6 charcuteries</strong> (2 pts / item)</p>
+        <p>🥔 <strong>6 chips Bret's</strong> (1 pt / saveur)</p>
+        <div style="margin-top:10px; color:var(--red); font-weight:bold;">⚠️ Chaque clic est irréversible !</div>
+      </div>
     </div>
+  </div>
 
-    <nav class="nav">
-        <button class="nav-btn active" id="nav-reg" onclick="showPanel('register')">Équipe</button>
-        <button class="nav-btn" id="nav-quiz" onclick="showPanel('quiz')">Dégustation</button>
-        <button class="nav-btn" id="nav-lb" onclick="showPanel('leaderboard')">Scores</button>
-    </nav>
-
-    <div class="main">
-
-        <div id="panel-register" class="panel active">
-            <div class="card">
-                <div class="card-header">🐎 BIENVENUE AU SALOON</div>
-                <div class="card-body">
-                    <p style="margin-bottom:1.5rem; font-weight:700; color:var(--brown); text-align:center; font-size: 1.1rem; border: 2px dashed var(--gold); padding: 15px; border-radius: 10px;">
-                        💡 "L'union fait la force : les adultes misent sur le vin, les enfants sur les chips Bret's ! Mettez-vous en équipe (ex: Marie & Evangéline)."
-                    </p>
-                    
-                    <div class="input-group">
-                        <label>NOM DU GROUPE / ÉQUIPE</label>
-                        <input type="text" id="player-name" placeholder="ex. Les Sept Mercenaires">
-                    </div>
-
-                    <div class="input-group">
-                        <label>VOTRE TABLE</label>
-                        <input type="text" id="player-table" placeholder="ex. Table du Ranch">
-                    </div>
-
-                    <button class="btn" onclick="registerPlayer()">🌵 Lancer le concours</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">📜 RÈGLEMENT DU SHÉRIF</div>
-                <div class="card-body">
-                    <div style="color:var(--red); font-weight:900; border:3px solid var(--red); padding:15px; text-align:center; border-radius:12px; margin-bottom:20px;">
-                        ⚠️ ATTENTION : Chaque clic est irréversible ! Réfléchissez bien avant de valider votre choix.
-                    </div>
-                    
-                    <p>🍷 <b>4 Vins</b> : 3 pts / bon vin (12 pts)</p>
-                    <p>🧀 <b>8 Fromages</b> : 2 pts / fromage (16 pts)</p>
-                    <p>🥩 <b>6 Charcuteries</b> : 2 pts / item (12 pts)</p>
-                    <p>🥔 <b>6 Chips Bret's</b> : 1 pt / saveur (6 pts)</p>
-                    <p style="margin-top:15px; text-align:center; font-family:'Rye'; font-size:1.4rem; color: var(--brown);">TOTAL : 46 POINTS</p>
-                </div>
+  <div id="panel-quiz" class="panel">
+    <div id="quiz-content">
+        <div class="card">
+            <div class="card-body">
+                <div id="quiz-player-label" style="font-family:'Rye'; color:var(--brown);">🤠 Cowboy</div>
+                <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
+                <p style="font-size:0.8rem; text-align:right;"><span id="answered-count">0</span> / 24 items</p>
             </div>
         </div>
-
-        <div id="panel-quiz" class="panel">
-            <div class="card">
-                <div class="card-body">
-                    <div id="quiz-info-header" style="font-weight:900; color:var(--brown); text-transform: uppercase;"></div>
-                    <div class="progress-bar"><div id="quiz-progress" class="progress-fill"></div></div>
-                    <p style="text-align:right; font-weight:800;"><span id="answered-count">0</span> / 24 items dÉgustÉs</p>
-                </div>
-            </div>
-            <div id="quiz-container"></div>
-        </div>
-
-        <div id="panel-leaderboard" class="panel">
-            <div class="card">
-                <div class="card-header">🏆 CLASSEMENT DES COWBOYS</div>
-                <div class="card-body" style="padding:0;">
-                    <table class="leaderboard-table">
-                        <thead><tr><th>RANG</th><th>ÉQUIPE</th><th style="text-align:center">PTS</th></tr></thead>
-                        <tbody id="lb-body"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">📊 MOYENNES PAR CATÉGORIE</div>
-                <div class="card-body" id="category-stats"></div>
-            </div>
-        </div>
-
+        <div class="card"><div class="card-header">🍷 Les 4 Vins</div><div class="card-body" id="quiz-vins"></div></div>
+        <div class="card"><div class="card-header">🧀 Les 8 Fromages</div><div class="card-body" id="quiz-fromages"></div></div>
+        <div class="card"><div class="card-header">🥩 Les 6 Charcuteries</div><div class="card-body" id="quiz-charcuteries"></div></div>
+        <div class="card"><div class="card-header">🥔 Chips Bret's</div><div class="card-body" id="quiz-chips"></div></div>
     </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <div id="panel-leaderboard" class="panel">
+    <div class="card">
+      <div class="card-header">🏆 Classement en direct</div>
+      <div class="card-body" id="leaderboard-content"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">📊 Moyennes par catégorie</div>
+      <div class="card-body" id="category-stats"></div>
+    </div>
+  </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
-            authDomain: "alexandre50.firebaseapp.com",
-            projectId: "alexandre50",
-            storageBucket: "alexandre50.firebasestorage.app",
-            messagingSenderId: "159600747281",
-            appId: "1:159600747281:web:09f382f707b2c481a922b0"
-        };
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+<div class="footer">🤠 Joyeux 50 ans Alexandre ! 🎉</div>
 
-        const QUESTIONS = {
-            vins: [
-                { id: 'v1', label: 'Vin Blanc n°1', options: ['Chardonnay', 'Sauvignon', 'Riesling', 'Viognier'], answer: 1 },
-                { id: 'v2', label: 'Vin Blanc n°2', options: ['Chablis', 'Meursault', 'Sancerre', 'Gewurztraminer'], answer: 2 },
-                { id: 'v3', label: 'Vin Rouge n°1', options: ['Pinot Noir', 'Syrah', 'Cabernet', 'Merlot'], answer: 0 },
-                { id: 'v4', label: 'Vin Rouge n°2', options: ['Châteauneuf', 'Côte-Rôtie', 'Saint-Émilion', 'Morgon'], answer: 3 }
-            ],
-            fromages: [
-                { id: 'f1', label: 'Fromage 1', options: ['Comté', 'Beaufort', 'Abondance', 'Emmental'], answer: 0 },
-                { id: 'f2', label: 'Fromage 2', options: ['Camembert', 'Brie', 'Coulommiers', 'Reblochon'], answer: 1 },
-                { id: 'f3', label: 'Fromage 3', options: ['Roquefort', 'Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Bleu des Causses'], answer: 2 },
-                { id: 'f4', label: 'Fromage 4', options: ['Morbier', 'Raclette', 'Tomme de Savoie', 'Saint-Nectaire'], answer: 3 },
-                { id: 'f5', label: 'Fromage 5', options: ['Chèvre frais', 'Sainte-Maure', 'Crottin', 'Valençay'], answer: 1 },
-                { id: 'f6', label: 'Fromage 6', options: ['Ossau-Iraty', 'Manchego', 'Cantal', 'Salers'], answer: 0 },
-                { id: 'f7', label: 'Fromage 7', options: ['Munster', 'Epoisses', 'Livarot', 'Maroilles'], answer: 1 },
-                { id: 'f8', label: 'Fromage 8', options: ['Mimolette', 'Cheddar', 'Gouda', 'Edam'], answer: 0 }
-            ],
-            charcuteries: [
-                { id: 'c1', label: 'Saucisson', options: ['Porc', 'Sanglier', 'Âne', 'Taureau'], answer: 0 },
-                { id: 'c2', label: 'Jambon Cru', options: ['Serrano', 'Parme', 'Bayonne', 'Corse'], answer: 2 },
-                { id: 'c3', label: 'Coppa / Lomo', options: ['Coppa', 'Lomo', 'Bresaola', 'Pancetta'], answer: 0 },
-                { id: 'c4', label: 'Chorizo', options: ['Doux', 'Fort', 'Extra-fort', 'Cular'], answer: 1 },
-                { id: 'c5', label: 'Pâté / Rillettes', options: ['Campagne', 'Pur Porc', 'Oie', 'Canard'], answer: 3 },
-                { id: 'c6', label: 'Viande Grison', options: ['Bœuf', 'Cerf', 'Biche', 'Cheval'], answer: 0 }
-            ],
-            chips: [
-                { id: 'ch1', label: 'Chips n°1', options: ['Nature', 'Poulet braisé', 'Oignon', 'Sel de Guérande'], answer: 3 },
-                { id: 'ch2', label: 'Chips n°2', options: ['Fromage du Jura', 'Comté', 'Chèvre Piment', 'Tartiflette'], answer: 0 },
-                { id: 'ch3', label: 'Chips n°3', options: ['Barbecue', 'Piment doux', 'Aïoli', 'Yakitori'], answer: 2 },
-                { id: 'ch4', label: 'Chips n°4', options: ['Vinaigre', 'Moutarde', 'Pesto', 'Cornichon'], answer: 3 },
-                { id: 'ch5', label: 'Chips n°5', options: ['Indienne', 'Camembert', 'Cheddar', 'Burger'], answer: 1 },
-                { id: 'ch6', label: 'Chips n°6', options: ['Cèpes', 'Aioli', 'Truffes', 'Figue'], answer: 0 }
-            ]
-        };
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const PTS = { vins: 3, fromages: 2, charcuteries: 2, chips: 1 };
-        let player = JSON.parse(localStorage.getItem('alex50_p')) || null;
-        let answers = player ? (JSON.parse(localStorage.getItem('alex50_a_' + player.id)) || {}) : {};
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
+    authDomain: "alexandre50.firebaseapp.com",
+    projectId: "alexandre50",
+    storageBucket: "alexandre50.firebasestorage.app",
+    messagingSenderId: "159600747281",
+    appId: "1:159600747281:web:09f382f707b2c481a922b0"
+  };
 
-        window.showPanel = (name) => {
-            document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-' + name).classList.add('active');
-            document.getElementById('nav-' + (name === 'register' ? 'reg' : (name === 'leaderboard' ? 'lb' : 'quiz'))).classList.add('active');
-            if (name === 'quiz') renderQuiz();
-            if (name === 'leaderboard') startSync();
-        };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-        window.registerPlayer = () => {
-            const name = document.getElementById('player-name').value.trim();
-            if (!name) return alert("Hé Cowboy ! Il nous faut un nom d'équipe.");
-            player = { id: Math.random().toString(36).substr(2, 9), name, table: document.getElementById('player-table').value };
-            localStorage.setItem('alex50_p', JSON.stringify(player));
-            showPanel('quiz');
-        };
+  const QUESTIONS = {
+    vins: [
+      { id:'v1', label:'Vin 1', options:['Bordeaux / Cabernet','Bourgogne / Pinot Noir','Rhône / Syrah','Loire / Muscadet'], answer:0 },
+      { id:'v2', label:'Vin 2', options:['Alsace / Riesling','Bordeaux / Sauvignon','Provence / Rosé','Languedoc / Grenache'], answer:2 },
+      { id:'v3', label:'Vin 3', options:['Champagne / Chardonnay','Chablis / Chardonnay','Sancerre / Sauvignon','Mâcon / Aligoté'], answer:2 },
+      { id:'v4', label:'Vin 4', options:['Côtes du Rhône / Grenache','Saint-Émilion / Merlot','Pomerol / Merlot','Cahors / Malbec'], answer:3 },
+    ],
+    fromages: [
+      { id:'f1', label:'Fromage 1', options:['Brie','Camembert','Coulommiers','Chaource'], answer:1 },
+      { id:'f2', label:'Fromage 2', options:['Comté','Beaufort','Emmental','Gruyère'], answer:0 },
+      { id:'f3', label:'Fromage 3', options:['Roquefort','Gorgonzola','Bleu d\'Auvergne','Fourme d\'Ambert'], answer:0 },
+      { id:'f4', label:'Fromage 4', options:['Reblochon','Munster','Livarot','Époisses'], answer:3 },
+      { id:'f5', label:'Fromage 5', options:['Chèvre frais','Sainte-Maure','Crottin','Valençay'], answer:2 },
+      { id:'f6', label:'Fromage 6', options:['Morbier','Tomme de Savoie','Raclette','Abondance'], answer:1 },
+      { id:'f7', label:'Fromage 7', options:['Maroilles','Pont-l\'Évêque','Livarot','Langres'], answer:0 },
+      { id:'f8', label:'Fromage 8', options:['Ossau-Iraty','Mimolette','Cantal','Salers'], answer:2 },
+    ],
+    charcuteries: [
+      { id:'c1', label:'Charcuterie 1', options:['Jambon Bayonne','Jambon Parme','Coppa','Bresaola'], answer:0 },
+      { id:'c2', label:'Charcuterie 2', options:['Saucisson sec','Chorizo','Salami','Sopressata'], answer:0 },
+      { id:'c3', label:'Charcuterie 3', options:['Rillettes','Pâté de campagne','Terrine','Mousse'], answer:1 },
+      { id:'c4', label:'Charcuterie 4', options:['Andouille','Andouillette','Boudin blanc','Boudin noir'], answer:0 },
+      { id:'c5', label:'Charcuterie 5', options:['Lard fumé','Poitrine roulée','Pancetta','Ventrèche'], answer:3 },
+      { id:'c6', label:'Charcuterie 6', options:['Noix de jambon','Rosette','Jésus de Lyon','Saucisse sèche'], answer:1 },
+    ],
+    chips: [
+      { id:'ch1', label:'Chips 1', options:['Nature','Barbecue','Sel & Vinaigre','Fromage'], answer:0 },
+      { id:'ch2', label:'Chips 2', options:['Paprika','Jambon beurre','Bolognaise','Poulet rôti'], answer:1 },
+      { id:'ch3', label:'Chips 3', options:['Crème Ciboulette','Raclette','Tartiflette','Reblochon'], answer:2 },
+      { id:'ch4', label:'Chips 4', options:['Ketchup','Maïs','Curry','Tapenade'], answer:3 },
+      { id:'ch5', label:'Chips 5', options:['Saveur Mer','Cocktail crevettes','Crevette-Citron','Langouste'], answer:1 },
+      { id:'ch6', label:'Chips 6', options:['Piment doux','Chili','Jalapeño','Piment Espelette'], answer:3 },
+    ]
+  };
 
-        function renderQuiz() {
-            if (!player) return showPanel('register');
-            document.getElementById('quiz-info-header').innerText = "🤠 Équipe : " + player.name;
-            const container = document.getElementById('quiz-container');
-            let html = '';
-            const labels = { vins: '🍷 LES VINS', fromages: '🧀 LES FROMAGES', charcuteries: '🥩 LA CHARCUTERIE', chips: '🥔 LES CHIPS BRET\'S' };
+  const POINTS = { vins:3, fromages:2, charcuteries:2, chips:1 };
+  let currentPlayer = JSON.parse(localStorage.getItem('alex50_player')) || null;
+  let answers = currentPlayer ? (JSON.parse(localStorage.getItem('alex50_answers_' + currentPlayer.id)) || {}) : {};
+  let allScores = {};
 
-            for (const cat in labels) {
-                html += `<div class="card"><div class="card-header">${labels[cat]}</div><div class="card-body">`;
-                QUESTIONS[cat].forEach(q => {
-                    const isAns = answers[q.id] !== undefined;
-                    html += `<div class="question-block"><div class="question-title">${q.label}</div><div class="options-grid">`;
-                    q.options.forEach((opt, idx) => {
-                        html += `<button class="opt-btn ${answers[q.id] === idx ? 'selected-secret' : ''} ${isAns ? 'locked' : ''}" onclick="vote('${q.id}', '${cat}', ${idx})">${opt}</button>`;
-                    });
-                    html += `</div></div>`;
-                });
-                html += `</div></div>`;
-            }
-            container.innerHTML = html;
-            updateUI();
+  window.showPanel = function(name) {
+    document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.getElementById('btn-' + (name === 'register' ? 'reg' : (name === 'leaderboard' ? 'lb' : 'quiz'))).classList.add('active');
+    if (name === 'quiz') setupQuiz();
+    if (name === 'leaderboard') renderLeaderboard();
+  };
+
+  window.registerPlayer = function() {
+    const name = document.getElementById('player-name').value.trim();
+    if (!name) return alert("Hé Cowboy ! Il faut un nom.");
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.random().toString(36).substring(2,6);
+    currentPlayer = { name, id, table: document.getElementById('player-table').value };
+    localStorage.setItem('alex50_player', JSON.stringify(currentPlayer));
+    showPanel('quiz');
+  };
+
+  function setupQuiz() {
+    if (!currentPlayer) return showPanel('register');
+    document.getElementById('quiz-player-label').textContent = '🤠 Équipe : ' + currentPlayer.name;
+    for (let cat in QUESTIONS) renderCategory(cat, 'quiz-' + cat);
+    updateProgress();
+  }
+
+  function renderCategory(cat, containerId) {
+    const container = document.getElementById(containerId);
+    let html = '';
+    QUESTIONS[cat].forEach(q => {
+      const isAns = answers[q.id] !== undefined;
+      html += `<div class="question-block"><div class="question-title">${q.label}</div><div class="options-grid">`;
+      q.options.forEach((opt, oi) => {
+        let cls = 'opt-btn';
+        if (isAns) {
+          cls += ' locked';
+          if (oi === q.answer) cls += ' correct';
+          else if (oi === answers[q.id]) cls += ' wrong';
         }
+        html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},${q.answer},this)">${opt}</button>`;
+      });
+      html += `</div></div>`;
+    });
+    container.innerHTML = html;
+  }
 
-        window.vote = async (qid, cat, idx) => {
-            if (answers[qid] !== undefined) return;
-            answers[qid] = idx;
-            localStorage.setItem('alex50_a_' + player.id, JSON.stringify(answers));
-            const s = calculate();
-            await setDoc(doc(db, 'scores', player.id), { name: player.name, table: player.table, score: s.total, byCat: s.byCat, count: Object.keys(answers).length });
-            renderQuiz();
-            if (Object.keys(answers).length === 24) {
-                document.getElementById('finalScoreMsg').innerText = "VOTRE SCORE : " + s.total + " / 46";
-                document.getElementById('finishModal').style.display = 'block';
-            }
-        };
+  window.selectAnswer = async function(qId, cat, oi, correct, btn) {
+    if (answers[qId] !== undefined) return;
+    answers[qId] = oi;
+    localStorage.setItem('alex50_answers_' + currentPlayer.id, JSON.stringify(answers));
+    setupQuiz();
+    await pushScore();
+  };
 
-        function calculate() {
-            let total = 0, byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
-            for (const c in QUESTIONS) {
-                QUESTIONS[c].forEach(q => { if (answers[q.id] === q.answer) { total += PTS[c]; byCat[c] += PTS[c]; } });
-            }
-            return { total, byCat };
-        }
+  async function pushScore() {
+    let total = 0; let byCat = { vins:0, fromages:0, charcuteries:0, chips:0 };
+    for (let cat in QUESTIONS) {
+      QUESTIONS[cat].forEach(q => { if (answers[q.id] === q.answer) { total += POINTS[cat]; byCat[cat] += POINTS[cat]; } });
+    }
+    await setDoc(doc(db, 'scores', currentPlayer.id), { name: currentPlayer.name, score: total, byCategory: byCat, answered: Object.keys(answers).length });
+  }
 
-        function updateUI() {
-            const c = Object.keys(answers).length;
-            document.getElementById('answered-count').innerText = c;
-            document.getElementById('quiz-progress').style.width = (c / 24 * 100) + '%';
-        }
+  function updateProgress() {
+    const count = Object.keys(answers).length;
+    document.getElementById('answered-count').textContent = count;
+    document.getElementById('quiz-progress').style.width = (count / 24 * 100) + '%';
+  }
 
-        function startSync() {
-            onSnapshot(collection(db, 'scores'), (snap) => {
-                const res = []; snap.forEach(d => res.push(d.data()));
-                res.sort((a, b) => b.score - a.score);
-                document.getElementById('lb-body').innerHTML = res.map((r, i) => `<tr><td>#${i + 1}</td><td><b>${r.name}</b></td><td class="score-cell">${r.score}</td></tr>`).join('');
-                
-                if (res.length > 0) {
-                    let h = '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">';
-                    const keys = { vins: 12, fromages: 16, charcuteries: 12, chips: 6 };
-                    for (let k in keys) {
-                        const sum = res.reduce((a, b) => a + (b.byCat?.[k] || 0), 0);
-                        const avg = (sum / res.length).toFixed(1);
-                        h += `<div style="background:white; padding:10px; border-radius:8px; border:1px solid var(--gold); text-align:center;"><small>${k.toUpperCase()}</small><br><b style="color:var(--red); font-family:'Rye';">${avg} / ${keys[k]}</b></div>`;
-                    }
-                    document.getElementById('category-stats').innerHTML = h + '</div>';
-                }
-            });
-        }
+  function renderLeaderboard() {
+    const players = Object.values(allScores).sort((a,b) => b.score - a.score);
+    let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Équipe</th><th>Pts</th></tr></thead><tbody>';
+    players.forEach((p, i) => {
+      html += `<tr><td>${i+1}</td><td><b>${p.name}</b></td><td class="score-cell">${p.score}</td></tr>`;
+    });
+    document.getElementById('leaderboard-content').innerHTML = html + '</tbody></table>';
+    
+    // MOYENNES (Style initial mais compact)
+    const maxPts = { vins:12, fromages:16, charcuteries:12, chips:6 };
+    const labels = { vins:'🍷 Vins', fromages:'🧀 Fromages', charcuteries:'🥩 Charcuteries', chips:'🥔 Chips' };
+    let statHtml = '';
+    for (let cat in labels) {
+      const avg = players.length ? (players.reduce((s,p) => s+(p.byCategory?.[cat]||0), 0) / players.length).toFixed(1) : 0;
+      const pct = (avg / maxPts[cat] * 100);
+      statHtml += `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem"><span>${labels[cat]}</span><span>${avg}/${maxPts[cat]}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    }
+    document.getElementById('category-stats').innerHTML = statHtml;
+  }
 
-        window.closeModal = () => { document.getElementById('finishModal').style.display = 'none'; showPanel('leaderboard'); };
-        if (player) showPanel('quiz');
-    </script>
+  onSnapshot(collection(db, 'scores'), (snap) => {
+    allScores = {}; snap.forEach(d => allScores[d.id] = d.data());
+    if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
+  });
+
+  if (currentPlayer) showPanel('quiz');
+</script>
 </body>
 </html>
