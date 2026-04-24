@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- VARIABLES DE DESIGN --- */
         :root {
             --brown: #5C3A1E;
             --brown-light: #8B5E3C;
@@ -16,12 +15,11 @@
             --cream: #F5EDD6;
             --cream-dark: #E8D9B5;
             --red: #8B1A1A;
-            --green: #2D4A1E;
+            --red-light: #B22222;
             --text-dark: #2C1810;
             --shadow: rgba(0,0,0,0.4);
         }
 
-        /* --- RESET & BASE --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -32,7 +30,7 @@
             font-family: 'Lato', sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
-            padding-bottom: 60px;
+            padding-bottom: 50px;
         }
 
         /* --- HEADER & BADGE 50 ANS --- */
@@ -40,7 +38,7 @@
             background: linear-gradient(135deg, var(--red) 0%, var(--brown) 50%, var(--red) 100%);
             border-bottom: 6px solid var(--gold);
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 2.5rem 1rem;
             position: relative;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
@@ -49,7 +47,8 @@
             font-family: 'Rye', serif;
             font-size: clamp(1.8rem, 8vw, 3.8rem);
             color: var(--gold-light);
-            text-shadow: 3px 3px 0 var(--brown);
+            text-shadow: 3px 3px 0 var(--brown), 5px 5px 10px rgba(0,0,0,0.5);
+            margin-bottom: 5px;
             letter-spacing: 2px;
         }
 
@@ -59,16 +58,17 @@
             letter-spacing: 4px;
             font-size: 0.9rem;
             text-transform: uppercase;
+            opacity: 0.9;
         }
 
         .age-badge {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: var(--gold);
             color: var(--brown);
-            width: 75px;
-            height: 75px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
@@ -81,7 +81,7 @@
             z-index: 10;
         }
 
-        .age-badge span { font-size: 1.8rem; font-weight: bold; line-height: 1; }
+        .age-badge span { font-size: 1.6rem; font-weight: bold; }
         .age-badge small { font-size: 0.7rem; text-transform: uppercase; }
 
         /* --- NAVIGATION --- */
@@ -103,11 +103,12 @@
             font-size: 0.9rem;
             font-weight: 700;
             text-transform: uppercase;
-            padding: 1.3rem;
+            padding: 1.2rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
             flex: 1;
-            max-width: 250px;
+            max-width: 200px;
         }
 
         .nav-btn.active {
@@ -116,11 +117,11 @@
             background: rgba(255,255,255,0.05);
         }
 
-        /* --- STRUCTURE --- */
+        /* --- STRUCTURE PRINCIPALE --- */
         .main {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
         }
 
         .card {
@@ -138,25 +139,52 @@
             font-family: 'Rye', serif;
             padding: 1.2rem;
             font-size: 1.2rem;
+            letter-spacing: 1px;
             border-bottom: 2px solid var(--gold);
         }
 
         .card-body { padding: 1.5rem; }
 
         .panel { display: none; }
-        .panel.active { display: block; animation: fadeIn 0.4s ease-out; }
+        .panel.active { display: block; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* --- INPUTS & BOUTONS --- */
+        /* --- ÉQUIPE / REGISTER --- */
+        .union-box {
+            background: var(--red);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            line-height: 1.5;
+            border: 2px solid var(--gold);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label {
+            display: block;
+            font-weight: 900;
+            color: var(--brown);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
         .input-field {
             width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 14px;
             border-radius: 8px;
             border: 2px solid var(--cream-dark);
             font-size: 1.1rem;
             font-family: 'Lato', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
         }
+
+        .input-field:focus { border-color: var(--gold); }
 
         .btn-gold {
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
@@ -169,7 +197,8 @@
             cursor: pointer;
             font-size: 1.2rem;
             box-shadow: 0 5px 0 #8c6607;
-            transition: 0.1s;
+            transition: all 0.1s;
+            text-transform: uppercase;
         }
 
         .btn-gold:active { transform: translateY(3px); box-shadow: 0 2px 0 #8c6607; }
@@ -185,6 +214,7 @@
             font-weight: 900;
             color: var(--brown);
             margin-bottom: 12px;
+            font-size: 1rem;
             text-transform: uppercase;
         }
 
@@ -198,15 +228,19 @@
             background: white;
             border: 2px solid var(--cream-dark);
             border-radius: 8px;
-            padding: 14px;
+            padding: 12px;
             cursor: pointer;
             font-weight: 700;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            font-family: 'Lato', sans-serif;
         }
 
         .opt-btn.selected {
             background: var(--brown) !important;
             color: white !important;
+            border-color: var(--text-dark);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .opt-btn.locked {
@@ -214,24 +248,54 @@
             opacity: 0.7;
         }
 
-        /* --- LEADERBOARD & SCROLL --- */
-        .lb-scroll {
-            max-height: 550px;
-            overflow-y: auto;
-            padding-right: 10px;
+        /* --- MODAL RÉSULTATS --- */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
         }
 
-        .lb-scroll::-webkit-scrollbar { width: 10px; }
+        .modal-content {
+            background: var(--cream);
+            border: 4px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 30px var(--gold);
+        }
+
+        /* --- CLASSEMENT & SCROLLBAR --- */
+        .lb-scroll {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin: 10px 0;
+        }
+
+        .lb-scroll::-webkit-scrollbar { width: 12px; }
         .lb-scroll::-webkit-scrollbar-track { background: var(--cream-dark); border-radius: 10px; }
         .lb-scroll::-webkit-scrollbar-thumb { 
             background: var(--gold); 
             border-radius: 10px; 
-            border: 2px solid var(--brown);
+            border: 3px solid var(--brown);
         }
 
-        .lb-table { width: 100%; border-collapse: collapse; }
-        .lb-table td { padding: 15px 10px; border-bottom: 1px solid var(--cream-dark); }
-        
+        .lb-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lb-table td {
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+
         .rank-pill {
             display: inline-flex;
             align-items: center;
@@ -242,49 +306,67 @@
             font-weight: bold;
             font-family: 'Rye', serif;
             background: var(--cream-dark);
-        }
-        .top1 { background: var(--gold); color: white; border: 2px solid var(--brown); }
-
-        /* --- POP-UP MODAL --- */
-        #modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; align-items: center;
-            justify-content: center; z-index: 2000; padding: 20px;
+            color: var(--brown);
         }
 
-        .modal-content {
-            background: var(--cream);
-            border: 4px solid var(--gold);
+        .top1 { 
+            background: var(--gold); 
+            color: white; 
+            border: 2px solid var(--brown);
+        }
+
+        /* --- PROGRESS BARS --- */
+        .pg-container { margin-bottom: 15px; }
+        .pg-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .pg-bar {
+            background: var(--cream-dark);
             border-radius: 20px;
-            padding: 40px 20px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 40px var(--shadow);
-            animation: modalPop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.3);
+            height: 16px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
         }
 
-        @keyframes modalPop { from {transform: scale(0.5); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        .pg-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+            transition: width 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
 
-        .modal-icon { font-size: 5rem; margin-bottom: 15px; }
-        .modal-title { font-family: 'Rye', serif; font-size: 2rem; margin-bottom: 10px; }
-        .modal-text { font-size: 1.3rem; font-weight: 700; margin-bottom: 25px; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-        /* --- PROGRESS --- */
-        .pg-bar { background: var(--cream-dark); border-radius: 20px; height: 16px; overflow: hidden; margin-top: 10px; }
-        .pg-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); transition: width 0.6s; }
-
-        @media (max-width: 500px) { .opt-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 500px) {
+            .opt-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.2rem; }
+        }
     </style>
 </head>
 <body>
 
     <div id="modal-overlay">
         <div class="modal-content">
-            <div id="modal-icon" class="modal-icon">🌵</div>
-            <div id="modal-title" class="modal-title">TITRE</div>
-            <div id="modal-text" class="modal-text">Message ici...</div>
-            <button class="btn-gold" onclick="closeModal()">SUIVANT !</button>
+            <h2 style="font-family:'Rye'; color:var(--brown); font-size:1.8rem; margin-bottom:15px;">🤠 FIN DU TIR !</h2>
+            <p style="font-size:1.1rem; margin-bottom:10px;">Bravo Cowboy, tu as terminé la dégustation.</p>
+            <div style="background:var(--brown); color:var(--gold-light); padding:20px; border-radius:10px; margin:20px 0;">
+                <div style="font-size:0.9rem; text-transform:uppercase;">Ton Score Total</div>
+                <div style="font-family:'Rye'; font-size:3rem;" id="modal-score-val">0</div>
+                <div style="font-size:0.8rem;">points sur 46</div>
+            </div>
+            <button class="btn-gold" onclick="document.getElementById('modal-overlay').style.display='none'">VOIR LE CLASSEMENT</button>
         </div>
     </div>
 
@@ -301,16 +383,40 @@
     </nav>
 
     <div class="main">
+
         <div id="panel-register" class="panel active">
             <div class="card">
-                <div class="card-header">🐎 BIENVENUE AU RANCH</div>
+                <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
                 <div class="card-body">
-                    <p style="margin-bottom:20px; font-weight:700; color:var(--red); text-align:center;">
-                        "Unissez vos forces : les enfants pour les chips, les adultes pour le vin !"
-                    </p>
-                    <input type="text" id="p-name" class="input-field" placeholder="Nom de l'équipe (ex: Les Dalton)">
-                    <input type="text" id="p-table" class="input-field" placeholder="Nom de votre table">
-                    <button class="btn-gold" onclick="register()">🌵 REJOINDRE LE SALOON</button>
+                    <div class="union-box">
+                        <strong>L'UNION FAIT LA FORCE !</strong><br>
+                        "Les adultes dégustent les vins, les enfants identifient les chips Bret's ! Formez une équipe mixte pour gagner."
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>NOM DE L'ÉQUIPE (OU COWBOY)</label>
+                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Les Dalton">
+                    </div>
+
+                    <div class="input-group">
+                        <label>VOTRE TABLE</label>
+                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table Canyon">
+                    </div>
+
+                    <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
+                    <div id="reg-feedback" style="text-align:center; margin-top:15px;"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
+                <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
+                    <p>🍷 <strong>4 VINS :</strong> 3 pts (12 total)</p>
+                    <p>🧀 <strong>8 FROMAGES :</strong> 2 pts (16 total)</p>
+                    <p>🥩 <strong>6 CHARCUTERIES :</strong> 2 pts (12 total)</p>
+                    <p>🥔 <strong>6 CHIPS :</strong> 1 pt (6 total)</p>
+                    <hr style="margin:10px 0; opacity:0.2;">
+                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Un clic est définitif !</p>
                 </div>
             </div>
         </div>
@@ -318,11 +424,12 @@
         <div id="panel-quiz" class="panel">
             <div class="card">
                 <div class="card-body">
-                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.4rem; color:var(--brown);">Cowboy : ...</div>
-                    <div class="pg-bar"><div class="pg-fill" id="q-progress-fill" style="width:0%"></div></div>
-                    <p style="text-align:right; font-size:0.8rem; font-weight:700; margin-top:5px;">
-                        <span id="q-done-count">0</span> / 24 ANALYSES TERMINÉES
-                    </p>
+                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.4rem; color:var(--brown); margin-bottom:10px;">Cowboy : ...</div>
+                    <div class="pg-container">
+                        <div class="pg-label"><span>Progression</span><span id="q-percent">0%</span></div>
+                        <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
+                    </div>
+                    <p style="text-align:right; font-size:0.8rem; font-weight:900; color:var(--brown-light);"><span id="q-done-count">0</span> / 24 ÉLÉMENTS</p>
                 </div>
             </div>
             <div id="quiz-render-area"></div>
@@ -330,17 +437,23 @@
 
         <div id="panel-leaderboard" class="panel">
             <div class="card">
-                <div class="card-header">🏆 SCOREBOARD LIVE</div>
+                <div class="card-header">🏆 CLASSEMENT DU SALOON</div>
                 <div class="card-body">
                     <div class="lb-scroll">
-                        <table class="lb-table" id="lb-body">
-                            <tr><td align="center">Chargement des hors-la-loi...</td></tr>
-                        </table>
+                        <table class="lb-table" id="lb-display"></table>
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-header">📊 ANALYSE DES EXPERTS</div>
+                <div class="card-body" id="category-stats-area"></div>
+            </div>
         </div>
+
     </div>
+
+    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre - 2024 🎉</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -358,8 +471,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- QUESTIONS DÉTAILLÉES (24 items) ---
-        const QUESTIONS = {
+        const QUESTIONS_DB = {
             vins: [
                 { id: 'v1', label: 'Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], answer: 1 },
                 { id: 'v2', label: 'Vin Blanc n°2', options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], answer: 2 },
@@ -368,148 +480,143 @@
             ],
             fromages: [
                 { id: 'f1', label: 'Fromage 1', options: ['Camembert', 'Brie', 'Coulommiers', 'Chaource'], answer: 0 },
-                { id: 'f2', label: 'Fromage 2', options: ['Comté 12m', 'Comté 24m', 'Beaufort', 'Abondance'], answer: 1 },
+                { id: 'f2', label: 'Fromage 2', options: ['Comté 12 mois', 'Comté 24 mois', 'Beaufort', 'Abondance'], answer: 1 },
                 { id: 'f3', label: 'Fromage 3', options: ['Morbier', 'Raclette', 'Saint-Nectaire', 'Reblochon'], answer: 2 },
-                { id: 'f4', label: 'Fromage 4', options: ['Roquefort', 'Bleu d\'Auv.', 'Fourme d\'Amb.', 'Gorgonzola'], answer: 0 },
-                { id: 'f5', label: 'Fromage 5', options: ['Chèvre Frais', 'Sainte-Maure', 'Crottin', 'Pélardon'], answer: 1 },
+                { id: 'f4', label: 'Fromage 4', options: ['Roquefort', 'Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Gorgonzola'], answer: 0 },
+                { id: 'f5', label: 'Fromage 5', options: ['Chèvre Frais', 'Sainte-Maure', 'Crottin Chavignol', 'Pélardon'], answer: 1 },
                 { id: 'f6', label: 'Fromage 6', options: ['Munster', 'Époisses', 'Livarot', 'Maroilles'], answer: 1 },
                 { id: 'f7', label: 'Fromage 7', options: ['Ossau-Iraty', 'Manchego', 'Cantal', 'Salers'], answer: 0 },
-                { id: 'f8', label: 'Fromage 8', options: ['Tomme Sav.', 'Tomme Brebis', 'Mimolette', 'Gruyère'], answer: 2 }
+                { id: 'f8', label: 'Fromage 8', options: ['Tomme de Savoie', 'Tomme de Brebis', 'Mimolette', 'Gruyère'], answer: 2 }
             ],
             charcuteries: [
-                { id: 'c1', label: 'Charcuterie 1', options: ['Bayonne', 'Serrano', 'Parme', 'San Daniele'], answer: 0 },
-                { id: 'c2', label: 'Charcuterie 2', options: ['Rosette', 'Saucisson Sec', 'Jésus', 'Chorizo'], answer: 3 },
+                { id: 'c1', label: 'Charcuterie 1', options: ['Jambon de Bayonne', 'Serrano', 'Parme', 'San Daniele'], answer: 0 },
+                { id: 'c2', label: 'Charcuterie 2', options: ['Rosette Lyon', 'Saucisson Sec', 'Jésus', 'Chorizo'], answer: 3 },
                 { id: 'c3', label: 'Charcuterie 3', options: ['Coppa', 'Pancetta', 'Lomo', 'Bresaola'], answer: 0 },
-                { id: 'c4', label: 'Charcuterie 4', options: ['Andouille', 'Andouillette', 'Boudin Noir', 'Saucisson Ail'], answer: 0 },
-                { id: 'c5', label: 'Charcuterie 5', options: ['Rillettes', 'Pâté Camp.', 'Terrine Sanglier', 'Mousse Canard'], answer: 1 },
-                { id: 'c6', label: 'Charcuterie 6', options: ['Grisons', 'Cécina', 'Noix Jambon', 'Magret Séché'], answer: 2 }
+                { id: 'c4', label: 'Charcuterie 4', options: ['Andouille de Guémené', 'Andouillette', 'Boudin Noir', 'Saucisson à l\'ail'], answer: 0 },
+                { id: 'c5', label: 'Charcuterie 5', options: ['Rillettes Pur Porc', 'Pâté de Campagne', 'Terrine de Sanglier', 'Mousse de canard'], answer: 1 },
+                { id: 'c6', label: 'Charcuterie 6', options: ['Viande des Grisons', 'Cécina', 'Noix de Jambon', 'Magret Séché'], answer: 2 }
             ],
             chips: [
-                { id: 'ch1', label: 'Bret\'s n°1', options: ['Nature', 'Guérande', 'Barbecue', 'Poulet'], answer: 1 },
-                { id: 'ch2', label: 'Bret\'s n°2', options: ['Oignon Grillé', 'Fromage Jura', 'Camembert', 'Chèvre'], answer: 0 },
+                { id: 'ch1', label: 'Bret\'s n°1', options: ['Nature', 'Sel de Guérande', 'Barbecue', 'Poulet Rôti'], answer: 1 },
+                { id: 'ch2', label: 'Bret\'s n°2', options: ['Oignon Grillé', 'Fromage du Jura', 'Camembert', 'Chèvre Piment'], answer: 0 },
                 { id: 'ch3', label: 'Bret\'s n°3', options: ['Aioli', 'Pesto', 'Tartine Grillée', 'Cheddar'], answer: 0 },
                 { id: 'ch4', label: 'Bret\'s n°4', options: ['Vinaigre', 'Moutarde', 'Pickles', 'Ketchup'], answer: 1 },
-                { id: 'ch5', label: 'Bret\'s n°5', options: ['Espelette', 'Chili', 'Curry', 'Mexicaine'], answer: 0 },
+                { id: 'ch5', label: 'Bret\'s n°5', options: ['Piment d\'Espelette', 'Chili', 'Curry', 'Mexicaine'], answer: 0 },
                 { id: 'ch6', label: 'Bret\'s n°6', options: ['Truffe', 'Cèpes', 'Morilles', 'Champignons'], answer: 1 }
             ]
         };
 
         const BAREME = { vins: 3, fromages: 2, charcuteries: 2, chips: 1 };
-        let player = JSON.parse(localStorage.getItem('alex_p'));
-        let myAns = player ? (JSON.parse(localStorage.getItem('ans_' + player.id)) || {}) : {};
-        let scores = {};
+        let player = JSON.parse(localStorage.getItem('alex_50_p'));
+        let answers = player ? (JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {}) : {};
+        let liveScores = {};
 
-        // --- NAVIGATION ---
-        window.showPanel = (id) => {
+        window.showPanel = (panelId) => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-'+id).classList.add('active');
-            document.getElementById('nav-'+id).classList.add('active');
-            if(id === 'quiz') renderQuiz();
-            if(id === 'leaderboard') renderLB();
-            window.scrollTo(0,0);
+            document.getElementById('panel-' + panelId).classList.add('active');
+            document.getElementById('nav-' + panelId).classList.add('active');
+            if(panelId === 'quiz') renderQuiz();
+            if(panelId === 'leaderboard') renderLeaderboard();
         };
 
-        // --- INSCRIPTION ---
-        window.register = () => {
+        window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
-            if(!name) return alert("Veuillez entrer un nom d'équipe !");
-            const id = name.toLowerCase().replace(/[^a-z]/g, '') + "_" + Math.floor(Math.random()*999);
-            player = { id, name, table: document.getElementById('p-table').value };
-            localStorage.setItem('alex_p', JSON.stringify(player));
-            showPanel('quiz');
+            const table = document.getElementById('p-table').value.trim();
+            if(!name) { alert("Nom obligatoire !"); return; }
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*10000);
+            player = { id, name, table };
+            localStorage.setItem('alex_50_p', JSON.stringify(player));
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>En selle !</b>";
+            setTimeout(() => showPanel('quiz'), 1000);
         };
 
-        // --- QUIZ LOGIC ---
         function renderQuiz() {
-            if(!player) return showPanel('register');
-            document.getElementById('q-player-name').textContent = "🤠 Équipe : " + player.name;
-            
+            if(!player) { showPanel('register'); return; }
+            document.getElementById('q-player-name').textContent = "🤠 Cowboy : " + player.name;
             let html = "";
-            const cats = { vins: '🍷 LES VINS (3 pts)', fromages: '🧀 LES FROMAGES (2 pts)', charcuteries: '🥩 CHARCUTERIES (2 pts)', chips: '🥔 CHIPS BRET\'S (1 pt)' };
-            
-            for(const c in QUESTIONS) {
-                html += `<div class="card"><div class="card-header">${cats[c]}</div><div class="card-body">`;
-                QUESTIONS[c].forEach(q => {
-                    const picked = myAns[q.id];
+            const catTitles = { vins: '🍷 VINS', fromages: '🧀 FROMAGES', charcuteries: '🥩 CHARCUTERIE', chips: '🥔 CHIPS BRET\'S' };
+
+            for(const cat in QUESTIONS_DB) {
+                html += `<div class="card"><div class="card-header">${catTitles[cat]}</div><div class="card-body">`;
+                QUESTIONS_DB[cat].forEach(q => {
+                    const userAns = answers[q.id];
+                    const isLocked = userAns !== undefined;
                     html += `<div class="q-block"><div class="q-title">${q.label}</div><div class="opt-grid">`;
                     q.options.forEach((opt, idx) => {
-                        let cls = "opt-btn";
-                        if(picked !== undefined) {
-                            cls += " locked";
-                            if(idx === picked) cls += " selected";
-                        }
-                        html += `<button class="${cls}" onclick="vote('${q.id}', '${c}', ${idx})">${opt}</button>`;
+                        let btnClass = "opt-btn" + (isLocked ? (idx === userAns ? " selected locked" : " locked") : "");
+                        html += `<button class="${btnClass}" onclick="handleVote('${q.id}', '${cat}', ${idx})">${opt}</button>`;
                     });
                     html += `</div></div>`;
                 });
                 html += `</div></div>`;
             }
             document.getElementById('quiz-render-area').innerHTML = html;
-            const count = Object.keys(myAns).length;
-            document.getElementById('q-done-count').textContent = count;
-            document.getElementById('q-progress-fill').style.width = (count/24*100) + "%";
+            updateQuizProgress();
         }
 
-        window.vote = async (qid, cat, choice) => {
-            if(myAns[qid] !== undefined) return;
-
-            // Récupérer la question pour vérifier
-            const question = QUESTIONS[cat].find(x => x.id === qid);
-            const correct = (question.answer === choice);
-
-            // Pop-up Feedback
-            const modal = document.getElementById('modal-overlay');
-            const mTitle = document.getElementById('modal-title');
-            const mIcon = document.getElementById('modal-icon');
-            const mText = document.getElementById('modal-text');
-
-            modal.style.display = 'flex';
-            if(correct) {
-                mIcon.textContent = "🎯"; mTitle.textContent = "BIEN JOUÉ !";
-                mTitle.style.color = "var(--green)";
-                mText.textContent = "C'est une excellente réponse !";
-            } else {
-                mIcon.textContent = "🌵"; mTitle.textContent = "OUILLE...";
-                mTitle.style.color = "var(--red)";
-                mText.textContent = "Ce n'est pas tout à fait ça...";
-            }
-
-            myAns[qid] = choice;
-            localStorage.setItem('ans_' + player.id, JSON.stringify(myAns));
-
-            // Calcul Score
-            let total = 0; let byCat = { vins:0, fromages:0, charcuteries:0, chips:0 };
-            for(const c in QUESTIONS) {
-                QUESTIONS[c].forEach(q => { if(myAns[q.id] === q.answer) { total += BAREME[c]; byCat[c] += BAREME[c]; } });
-            }
-
-            await setDoc(doc(db, "scores", player.id), { 
-                name: player.name, table: player.table, score: total, byCat, lastUpdate: Date.now() 
-            });
-        };
-
-        window.closeModal = () => {
-            document.getElementById('modal-overlay').style.display = 'none';
+        window.handleVote = async (qId, cat, choiceIdx) => {
+            if(answers[qId] !== undefined) return;
+            answers[qId] = choiceIdx;
+            localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
             renderQuiz();
+
+            let score = 0;
+            let byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
+            for(const c in QUESTIONS_DB) {
+                QUESTIONS_DB[c].forEach(q => {
+                    if(answers[q.id] === q.answer) { score += BAREME[c]; byCat[c] += BAREME[c]; }
+                });
+            }
+
+            await setDoc(doc(db, "scores", player.id), {
+                name: player.name, table: player.table, score: score, byCat: byCat,
+                done: Object.keys(answers).length, lastUpdate: Date.now()
+            });
+
+            // GESTION DU POP-UP FINAL
+            if(Object.keys(answers).length === 24) {
+                document.getElementById('modal-score-val').textContent = score;
+                document.getElementById('modal-overlay').style.display = 'flex';
+            }
         };
 
-        // --- LEADERBOARD ---
-        function renderLB() {
-            const list = Object.values(scores).sort((a,b) => b.score - a.score);
-            let html = `<table class="lb-table">`;
-            list.forEach((p, i) => {
-                html += `<tr>
-                    <td width="50"><span class="rank-pill ${i===0?'top1':''}">${i+1}</span></td>
-                    <td><b>${p.name}</b><br><small>${p.table||''}</small></td>
-                    <td align="right"><b style="color:var(--red); font-size:1.3rem;">${p.score}</b><small> pts</small></td>
-                </tr>`;
-            });
-            document.getElementById('lb-body').innerHTML = html + "</table>";
+        function updateQuizProgress() {
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / 24) * 100);
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-main-fill').style.width = pct + "%";
         }
 
-        onSnapshot(collection(db, "scores"), (snap) => {
-            snap.forEach(d => scores[d.id] = d.data());
-            if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLB();
+        function renderLeaderboard() {
+            const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
+            let html = `<table class="lb-table">`;
+            list.forEach((p, index) => {
+                const rank = index + 1;
+                html += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${rank===1?'🥇':rank}</span></td>
+                <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.7rem;">${p.table}</div></td>
+                <td align="right"><div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div></td></tr>`;
+            });
+            document.getElementById('lb-display').innerHTML = html + `</table>`;
+            renderCategoryStats(list);
+        }
+
+        function renderCategoryStats(list) {
+            if(list.length === 0) return;
+            const cats = { vins: 12, fromages: 16, charcuteries: 12, chips: 6 };
+            const labels = { vins: '🍷 Vins', fromages: '🧀 Fromages', charcuteries: '🥩 Charcuterie', chips: '🥔 Chips' };
+            let html = "";
+            for(const c in cats) {
+                const avg = (list.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / list.length).toFixed(1);
+                html += `<div class="pg-container"><div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg} / ${cats[c]}</span></div>
+                <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c]*100)}%"></div></div></div>`;
+            }
+            document.getElementById('category-stats-area').innerHTML = html;
+        }
+
+        onSnapshot(collection(db, "scores"), (sn) => {
+            sn.forEach(doc => { liveScores[doc.id] = doc.data(); });
+            if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
         });
 
         if(player) showPanel('quiz');
