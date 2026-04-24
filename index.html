@@ -14,6 +14,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // QUESTIONS (bonnes réponses utilisées uniquement pour le calcul du score)
   const QUESTIONS = {
     vins: [
       { id:'v1', label:'Vin 1', options:['Bordeaux / Cabernet','Bourgogne / Pinot Noir','Rhône / Syrah','Loire / Muscadet'], answer:0 },
@@ -57,6 +58,7 @@
   let answers = {};
   let allScores = {};
 
+  // Initialisation
   function init() {
     const saved = localStorage.getItem('alex50_player');
     if (saved) {
@@ -65,6 +67,7 @@
       if (savedAns) answers = JSON.parse(savedAns);
     }
 
+    // Mise à jour en temps réel du classement
     const scoresCol = collection(db, 'scores');
     onSnapshot(scoresCol, (snapshot) => {
       allScores = {};
@@ -75,6 +78,7 @@
     });
   }
 
+  // Navigation
   window.showPanel = function(name) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -86,7 +90,7 @@
     if (name === 'leaderboard') renderLeaderboard();
   };
 
-  // Inscription (simplifiée)
+  // Inscription
   window.registerPlayer = async function() {
     const name = document.getElementById('player-name').value.trim();
     const table = document.getElementById('player-table').value.trim();
@@ -100,8 +104,8 @@
     const existing = Object.values(allScores).find(p => p.name?.toLowerCase() === name.toLowerCase());
     if (existing) {
       msg.innerHTML = `<div class="msg" style="background:#fff3cd;color:#856404;border:1px solid #ffe69c;">
-        <strong>${name}</strong> est déjà inscrit !<br>
-        <button class="btn" style="width:auto;margin-top:0.6rem;" onclick="confirmRegister('${name.replace(/'/g,"\\'")}','${table.replace(/'/g,"\\'")}')">Continuer quand même</button>
+        <strong>${name}</strong> est déjà inscrit(e) !<br>
+        <button class="btn" style="width:auto;margin-top:0.6rem;font-size:0.85rem;" onclick="confirmRegister('${name.replace(/'/g,"\\'")}','${table.replace(/'/g,"\\'")}')">Continuer quand même</button>
       </div>`;
       return;
     }
@@ -116,6 +120,7 @@
     setTimeout(() => showPanel('quiz'), 800);
   };
 
+  // Configuration du quiz
   function setupQuiz() {
     if (!currentPlayer) {
       document.getElementById('quiz-not-registered').style.display = 'block';
@@ -128,7 +133,11 @@
 
     renderAllCategories();
     updateProgress();
-    checkIfFinished(); // Vérifie si déjà terminé
+
+    // Si déjà terminé, afficher le popup
+    if (Object.keys(answers).length === TOTAL_Q) {
+      setTimeout(showFinalScorePopup, 300);
+    }
   }
 
   function renderAllCategories() {
@@ -138,12 +147,14 @@
     renderCategory('chips', 'quiz-chips');
   }
 
+  // Rendu sécurisé : seul le choix du joueur est vert
   function renderCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     let html = '';
 
     QUESTIONS[cat].forEach((q, qi) => {
       const selected = answers[q.id];
+
       html += `<div class="question-block">
         <div class="question-title">${q.label} <span style="float:right;color:var(--gold);font-size:0.75rem">+${POINTS[cat]} pts</span></div>
         <div class="options-grid">`;
@@ -152,7 +163,7 @@
         let cls = 'opt-btn';
         if (selected !== undefined) {
           cls += ' locked';
-          if (oi === selected) cls += ' correct';   // Vert uniquement sur le choix du joueur
+          if (oi === selected) cls += ' correct';   // UNIQUEMENT le choix du joueur
         }
         html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},this)">${opt}</button>`;
       });
@@ -164,24 +175,29 @@
     container.innerHTML = html;
   }
 
+  // Sélection de réponse (correction stricte)
   window.selectAnswer = async function(qId, cat, optionIdx, btn) {
     if (answers[qId] !== undefined) return;
 
     answers[qId] = optionIdx;
     localStorage.setItem('alex50_answers_' + currentPlayer.id, JSON.stringify(answers));
 
+    // Mise à jour visuelle stricte
     const grid = btn.closest('.options-grid');
     grid.querySelectorAll('.opt-btn').forEach(b => {
       const oi = parseInt(b.getAttribute('onclick').match(/,(\d+),this/)[1]);
       b.classList.add('locked');
-      b.classList.remove('correct', 'wrong');
-      if (oi === optionIdx) b.classList.add('correct');
+      b.classList.remove('correct', 'wrong');   // On enlève toute couleur précédente
+
+      if (oi === optionIdx) {
+        b.classList.add('correct');   // Vert uniquement sur le choix du joueur
+      }
     });
 
     updateProgress();
     await pushScore();
 
-    // Vérifier si toutes les questions sont répondues
+    // Afficher le popup si toutes les questions sont répondues
     if (Object.keys(answers).length === TOTAL_Q) {
       setTimeout(showFinalScorePopup, 600);
     }
@@ -194,17 +210,15 @@
     document.getElementById('quiz-progress').style.width = Math.round(answered / TOTAL_Q * 100) + '%';
   }
 
+  // Calcul et envoi du score en temps réel
   async function pushScore() {
     if (!currentPlayer) return;
 
     let total = 0;
-    const byCategory = { vins:0, fromages:0, charcuteries:0, chips:0 };
-
     Object.keys(QUESTIONS).forEach(cat => {
       QUESTIONS[cat].forEach(q => {
         if (answers[q.id] !== undefined && answers[q.id] === q.answer) {
           total += POINTS[cat];
-          byCategory[cat] += POINTS[cat];
         }
       });
     });
@@ -216,15 +230,17 @@
       maxScore: MAX_SCORE,
       answered: Object.keys(answers).length,
       totalQuestions: TOTAL_Q,
-      byCategory,
       ts: Date.now()
     };
 
     try {
       await setDoc(doc(db, 'scores', currentPlayer.id), data);
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error('Firebase error:', e);
+    }
   }
 
+  // Pop-up de score final
   function showFinalScorePopup() {
     const score = computeCurrentScore();
     const percent = Math.round((score / MAX_SCORE) * 100);
@@ -233,26 +249,22 @@
     popup.style.cssText = `
       position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
       background:var(--cream); color:var(--text-dark); padding:2rem; border-radius:16px;
-      border:4px solid var(--gold); box-shadow:0 10px 30px rgba(0,0,0,0.5);
-      text-align:center; max-width:320px; z-index:1000; font-family:'Lato',sans-serif;
+      border:5px solid var(--gold); box-shadow:0 15px 40px rgba(0,0,0,0.6);
+      text-align:center; max-width:340px; z-index:10000; font-family:'Lato',sans-serif;
     `;
     popup.innerHTML = `
       <h2 style="color:var(--brown); margin-bottom:1rem;">🎉 Dégustation terminée !</h2>
       <p style="font-size:1.1rem;">Ton score :</p>
-      <div style="font-size:3rem; font-family:'Rye',serif; color:var(--gold); margin:0.5rem 0;">
+      <div style="font-size:3.2rem; font-family:'Rye',serif; color:var(--gold); margin:0.8rem 0;">
         ${score} / ${MAX_SCORE}
       </div>
-      <p style="font-size:1.3rem; color:var(--green-dark);">${percent}% de bonnes réponses</p>
-      <button onclick="this.parentElement.remove()" class="btn" style="margin-top:1.5rem;width:100%;">
-        Voir le classement
+      <p style="font-size:1.4rem; color:var(--green-dark);">${percent}% de bonnes réponses</p>
+      <button onclick="this.parentElement.remove(); showPanel('leaderboard');" 
+              class="btn" style="margin-top:1.5rem; width:100%;">
+        Voir le classement en direct
       </button>
     `;
     document.body.appendChild(popup);
-
-    // Aller automatiquement sur le classement après fermeture du popup
-    popup.querySelector('button').addEventListener('click', () => {
-      showPanel('leaderboard');
-    });
   }
 
   function computeCurrentScore() {
@@ -267,6 +279,7 @@
     return total;
   }
 
+  // Classement en live
   function renderLeaderboard() {
     const players = Object.values(allScores)
       .sort((a, b) => (b.score || 0) - (a.score || 0) || (b.answered || 0) - (a.answered || 0));
@@ -274,7 +287,7 @@
     const container = document.getElementById('leaderboard-content');
 
     if (!players.length) {
-      container.innerHTML = '<p style="text-align:center;color:#999;padding:2rem 0;">Pas encore de participants...</p>';
+      container.innerHTML = '<p style="text-align:center;color:#999;padding:2rem 0;">Pas encore de participants — soyez les premiers ! 🤠</p>';
       return;
     }
 
@@ -285,7 +298,7 @@
     players.forEach((p, i) => {
       const rank = i + 1;
       const rankClass = rank <= 3 ? 'rank-' + rank : 'rank-other';
-      const isCurrent = currentPlayer && p.name.toLowerCase() === currentPlayer.name.toLowerCase();
+      const isCurrent = currentPlayer && p.name?.toLowerCase() === currentPlayer.name.toLowerCase();
 
       html += `<tr style="${isCurrent ? 'background:rgba(201,147,10,0.15);' : ''}">
         <td><span class="rank-badge ${rankClass}">${rank}</span></td>
