@@ -173,6 +173,29 @@
 
     const grid = btn.closest('.options-grid');
 
+    grid.querySelectorAll('.opt-btn').forEach(b => {
+      // Récupération plus sûre de l'index
+      const onclickStr = b.getAttribute('onclick') || '';
+      const match = onclickStr.match(/,(\d+),this/);
+      const oi = match ? parseInt(match[1]) : -1;
+
+      b.classList.add('locked');
+      b.classList.remove('correct', 'wrong');
+
+      // Vert UNIQUEMENT sur le choix du joueur
+      if (oi === optionIdx) {
+        b.classList.add('correct');
+      }
+    });
+
+    updateProgress();
+    await pushScore();
+
+    if (Object.keys(answers).length === TOTAL_Q) {
+      setTimeout(showFinalScorePopup, 600);
+    }
+  };
+
     // On verrouille tout et on retire TOUTES les classes correct/wrong
     grid.querySelectorAll('.opt-btn').forEach(b => {
       const oi = parseInt(b.getAttribute('onclick').match(/,(\d+),this/)[1]);
