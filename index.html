@@ -153,7 +153,8 @@
           cls += ' locked';
           if (oi === selected) cls += ' correct';
         }
-        html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},this)">${opt}</button>`;
+        // onclick sans le "this" fragile
+        html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi})">${opt}</button>`;
       });
 
       html += `</div></div>`;
@@ -163,22 +164,29 @@
     container.innerHTML = html;
   }
 
-  window.selectAnswer = async function(qId, cat, optionIdx, btn) {
+  // Fonction selectAnswer corrigée et robuste
+  window.selectAnswer = async function(qId, cat, optionIdx) {
     if (answers[qId] !== undefined) return;
 
     answers[qId] = optionIdx;
     localStorage.setItem('alex50_answers_' + currentPlayer.id, JSON.stringify(answers));
 
-    const grid = btn.closest('.options-grid');
+    // Recherche robuste du groupe de boutons de cette question
+    const allButtons = document.querySelectorAll(`button[onclick*="selectAnswer('${qId}'"]`);
+    if (allButtons.length === 0) return;
+
+    const grid = allButtons[0].closest('.options-grid');
+    if (!grid) return;
 
     grid.querySelectorAll('.opt-btn').forEach(b => {
       const onclickStr = b.getAttribute('onclick') || '';
-      const match = onclickStr.match(/,(\d+),this/);
+      const match = onclickStr.match(/,(\d+)\)/);
       const oi = match ? parseInt(match[1]) : -1;
 
       b.classList.add('locked');
       b.classList.remove('correct', 'wrong');
 
+      // Vert uniquement sur le choix du joueur
       if (oi === optionIdx) {
         b.classList.add('correct');
       }
