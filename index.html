@@ -21,9 +21,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background-color: var(--brown);
-    background-image:
-      repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px),
-      repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px);
+    background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px);
     font-family: 'Lato', sans-serif;
     color: var(--text-dark);
     min-height: 100vh;
@@ -32,24 +30,24 @@
     background: linear-gradient(135deg, var(--red) 0%, var(--brown) 50%, var(--red) 100%);
     border-bottom: 6px solid var(--gold);
     text-align: center;
-    padding: 1.5rem 1rem 1rem;
-    position: relative;
-    overflow: hidden;
+    padding: 1.5rem 1rem;
   }
-  .header-stars { font-size: 1.4rem; letter-spacing: 8px; color: var(--gold-light); position: relative; }
   .header h1 {
     font-family: 'Rye', serif;
     font-size: clamp(1.8rem, 6vw, 3.2rem);
     color: var(--gold-light);
-    text-shadow: 3px 3px 0 var(--brown), 5px 5px 8px rgba(0,0,0,0.5);
+    text-shadow: 3px 3px 0 var(--brown);
     margin: 0.3rem 0;
-    line-height: 1.1;
   }
-  .header-sub {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(0.9rem, 3vw, 1.3rem);
-    color: var(--cream);
-    letter-spacing: 3px;
+  .header-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--brown);
+    font-family: 'Rye', serif;
+    font-size: 0.75rem;
+    padding: 0.2rem 1rem;
+    border-radius: 20px;
+    margin-top: 0.5rem;
     text-transform: uppercase;
   }
   .nav {
@@ -64,10 +62,9 @@
     color: var(--cream-dark);
     font-family: 'Lato', sans-serif;
     font-size: 0.8rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1.5px;
+    text-transform: uppercase;
     padding: 0.9rem 1.2rem; cursor: pointer;
     border-bottom: 3px solid transparent;
-    transition: all 0.2s;
   }
   .nav-btn.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
   .main { max-width: 760px; margin: 0 auto; padding: 1rem; }
@@ -80,121 +77,88 @@
   .card-header {
     background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
     color: var(--gold-light); font-family: 'Rye', serif;
-    font-size: 1rem; padding: 0.7rem 1.1rem;
-    letter-spacing: 1px;
+    padding: 0.7rem 1.1rem;
   }
   .card-body { padding: 1rem; }
   .panel { display: none; }
   .panel.active { display: block; }
-  .input-group { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
-  .input-group label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--brown); }
-  input[type="text"] { padding: 0.65rem; border: 2px solid var(--brown-light); border-radius: 8px; }
   .btn {
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
     color: var(--brown); border: none; border-radius: 8px;
-    font-family: 'Rye', serif; font-size: 0.95rem; padding: 0.75rem;
-    cursor: pointer; width: 100%; box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    font-family: 'Rye', serif; padding: 0.75rem; cursor: pointer; width: 100%;
   }
-  .question-block { margin-bottom: 1.2rem; }
-  .question-title { font-weight: 700; font-size: 0.9rem; color: var(--brown); margin-bottom: 0.5rem; text-transform: uppercase; }
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-top: 0.5rem; }
   .opt-btn {
     background: white; border: 2px solid var(--cream-dark);
-    border-radius: 8px; padding: 0.55rem; cursor: pointer;
-    font-size: 0.82rem; transition: all 0.2s;
+    border-radius: 8px; padding: 0.55rem; cursor: pointer; font-size: 0.82rem;
   }
-  .opt-btn.correct { border-color: var(--green-dark); background: #e8f5e2; color: var(--green-dark); font-weight: 700; pointer-events: none; }
-  .opt-btn.wrong { border-color: var(--red); background: #ffe8e8; color: var(--red); font-weight: 700; pointer-events: none; }
-  .opt-btn.locked { pointer-events: none; opacity: 0.7; }
-  .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 0.5rem; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); transition: width 0.4s; }
+  .opt-btn.correct { border-color: var(--green-dark); background: #e8f5e2; color: var(--green-dark); font-weight: 700; }
+  .opt-btn.wrong { border-color: var(--red); background: #ffe8e8; color: var(--red); font-weight: 700; }
+  .opt-btn.locked { pointer-events: none; }
+  .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); transition: width 0.4s; }
   .leaderboard-table { width: 100%; border-collapse: collapse; }
-  .leaderboard-table th { background: var(--brown); color: var(--gold-light); font-family: 'Rye', serif; padding: 0.7rem; text-align: left; }
   .leaderboard-table td { padding: 0.7rem; border-bottom: 1px solid var(--cream-dark); }
-  .score-cell { font-family: 'Rye', serif; font-size: 1.1rem; }
-  .live-dot { display: inline-block; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
-  .footer { text-align: center; padding: 2rem; color: rgba(245,237,214,0.3); font-size: 0.8rem; }
-  @media (max-width: 420px) { .options-grid { grid-template-columns: 1fr; } }
+  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-weight: bold; }
+  .rank-1 { background: var(--gold); color: var(--brown); }
+  .rank-2 { background: #C0C0C0; color: white; }
+  .rank-3 { background: #CD7F32; color: white; }
+  .msg-success { background: #e8f5e2; color: var(--green-dark); padding: 10px; border-radius: 8px; text-align: center; margin-top: 10px; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-stars">✦ ✦ ✦ ✦ ✦</div>
   <h1>🤠 Alexandre a 50 ans !</h1>
-  <div class="header-sub">Dégustation Live</div>
+  <div class="header-badge">⭐ Wild West Birthday Party ⭐</div>
 </div>
 
 <nav class="nav">
-  <button class="nav-btn active" id="btn-reg" onclick="showPanel('register')">Équipe</button>
-  <button class="nav-btn" id="btn-quiz" onclick="showPanel('quiz')">Dégustation</button>
-  <button class="nav-btn" id="btn-lb" onclick="showPanel('leaderboard')">Scores</button>
+  <button class="nav-btn active" onclick="showPanel('register')">Équipe</button>
+  <button class="nav-btn" onclick="showPanel('quiz')">Dégustation</button>
+  <button class="nav-btn" onclick="showPanel('leaderboard')">Scores</button>
 </nav>
 
 <div class="main">
-
   <div id="panel-register" class="panel active">
     <div class="card">
-      <div class="card-header">🐎 Bienvenue au Saloon</div>
+      <div class="card-header">🐎 BIENVENUE AU SALOON</div>
       <div class="card-body">
-        <p style="margin-bottom:1.5rem; font-weight:700; color:var(--brown); text-align:center; font-size: 1rem; border: 2px dashed var(--gold); padding: 15px; border-radius: 10px;">
+        <p style="margin-bottom:1.5rem; font-weight:700; color:var(--brown); text-align:center; border: 2px dashed var(--gold); padding: 15px; border-radius: 10px;">
           💡 "L'union fait la force : les adultes misent sur le vin, les enfants sur les chips Bret's ! Mettez-vous en équipe (ex: Marie & Evangéline)."
         </p>
-        <div class="input-group">
-          <label>Nom de l'équipe / Cowboy</label>
-          <input type="text" id="player-name" placeholder="ex. Les Sept Mercenaires">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <input type="text" id="player-name" style="padding:10px;" placeholder="Nom de l'équipe">
+          <input type="text" id="player-table" style="padding:10px;" placeholder="Table (ex. Table 3)">
+          <button class="btn" onclick="registerPlayer()">🐴 Rejoindre le concours</button>
         </div>
-        <div class="input-group">
-          <label>VOTRE TABLE</label>
-          <input type="text" id="player-table" placeholder="ex. Table du Ranch">
-        </div>
-        <button class="btn" onclick="registerPlayer()">🌵 Lancer le concours</button>
         <div id="register-msg"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header">📜 Règlement du Shérif</div>
-      <div class="card-body" style="font-size:0.9rem; line-height:1.6; color:var(--brown);">
-        <p>🍷 <strong>4 vins</strong> (3 pts / bon vin)</p>
-        <p>🧀 <strong>8 fromages</strong> (2 pts / fromage)</p>
-        <p>🥩 <strong>6 charcuteries</strong> (2 pts / item)</p>
-        <p>🥔 <strong>6 chips Bret's</strong> (1 pt / saveur)</p>
-        <div style="margin-top:10px; color:var(--red); font-weight:bold;">⚠️ Chaque clic est irréversible !</div>
       </div>
     </div>
   </div>
 
   <div id="panel-quiz" class="panel">
-    <div id="quiz-content">
-        <div class="card">
-            <div class="card-body">
-                <div id="quiz-player-label" style="font-family:'Rye'; color:var(--brown);">🤠 Cowboy</div>
-                <div class="progress-bar" style="margin-top:10px;"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
-                <p style="font-size:0.8rem; text-align:right;"><span id="answered-count">0</span> / 24 items</p>
-            </div>
-        </div>
-        <div class="card"><div class="card-header">🍷 Les 4 Vins</div><div class="card-body" id="quiz-vins"></div></div>
-        <div class="card"><div class="card-header">🧀 Les 8 Fromages</div><div class="card-body" id="quiz-fromages"></div></div>
-        <div class="card"><div class="card-header">🥩 Les 6 Charcuteries</div><div class="card-body" id="quiz-charcuteries"></div></div>
-        <div class="card"><div class="card-header">🥔 Chips Bret's</div><div class="card-body" id="quiz-chips"></div></div>
+    <div class="card">
+      <div class="card-body">
+        <div id="quiz-player-label" style="font-family:'Rye';">🤠 Cowboy</div>
+        <div class="progress-bar" style="margin: 10px 0;"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
+        <div style="text-align:right; font-size:0.8rem;"><span id="answered-count">0</span> / 24 items</div>
+      </div>
     </div>
+    <div id="quiz-container"></div>
   </div>
 
   <div id="panel-leaderboard" class="panel">
     <div class="card">
-      <div class="card-header">🏆 Classement en direct</div>
+      <div class="card-header">🏆 CLASSEMENT LIVE</div>
       <div class="card-body" id="leaderboard-content"></div>
     </div>
     <div class="card">
-      <div class="card-header">📊 Moyennes par catégorie</div>
+      <div class="card-header">📊 RÉSULTATS PAR CATÉGORIE</div>
       <div class="card-body" id="category-stats"></div>
     </div>
   </div>
-
 </div>
-
-<div class="footer">🤠 Joyeux 50 ans Alexandre ! 🎉</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -214,136 +178,138 @@
 
   const QUESTIONS = {
     vins: [
-      { id:'v1', label:'Vin 1', options:['Bordeaux / Cabernet','Bourgogne / Pinot Noir','Rhône / Syrah','Loire / Muscadet'], answer:0 },
-      { id:'v2', label:'Vin 2', options:['Alsace / Riesling','Bordeaux / Sauvignon','Provence / Rosé','Languedoc / Grenache'], answer:2 },
-      { id:'v3', label:'Vin 3', options:['Champagne / Chardonnay','Chablis / Chardonnay','Sancerre / Sauvignon','Mâcon / Aligoté'], answer:2 },
-      { id:'v4', label:'Vin 4', options:['Côtes du Rhône / Grenache','Saint-Émilion / Merlot','Pomerol / Merlot','Cahors / Malbec'], answer:3 },
+      { id:'v1', label:'Vin 1', options:['Bordeaux','Bourgogne','Rhône','Loire'], answer:0 },
+      { id:'v2', label:'Vin 2', options:['Alsace','Bordeaux','Provence','Languedoc'], answer:2 },
+      { id:'v3', label:'Vin 3', options:['Champagne','Chablis','Sancerre','Mâcon'], answer:2 },
+      { id:'v4', label:'Vin 4', options:['Rhône','St-Émilion','Pomerol','Cahors'], answer:3 },
     ],
     fromages: [
       { id:'f1', label:'Fromage 1', options:['Brie','Camembert','Coulommiers','Chaource'], answer:1 },
       { id:'f2', label:'Fromage 2', options:['Comté','Beaufort','Emmental','Gruyère'], answer:0 },
-      { id:'f3', label:'Fromage 3', options:['Roquefort','Gorgonzola','Bleu d\'Auvergne','Fourme d\'Ambert'], answer:0 },
+      { id:'f3', label:'Fromage 3', options:['Roquefort','Gorgonzola','Bleu','Fourme'], answer:0 },
       { id:'f4', label:'Fromage 4', options:['Reblochon','Munster','Livarot','Époisses'], answer:3 },
       { id:'f5', label:'Fromage 5', options:['Chèvre frais','Sainte-Maure','Crottin','Valençay'], answer:2 },
-      { id:'f6', label:'Fromage 6', options:['Morbier','Tomme de Savoie','Raclette','Abondance'], answer:1 },
+      { id:'f6', label:'Fromage 6', options:['Morbier','Tomme','Raclette','Abondance'], answer:1 },
       { id:'f7', label:'Fromage 7', options:['Maroilles','Pont-l\'Évêque','Livarot','Langres'], answer:0 },
       { id:'f8', label:'Fromage 8', options:['Ossau-Iraty','Mimolette','Cantal','Salers'], answer:2 },
     ],
     charcuteries: [
-      { id:'c1', label:'Charcuterie 1', options:['Jambon Bayonne','Jambon Parme','Coppa','Bresaola'], answer:0 },
-      { id:'c2', label:'Charcuterie 2', options:['Saucisson sec','Chorizo','Salami','Sopressata'], answer:0 },
-      { id:'c3', label:'Charcuterie 3', options:['Rillettes','Pâté de campagne','Terrine','Mousse'], answer:1 },
-      { id:'c4', label:'Charcuterie 4', options:['Andouille','Andouillette','Boudin blanc','Boudin noir'], answer:0 },
-      { id:'c5', label:'Charcuterie 5', options:['Lard fumé','Poitrine roulée','Pancetta','Ventrèche'], answer:3 },
-      { id:'c6', label:'Charcuterie 6', options:['Noix de jambon','Rosette','Jésus de Lyon','Saucisse sèche'], answer:1 },
+      { id:'c1', label:'Charcuterie 1', options:['Bayonne','Parme','Coppa','Bresaola'], answer:0 },
+      { id:'c2', label:'Charcuterie 2', options:['Saucisson','Chorizo','Salami','Sopressata'], answer:0 },
+      { id:'c3', label:'Charcuterie 3', options:['Rillettes','Pâté','Terrine','Mousse'], answer:1 },
+      { id:'c4', label:'Charcuterie 4', options:['Andouille','Andouillette','Boudin B.','Boudin N.'], answer:0 },
+      { id:'c5', label:'Charcuterie 5', options:['Lard','Poitrine','Pancetta','Ventrèche'], answer:3 },
+      { id:'c6', label:'Charcuterie 6', options:['Noix Jambon','Rosette','Jésus','Saucisse'], answer:1 },
     ],
     chips: [
-      { id:'ch1', label:'Chips 1', options:['Nature','Barbecue','Sel & Vinaigre','Fromage'], answer:0 },
-      { id:'ch2', label:'Chips 2', options:['Paprika','Jambon beurre','Bolognaise','Poulet rôti'], answer:1 },
-      { id:'ch3', label:'Chips 3', options:['Crème Ciboulette','Raclette','Tartiflette','Reblochon'], answer:2 },
+      { id:'ch1', label:'Chips 1', options:['Nature','Barbecue','Vinaigre','Fromage'], answer:0 },
+      { id:'ch2', label:'Chips 2', options:['Paprika','Jambon Beurre','Bolognaise','Poulet'], answer:1 },
+      { id:'ch3', label:'Chips 3', options:['Ciboulette','Raclette','Tartiflette','Reblochon'], answer:2 },
       { id:'ch4', label:'Chips 4', options:['Ketchup','Maïs','Curry','Tapenade'], answer:3 },
-      { id:'ch5', label:'Chips 5', options:['Saveur Mer','Cocktail crevettes','Crevette-Citron','Langouste'], answer:1 },
-      { id:'ch6', label:'Chips 6', options:['Piment doux','Chili','Jalapeño','Piment Espelette'], answer:3 },
+      { id:'ch5', label:'Chips 5', options:['Mer','Crevette','Citron','Langouste'], answer:1 },
+      { id:'ch6', label:'Chips 6', options:['Piment D.','Chili','Jalapeño','Espelette'], answer:3 },
     ]
   };
 
   const POINTS = { vins:3, fromages:2, charcuteries:2, chips:1 };
-  let currentPlayer = JSON.parse(localStorage.getItem('alex50_player')) || null;
-  let answers = currentPlayer ? (JSON.parse(localStorage.getItem('alex50_answers_' + currentPlayer.id)) || {}) : {};
+  let currentPlayer = JSON.parse(localStorage.getItem('alex50_player'));
+  let answers = currentPlayer ? (JSON.parse(localStorage.getItem('alex50_ans_' + currentPlayer.id)) || {}) : {};
   let allScores = {};
 
-  window.showPanel = function(name) {
+  window.showPanel = (n) => {
     document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById('panel-' + name).classList.add('active');
-    document.getElementById('btn-' + (name === 'register' ? 'reg' : (name === 'leaderboard' ? 'lb' : 'quiz'))).classList.add('active');
-    if (name === 'quiz') setupQuiz();
-    if (name === 'leaderboard') renderLeaderboard();
+    document.getElementById('panel-'+n).classList.add('active');
+    if(n === 'quiz') renderQuiz();
+    if(n === 'leaderboard') renderLeaderboard();
   };
 
   window.registerPlayer = function() {
     const name = document.getElementById('player-name').value.trim();
-    if (!name) return alert("Hé Cowboy ! Il faut un nom.");
-    const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.random().toString(36).substring(2,6);
+    if(!name) return;
+    const exists = Object.values(allScores).find(p => p.name.toLowerCase() === name.toLowerCase());
+    if(exists && !confirm("Ce nom existe déjà. C'est bien vous ?")) return;
+    const id = name.toLowerCase().replace(/\s/g,'') + '_' + Math.random().toString(36).substr(2,4);
     currentPlayer = { name, id, table: document.getElementById('player-table').value };
     localStorage.setItem('alex50_player', JSON.stringify(currentPlayer));
-    showPanel('quiz');
+    document.getElementById('register-msg').innerHTML = '<div class="msg-success">Bienvenue '+name+' ! 🤠</div>';
+    setTimeout(() => showPanel('quiz'), 800);
   };
 
-  function setupQuiz() {
-    if (!currentPlayer) return showPanel('register');
+  function renderQuiz() {
+    if(!currentPlayer) return showPanel('register');
     document.getElementById('quiz-player-label').textContent = '🤠 Équipe : ' + currentPlayer.name;
-    for (let cat in QUESTIONS) renderCategory(cat, 'quiz-' + cat);
+    let html = '';
+    const cats = { vins:'🍷 VINS', fromages:'🧀 FROMAGES', charcuteries:'🥩 CHARCUTERIE', chips:'🥔 CHIPS BRET\'S' };
+    for (let c in cats) {
+      html += `<div class="card"><div class="card-header">${cats[c]}</div><div class="card-body">`;
+      QUESTIONS[c].forEach(q => {
+        const ans = answers[q.id];
+        html += `<div style="margin-bottom:15px;"><div style="font-weight:700; font-size:0.85rem;">${q.label}</div><div class="options-grid">`;
+        q.options.forEach((opt, i) => {
+          let cls = 'opt-btn';
+          if(ans !== undefined) {
+             cls += ' locked';
+             if(i === q.answer) cls += ' correct';
+             else if(i === ans) cls += ' wrong';
+          }
+          html += `<button class="${cls}" onclick="vote('${q.id}','${c}',${i},${q.answer})">${opt}</button>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `</div></div>`;
+    }
+    document.getElementById('quiz-container').innerHTML = html;
     updateProgress();
   }
 
-  function renderCategory(cat, containerId) {
-    const container = document.getElementById(containerId);
-    let html = '';
-    QUESTIONS[cat].forEach(q => {
-      const isAns = answers[q.id] !== undefined;
-      html += `<div class="question-block"><div class="question-title">${q.label}</div><div class="options-grid">`;
-      q.options.forEach((opt, oi) => {
-        let cls = 'opt-btn';
-        if (isAns) {
-          cls += ' locked';
-          if (oi === q.answer) cls += ' correct';
-          else if (oi === answers[q.id]) cls += ' wrong';
-        }
-        html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},${q.answer},this)">${opt}</button>`;
-      });
-      html += `</div></div>`;
-    });
-    container.innerHTML = html;
-  }
-
-  window.selectAnswer = async function(qId, cat, oi, correct, btn) {
-    if (answers[qId] !== undefined) return;
-    answers[qId] = oi;
-    localStorage.setItem('alex50_answers_' + currentPlayer.id, JSON.stringify(answers));
-    setupQuiz();
-    await pushScore();
+  window.vote = async (qid, cat, i, correct) => {
+    if(answers[qid] !== undefined) return;
+    answers[qid] = i;
+    localStorage.setItem('alex50_ans_'+currentPlayer.id, JSON.stringify(answers));
+    renderQuiz();
+    await syncScore();
   };
 
-  async function pushScore() {
+  async function syncScore() {
     let total = 0; let byCat = { vins:0, fromages:0, charcuteries:0, chips:0 };
-    for (let cat in QUESTIONS) {
-      QUESTIONS[cat].forEach(q => { if (answers[q.id] === q.answer) { total += POINTS[cat]; byCat[cat] += POINTS[cat]; } });
+    for (let c in QUESTIONS) {
+      QUESTIONS[c].forEach(q => { if(answers[q.id] === q.answer) { total += POINTS[c]; byCat[c] += POINTS[c]; } });
     }
-    await setDoc(doc(db, 'scores', currentPlayer.id), { name: currentPlayer.name, score: total, byCategory: byCat, answered: Object.keys(answers).length });
+    await setDoc(doc(db, 'scores', currentPlayer.id), { name: currentPlayer.name, score: total, byCat, answered: Object.keys(answers).length });
   }
 
   function updateProgress() {
-    const count = Object.keys(answers).length;
-    document.getElementById('answered-count').textContent = count;
-    document.getElementById('quiz-progress').style.width = (count / 24 * 100) + '%';
+    const nb = Object.keys(answers).length;
+    document.getElementById('answered-count').textContent = nb;
+    document.getElementById('quiz-progress').style.width = (nb / 24 * 100) + '%';
   }
 
   function renderLeaderboard() {
-    const players = Object.values(allScores).sort((a,b) => b.score - a.score);
-    let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Équipe</th><th>Pts</th></tr></thead><tbody>';
-    players.forEach((p, i) => {
-      html += `<tr><td>${i+1}</td><td><b>${p.name}</b></td><td class="score-cell">${p.score}</td></tr>`;
+    const list = Object.values(allScores).sort((a,b) => b.score - a.score);
+    let html = '<table class="leaderboard-table"><tr><th>#</th><th>Nom</th><th>Score</th></tr>';
+    list.forEach((p, i) => {
+      const emoji = i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+      html += `<tr><td><span class="rank-badge rank-${i+1}">${emoji}</span></td><td><b>${esc(p.name)}</b></td><td style="font-family:Rye;">${p.score}/46</td></tr>`;
     });
-    document.getElementById('leaderboard-content').innerHTML = html + '</tbody></table>';
+    document.getElementById('leaderboard-content').innerHTML = html + '</table>';
     
-    // MOYENNES (Style initial mais compact)
-    const maxPts = { vins:12, fromages:16, charcuteries:12, chips:6 };
-    const labels = { vins:'🍷 Vins', fromages:'🧀 Fromages', charcuteries:'🥩 Charcuteries', chips:'🥔 Chips' };
-    let statHtml = '';
-    for (let cat in labels) {
-      const avg = players.length ? (players.reduce((s,p) => s+(p.byCategory?.[cat]||0), 0) / players.length).toFixed(1) : 0;
-      const pct = (avg / maxPts[cat] * 100);
-      statHtml += `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem"><span>${labels[cat]}</span><span>${avg}/${maxPts[cat]}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    const cats = { vins:12, fromages:16, charcuteries:12, chips:6 };
+    let sHtml = '';
+    for(let c in cats) {
+      const avg = list.length ? (list.reduce((s,p) => s+(p.byCat?.[c]||0), 0) / list.length).toFixed(1) : 0;
+      const best = list.length ? Math.max(...list.map(p => p.byCat?.[c]||0)) : 0;
+      sHtml += `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:0.75rem;"><span>${c.toUpperCase()}</span><span>Moy: ${avg} | Top: ${best}/${cats[c]}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${(avg/cats[c]*100)}%"></div></div></div>`;
     }
-    document.getElementById('category-stats').innerHTML = statHtml;
+    document.getElementById('category-stats').innerHTML = sHtml;
   }
+
+  function esc(s) { let t = document.createElement('div'); t.textContent = s; return t.innerHTML; }
 
   onSnapshot(collection(db, 'scores'), (snap) => {
     allScores = {}; snap.forEach(d => allScores[d.id] = d.data());
-    if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
+    if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
   });
-
-  if (currentPlayer) showPanel('quiz');
+  if(currentPlayer) showPanel('quiz');
 </script>
 </body>
 </html>
