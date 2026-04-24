@@ -216,6 +216,9 @@
             margin-bottom: 12px;
             font-size: 1rem;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .opt-grid {
@@ -252,11 +255,12 @@
         #modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.85);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
@@ -267,7 +271,8 @@
             max-width: 450px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 0 30px var(--gold);
+            box-shadow: 0 0 30px var(--shadow);
+            animation: fadeIn 0.4s ease-out;
         }
 
         /* --- CLASSEMENT & SCROLLBAR --- */
@@ -291,6 +296,8 @@
             border-collapse: collapse;
         }
 
+        .lb-table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+
         .lb-table td {
             padding: 15px 10px;
             border-bottom: 1px solid var(--cream-dark);
@@ -313,6 +320,7 @@
             background: var(--gold); 
             color: white; 
             border: 2px solid var(--brown);
+            transform: scale(1.1);
         }
 
         /* --- PROGRESS BARS --- */
@@ -352,6 +360,7 @@
         @media (max-width: 500px) {
             .opt-grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 2.2rem; }
+            .nav-btn { font-size: 0.75rem; padding: 1rem 0.5rem; }
         }
     </style>
 </head>
@@ -360,13 +369,13 @@
     <div id="modal-overlay">
         <div class="modal-content">
             <h2 style="font-family:'Rye'; color:var(--brown); font-size:1.8rem; margin-bottom:15px;">🤠 FIN DU TIR !</h2>
-            <p style="font-size:1.1rem; margin-bottom:10px;">Bravo Cowboy, tu as terminé la dégustation.</p>
+            <p style="font-size:1.1rem; margin-bottom:10px;">Bravo Cowboy, dégustation terminée.</p>
             <div style="background:var(--brown); color:var(--gold-light); padding:20px; border-radius:10px; margin:20px 0;">
-                <div style="font-size:0.9rem; text-transform:uppercase;">Ton Score Total</div>
-                <div style="font-family:'Rye'; font-size:3rem;" id="modal-score-val">0</div>
+                <div style="font-size:0.9rem; text-transform:uppercase;">Ton Score Final</div>
+                <div style="font-family:'Rye'; font-size:3.2rem;" id="modal-score-val">0</div>
                 <div style="font-size:0.8rem;">points sur 46</div>
             </div>
-            <button class="btn-gold" onclick="document.getElementById('modal-overlay').style.display='none'">VOIR LE CLASSEMENT</button>
+            <button class="btn-gold" onclick="document.getElementById('modal-overlay').style.display='none'; showPanel('leaderboard');">VOIR LE CLASSEMENT</button>
         </div>
     </div>
 
@@ -395,12 +404,12 @@
                     
                     <div class="input-group">
                         <label>NOM DE L'ÉQUIPE (OU COWBOY)</label>
-                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Les Dalton">
+                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Les Dalton / Marie & Léo">
                     </div>
 
                     <div class="input-group">
                         <label>VOTRE TABLE</label>
-                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table Canyon">
+                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table du Grand Canyon">
                     </div>
 
                     <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
@@ -411,12 +420,12 @@
             <div class="card">
                 <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
                 <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
-                    <p>🍷 <strong>4 VINS :</strong> 3 pts (12 total)</p>
-                    <p>🧀 <strong>8 FROMAGES :</strong> 2 pts (16 total)</p>
-                    <p>🥩 <strong>6 CHARCUTERIES :</strong> 2 pts (12 total)</p>
-                    <p>🥔 <strong>6 CHIPS :</strong> 1 pt (6 total)</p>
+                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse (12 pts)</p>
+                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse (16 pts)</p>
+                    <p>🥩 <strong>6 CHARCUTERIES :</strong> 2 points par réponse (12 pts)</p>
+                    <p>🥔 <strong>6 CHIPS BRET'S :</strong> 1 point par réponse (6 pts)</p>
                     <hr style="margin:10px 0; opacity:0.2;">
-                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Un clic est définitif !</p>
+                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Attention : Un clic est définitif !</p>
                 </div>
             </div>
         </div>
@@ -426,7 +435,7 @@
                 <div class="card-body">
                     <div id="q-player-name" style="font-family:'Rye'; font-size:1.4rem; color:var(--brown); margin-bottom:10px;">Cowboy : ...</div>
                     <div class="pg-container">
-                        <div class="pg-label"><span>Progression</span><span id="q-percent">0%</span></div>
+                        <div class="pg-label"><span>Progression Générale</span><span id="q-percent">0%</span></div>
                         <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
                     </div>
                     <p style="text-align:right; font-size:0.8rem; font-weight:900; color:var(--brown-light);"><span id="q-done-count">0</span> / 24 ÉLÉMENTS</p>
@@ -517,27 +526,32 @@
             document.getElementById('nav-' + panelId).classList.add('active');
             if(panelId === 'quiz') renderQuiz();
             if(panelId === 'leaderboard') renderLeaderboard();
+            window.scrollTo(0,0);
         };
 
         window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
-            if(!name) { alert("Nom obligatoire !"); return; }
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*10000);
+            if(!name) { alert("Nom d'équipe obligatoire !"); return; }
+
+            const exists = Object.values(liveScores).find(s => s.name.toLowerCase() === name.toLowerCase());
+            if(exists && !confirm("Ce nom existe déjà. Créer un nouveau profil séparé ?")) return;
+
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*100000);
             player = { id, name, table };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>En selle !</b>";
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi !</b>";
             setTimeout(() => showPanel('quiz'), 1000);
         };
 
         function renderQuiz() {
             if(!player) { showPanel('register'); return; }
-            document.getElementById('q-player-name').textContent = "🤠 Cowboy : " + player.name;
+            document.getElementById('q-player-name').textContent = "🤠 Équipe : " + player.name;
             let html = "";
-            const catTitles = { vins: '🍷 VINS', fromages: '🧀 FROMAGES', charcuteries: '🥩 CHARCUTERIE', chips: '🥔 CHIPS BRET\'S' };
+            const titles = { vins: '🍷 LES VINS (3 pts)', fromages: '🧀 LES FROMAGES (2 pts)', charcuteries: '🥩 LA CHARCUTERIE (2 pts)', chips: '🥔 CHIPS BRET\'S (1 pt)' };
 
             for(const cat in QUESTIONS_DB) {
-                html += `<div class="card"><div class="card-header">${catTitles[cat]}</div><div class="card-body">`;
+                html += `<div class="card"><div class="card-header">${titles[cat]}</div><div class="card-body">`;
                 QUESTIONS_DB[cat].forEach(q => {
                     const userAns = answers[q.id];
                     const isLocked = userAns !== undefined;
@@ -573,7 +587,6 @@
                 done: Object.keys(answers).length, lastUpdate: Date.now()
             });
 
-            // GESTION DU POP-UP FINAL
             if(Object.keys(answers).length === 24) {
                 document.getElementById('modal-score-val').textContent = score;
                 document.getElementById('modal-overlay').style.display = 'flex';
@@ -591,10 +604,11 @@
         function renderLeaderboard() {
             const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
             let html = `<table class="lb-table">`;
+            if(list.length === 0) html += "<tr><td>Aucun score au saloon...</td></tr>";
             list.forEach((p, index) => {
                 const rank = index + 1;
                 html += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${rank===1?'🥇':rank}</span></td>
-                <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.7rem;">${p.table}</div></td>
+                <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.75rem; color:#666;">${p.table}</div></td>
                 <td align="right"><div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div></td></tr>`;
             });
             document.getElementById('lb-display').innerHTML = html + `</table>`;
@@ -608,14 +622,14 @@
             let html = "";
             for(const c in cats) {
                 const avg = (list.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / list.length).toFixed(1);
-                html += `<div class="pg-container"><div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg} / ${cats[c]}</span></div>
+                html += `<div class="pg-container"><div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg}/${cats[c]}</span></div>
                 <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c]*100)}%"></div></div></div>`;
             }
             document.getElementById('category-stats-area').innerHTML = html;
         }
 
-        onSnapshot(collection(db, "scores"), (sn) => {
-            sn.forEach(doc => { liveScores[doc.id] = doc.data(); });
+        onSnapshot(collection(db, "scores"), (snapshot) => {
+            snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
             if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
         });
 
