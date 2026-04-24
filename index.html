@@ -14,7 +14,6 @@
     --cream: #F5EDD6;
     --cream-dark: #E8D9B5;
     --red: #8B1A1A;
-    --green-dark: #2D4A1E;
     --text-dark: #2C1810;
     --shadow: rgba(0,0,0,0.35);
   }
@@ -34,250 +33,155 @@
     text-align: center;
     padding: 1.5rem 1rem 1rem;
     position: relative;
-    overflow: hidden;
   }
-  .header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201,147,10,0.12) 40px, rgba(201,147,10,0.12) 42px);
-  }
-  .header-stars { font-size: 1.4rem; letter-spacing: 8px; color: var(--gold-light); position: relative; }
   .header h1 {
     font-family: 'Rye', serif;
     font-size: clamp(1.8rem, 6vw, 3.2rem);
     color: var(--gold-light);
-    text-shadow: 3px 3px 0 var(--brown), 5px 5px 8px rgba(0,0,0,0.5);
-    position: relative;
-    margin: 0.3rem 0;
-    line-height: 1.1;
-  }
-  .header-sub {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(0.9rem, 3vw, 1.3rem);
-    color: var(--cream);
-    letter-spacing: 3px;
-    position: relative;
-    text-transform: uppercase;
-  }
-  .header-badge {
-    display: inline-block;
-    background: var(--gold);
-    color: var(--brown);
-    font-family: 'Rye', serif;
-    font-size: 0.75rem;
-    padding: 0.2rem 1rem;
-    border-radius: 20px;
-    margin-top: 0.5rem;
-    letter-spacing: 2px;
-    position: relative;
+    text-shadow: 3px 3px 0 var(--brown);
   }
   .nav {
-    display: flex;
-    justify-content: center;
-    background: var(--brown);
-    border-bottom: 3px solid var(--gold);
-    overflow-x: auto;
-    position: sticky;
-    top: 0; z-index: 1000;
+    display: flex; justify-content: center; background: var(--brown);
+    border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 100;
   }
   .nav-btn {
-    background: none;
-    border: none;
-    color: var(--cream-dark);
-    font-family: 'Lato', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    padding: 0.9rem 1.2rem;
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -3px;
-    transition: all 0.2s;
+    background: none; border: none; color: var(--cream-dark);
+    padding: 0.9rem 1.2rem; cursor: pointer; font-family: 'Lato';
+    font-weight: 700; text-transform: uppercase; border-bottom: 3px solid transparent;
   }
-  .nav-btn:hover { color: var(--gold-light); }
   .nav-btn.active { color: var(--gold-light); border-bottom-color: var(--gold-light); }
   .main { max-width: 760px; margin: 0 auto; padding: 1rem; }
   .card {
-    background: var(--cream);
-    border-radius: 12px;
-    border: 2px solid var(--gold);
-    box-shadow: 0 6px 20px var(--shadow);
-    margin-bottom: 1rem;
-    overflow: hidden;
+    background: var(--cream); border-radius: 12px; border: 2px solid var(--gold);
+    box-shadow: 0 6px 20px var(--shadow); margin-bottom: 1rem; overflow: hidden;
   }
   .card-header {
     background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
-    color: var(--gold-light);
-    font-family: 'Rye', serif;
-    font-size: 1rem;
-    padding: 0.7rem 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    letter-spacing: 1px;
+    color: var(--gold-light); font-family: 'Rye'; padding: 0.7rem 1.1rem;
   }
   .card-body { padding: 1rem; }
   .panel { display: none; }
   .panel.active { display: block; }
-
+  
   /* MODAL */
   .modal {
-    display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
     width: 100%; height: 100%; background: rgba(0,0,0,0.85);
   }
   .modal-content {
-    background: var(--cream); margin: 15% auto; padding: 2rem;
-    border: 4px solid var(--gold); border-radius: 15px; width: 85%;
-    max-width: 450px; text-align: center; box-shadow: 0 0 30px var(--gold);
+    background: var(--cream); margin: 20% auto; padding: 2rem;
+    border: 4px solid var(--gold); width: 85%; max-width: 450px;
+    border-radius: 15px; text-align: center;
   }
 
-  .register-form { display: flex; flex-direction: column; gap: 0.9rem; }
-  .input-group { display: flex; flex-direction: column; gap: 0.3rem; }
-  .input-group label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brown); }
-  input[type="text"] {
-    padding: 0.65rem 0.9rem;
-    border: 2px solid var(--brown-light);
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: 'Lato', sans-serif;
-    background: white;
-    color: var(--text-dark);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input[type="text"]:focus { border-color: var(--gold); }
+  .input-group { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+  .input-group label { font-weight: 700; font-size: 0.8rem; color: var(--brown); text-transform: uppercase; }
+  input[type="text"] { padding: 0.7rem; border: 2px solid var(--brown-light); border-radius: 8px; }
+  
   .btn {
     background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    color: var(--brown);
-    border: none;
-    border-radius: 8px;
-    font-family: 'Rye', serif;
-    font-size: 0.95rem;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    letter-spacing: 1px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    transition: all 0.2s;
-    width: 100%;
+    color: var(--brown); border: none; border-radius: 8px; padding: 0.8rem;
+    font-family: 'Rye'; cursor: pointer; width: 100%;
   }
-  .question-block { margin-bottom: 1.2rem; }
-  .question-title { font-weight: 700; font-size: 0.9rem; color: var(--brown); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.8px; }
-  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
   .opt-btn {
     background: white; border: 2px solid var(--cream-dark); border-radius: 8px;
-    padding: 0.55rem 0.5rem; cursor: pointer; font-family: 'Lato', sans-serif;
-    font-size: 0.82rem; color: var(--text-dark); transition: all 0.2s; text-align: center;
+    padding: 0.6rem; cursor: pointer; transition: all 0.2s;
   }
-  .opt-btn.selected { border-color: var(--gold); background: var(--gold); color: var(--brown); font-weight: 700; }
-  .opt-btn.locked { pointer-events: none; cursor: default; }
+  /* Style quand on a cliqué : reste neutre (brun/doré) mais verrouillé */
+  .opt-btn.selected-hidden {
+    background: var(--brown);
+    color: var(--gold-light);
+    border-color: var(--gold);
+    font-weight: bold;
+  }
+  .opt-btn.locked { pointer-events: none; opacity: 0.6; }
+  .opt-btn.selected-hidden.locked { opacity: 1; } /* On garde bien visible celui qu'on a choisi */
 
-  .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 8px; overflow: hidden; margin: 0.5rem 0 1rem; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); border-radius: 20px; transition: width 0.4s ease; }
+  .progress-bar { background: var(--cream-dark); border-radius: 10px; height: 10px; margin: 10px 0; }
+  .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.3s; border-radius: 10px; }
+  
   .leaderboard-table { width: 100%; border-collapse: collapse; }
-  .leaderboard-table th { background: var(--brown); color: var(--gold-light); font-family: 'Rye', serif; font-size: 0.8rem; padding: 0.55rem 0.7rem; text-align: left; }
-  .leaderboard-table td { padding: 0.6rem 0.7rem; font-size: 0.88rem; border-bottom: 1px solid var(--cream-dark); }
-  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 700; font-size: 0.8rem; }
-  .rank-1 { background: var(--gold); color: var(--brown); }
-  .rank-other { background: var(--cream-dark); color: var(--brown); }
-  .score-cell { font-family: 'Rye', serif; color: var(--brown); }
-  .status-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; background: rgba(0,0,0,0.06); border-radius: 20px; font-size: 0.75rem; color: #555; margin-bottom: 0.8rem; width: fit-content; }
-  .footer { text-align: center; padding: 1.5rem; color: rgba(245,237,214,0.5); font-size: 0.75rem; }
+  .leaderboard-table td, .leaderboard-table th { padding: 0.8rem; border-bottom: 1px solid var(--cream-dark); }
+  .rank-badge { background: var(--gold); color: var(--brown); padding: 4px 8px; border-radius: 50%; font-weight: bold; }
+  
+  .footer { text-align: center; padding: 2rem; color: var(--cream); opacity: 0.6; font-size: 0.8rem; }
 </style>
 </head>
 <body>
 
 <div id="finishModal" class="modal">
   <div class="modal-content">
-    <h2 style="font-family:'Rye'; color:var(--red); font-size: 1.8rem; margin-bottom: 1rem;">🌵 BRAVO ! 🌵</h2>
-    <div id="modalScoreText" style="font-size: 1.2rem; margin-bottom: 1.5rem; font-weight: 700; color: var(--brown);"></div>
-    <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">Vos points sont enregistrés au bureau du Shérif.</p>
+    <h2 style="font-family:'Rye'; margin-bottom:1rem;">🌵 Bravo ! 🌵</h2>
+    <p>Dégustation terminée.</p>
+    <p id="finalScoreMsg" style="font-size:1.3rem; font-weight:bold; margin: 1rem 0;"></p>
     <button class="btn" onclick="closeModal()">Voir le classement</button>
   </div>
 </div>
 
 <div class="header">
-  <div class="header-stars">✦ ✦ ✦ ✦ ✦</div>
   <h1>🤠 Alexandre a 50 ans !</h1>
-  <div class="header-sub">Dégustation & Classement</div>
-  <div class="header-badge">⭐ Wild West Birthday Party ⭐</div>
+  <div style="color:var(--cream); letter-spacing:2px;">WILD WEST PARTY</div>
 </div>
 
 <nav class="nav">
-  <button class="nav-btn active" id="btn-register" onclick="showPanel('register')">Inscription</button>
-  <button class="nav-btn" id="btn-quiz" onclick="showPanel('quiz')">Dégustation</button>
-  <button class="nav-btn" id="btn-leaderboard" onclick="showPanel('leaderboard')">Classement</button>
+  <button class="nav-btn active" onclick="showPanel('register')">Inscription</button>
+  <button class="nav-btn" onclick="showPanel('quiz')">Dégustation</button>
+  <button class="nav-btn" onclick="showPanel('leaderboard')">Classement</button>
 </nav>
 
 <div class="main">
-
   <div id="panel-register" class="panel active">
     <div class="card">
-      <div class="card-header">🤠 Bienvenue, cowboy !</div>
+      <div class="card-header">🐴 Inscription</div>
       <div class="card-body">
-        <p style="margin-bottom:1rem;color:var(--brown);font-size:0.9rem;">Inscrivez-vous (ou votre équipe) pour participer au grand concours !</p>
-        <div class="register-form">
-          <div class="input-group">
-            <label>Prénom(s)</label>
-            <input type="text" id="player-name" placeholder="ex. Marie & Evangéline" maxlength="25" />
-          </div>
-          <div class="input-group">
-            <label>Table / Groupe</label>
-            <input type="text" id="player-table" placeholder="ex. Table des cousins" maxlength="25" />
-          </div>
-          <button class="btn" onclick="registerPlayer()">🐴 Rejoindre le concours</button>
+        <div class="input-group">
+          <label>Prénom(s)</label>
+          <input type="text" id="player-name" placeholder="ex. Marie & Evangéline">
         </div>
-        <div id="register-msg"></div>
+        <div class="input-group">
+          <label>Groupe / Table</label>
+          <input type="text" id="player-table" placeholder="ex. Les Cousins du Sud">
+        </div>
+        <button class="btn" onclick="registerPlayer()">Lancer la dégustation</button>
       </div>
     </div>
     <div class="card">
-      <div class="card-header">🏆 Comment ça marche ?</div>
-      <div class="card-body" style="font-size:0.88rem;line-height:1.7;color:var(--brown);">
-        <p style="margin-bottom: 0.8rem; font-style: italic; background: #fff9e6; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold);">
-            🚀 <strong>L'union fait la force :</strong> formez des équipes avec au moins un adulte (expert en cave) et un enfant (pro des chips) pour que tout le monde puisse participer !
-        </p>
-        <p style="color:var(--red); font-weight:700; margin-bottom:1rem; border-left: 4px solid var(--red); padding-left:10px;">
-            ⚠️ ATTENTION : Chaque clic est définitif. Une fois une réponse choisie, vous ne pouvez plus la modifier.
-        </p>
-        <p><strong>🍷 4 vins</strong> — (3 pts/vin)</p>
-        <p><strong>🧀 8 fromages</strong> — (2 pts/fromage)</p>
-        <p><strong>🥩 6 charcuteries</strong> — (2 pts/charcut.)</p>
-        <p><strong>🥔 Chips Bret's</strong> — (1 pt/saveur)</p>
+      <div class="card-header">📜 Règlement</div>
+      <div class="card-body" style="font-size:0.9rem; line-height:1.6;">
+        <p style="color:var(--red); font-weight:bold; text-align:center; border:1px solid var(--red); padding:5px; margin-bottom:10px;">⚠️ ATTENTION : CHAQUE CLIC EST DÉFINITIF !</p>
+        <p>🍷 4 Vins (3 pts) | 🧀 8 Fromages (2 pts)</p>
+        <p>🥩 6 Charcuteries (2 pts) | 🥔 6 Chips (1 pt)</p>
       </div>
     </div>
   </div>
 
   <div id="panel-quiz" class="panel">
-    <div id="quiz-not-registered" style="display:none; text-align:center;">
-        <div class="card"><div class="card-body">
-            <p>Veuillez d'abord vous inscrire !</p>
-            <button class="btn" style="margin-top:10px" onclick="showPanel('register')">Aller à l'inscription</button>
-        </div></div>
-    </div>
     <div id="quiz-content" style="display:none;">
       <div class="card">
-        <div class="card-header" id="quiz-player-label">🤠 Cowboy</div>
         <div class="card-body">
-          <div class="status-bar"><span style="color:#2ecc71">●</span> Tes choix sont définitifs</div>
-          <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
-          <p style="font-size:0.78rem;color:#888;text-align:right;"><span id="answered-count">0</span> / 24 dégustés</p>
+          <div id="quiz-player-name" style="font-weight:bold; color:var(--brown);"></div>
+          <div class="progress-bar"><div id="quiz-progress" class="progress-fill"></div></div>
+          <div style="text-align:right; font-size:0.8rem;"><span id="count">0</span> / 24</div>
         </div>
       </div>
-      <div id="quiz-container"></div>
+      <div id="quiz-vins-container"></div>
+      <div id="quiz-fromages-container"></div>
+      <div id="quiz-charcuteries-container"></div>
+      <div id="quiz-chips-container"></div>
     </div>
   </div>
 
   <div id="panel-leaderboard" class="panel">
     <div class="card">
-      <div class="card-header">🏆 Classement en direct</div>
-      <div class="card-body" id="leaderboard-content">Chargement…</div>
+      <div class="card-header">🏆 Classement Live</div>
+      <div class="card-body" id="leaderboard-content"></div>
     </div>
   </div>
-
 </div>
 
-<div class="footer">🤠 Joyeux 50 ans Alexandre ! 🎉</div>
+<div class="footer">🤠 Joyeux 50 ans Alexandre !</div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -296,128 +200,109 @@
   const db = getFirestore(app);
 
   const QUESTIONS = {
-    vins: { label:'🍷 Les 4 Vins (3 pts)', pts:3, qs: [
-      { id:'v1', label:'Vin 1', options:['Bordeaux / Cabernet','Bourgogne / Pinot Noir','Rhône / Syrah','Loire / Muscadet'], answer:0 },
-      { id:'v2', label:'Vin 2', options:['Alsace / Riesling','Bordeaux / Sauvignon','Provence / Rosé','Languedoc / Grenache'], answer:2 },
-      { id:'v3', label:'Vin 3', options:['Champagne / Chardonnay','Chablis / Chardonnay','Sancerre / Sauvignon','Mâcon / Aligoté'], answer:2 },
-      { id:'v4', label:'Vin 4', options:['Côtes du Rhône / Grenache','Saint-Émilion / Merlot','Pomerol / Merlot','Cahors / Malbec'], answer:3 }
-    ]},
-    fromages: { label:'🧀 Les 8 Fromages (2 pts)', pts:2, qs: [
-      { id:'f1', label:'Fromage 1', options:['Brie','Camembert','Coulommiers','Chaource'], answer:1 },
-      { id:'f2', label:'Fromage 2', options:['Comté','Beaufort','Emmental','Gruyère'], answer:0 },
-      { id:'f3', label:'Fromage 3', options:['Roquefort','Gorgonzola','Bleu','Fourme'], answer:0 },
-      { id:'f4', label:'Fromage 4', options:['Reblochon','Munster','Livarot','Époisses'], answer:3 },
-      { id:'f5', label:'Fromage 5', options:['Chèvre','St-Maure','Crottin','Valençay'], answer:2 },
-      { id:'f6', label:'Fromage 6', options:['Morbier','Tomme','Raclette','Abondance'], answer:1 },
-      { id:'f7', label:'Fromage 7', options:['Maroilles','Pont-l\'Évêque','Livarot','Langres'], answer:0 },
-      { id:'f8', label:'Fromage 8', options:['Ossau-Iraty','Mimolette','Cantal','Salers'], answer:2 }
-    ]},
-    charcuteries: { label:'🥩 Les 6 Charcuteries (2 pts)', pts:2, qs: [
-      { id:'c1', label:'Charcuterie 1', options:['Bayonne','Parme','Coppa','Bresaola'], answer:0 },
-      { id:'c2', label:'Charcuterie 2', options:['Saucisson','Chorizo','Salami','Sopressata'], answer:0 },
-      { id:'c3', label:'Charcuterie 3', options:['Rillettes','Pâté','Terrine','Mousse'], answer:1 },
-      { id:'c4', label:'Charcuterie 4', options:['Guémené','Andouillette','Boudin B.','Boudin N.'], answer:0 },
-      { id:'c5', label:'Charcuterie 5', options:['Lard','Poitrine','Pancetta','Ventrèche'], answer:3 },
-      { id:'c6', label:'Charcuterie 6', options:['Noix de jambon','Rosette','Jésus','Saucisse'], answer:1 }
-    ]},
-    chips: { label:'🥔 Chips Bret\'s (1 pt)', pts:1, qs: [
-      { id:'ch1', label:'Chips 1', options:['Nature','Barbecue','Sel & Vinaigre','Fromage'], answer:0 },
-      { id:'ch2', label:'Chips 2', options:['Paprika','Jambon beurre','Bolognaise','Poulet'], answer:1 },
-      { id:'ch3', label:'Chips 3', options:['Crème','Raclette','Tartiflette','Reblochon'], answer:2 },
-      { id:'ch4', label:'Chips 4', options:['Ketchup','Maïs','Curry','Tapenade'], answer:3 },
-      { id:'ch5', label:'Chips 5', options:['Mer','Cocktail','Citron','Langouste'], answer:1 },
-      { id:'ch6', label:'Chips 6', options:['Piment D.','Chili','Jalapeño','Espelette'], answer:3 }
-    ]}
+    vins: [{id:'v1',l:'Vin 1',o:['Bordeaux','Bourgogne','Rhône','Loire'],a:0},{id:'v2',l:'Vin 2',o:['Alsace','Bordeaux','Provence','Languedoc'],a:2},{id:'v3',l:'Vin 3',o:['Champagne','Chablis','Sancerre','Mâcon'],a:2},{id:'v4',l:'Vin 4',o:['Rhône','St-Emilion','Pomerol','Cahors'],a:3}],
+    fromages: [{id:'f1',l:'Fr. 1',o:['Brie','Camembert','Coulommiers','Chaource'],a:1},{id:'f2',l:'Fr. 2',o:['Comté','Beaufort','Emmental','Gruyère'],a:0},{id:'f3',l:'Fr. 3',o:['Roquefort','Gorgonzola','Bleu Auvergne','Fourme'],a:0},{id:'f4',l:'Fr. 4',o:['Reblochon','Munster','Livarot','Époisses'],a:3},{id:'f5',l:'Fr. 5',o:['Chèvre','St-Maure','Crottin','Valençay'],a:2},{id:'f6',l:'Fr. 6',o:['Morbier','Tomme Savoie','Raclette','Abondance'],a:1},{id:'f7',l:'Fr. 7',o:['Maroilles','Pont-l\'Evêque','Livarot','Langres'],a:0},{id:'f8',l:'Fr. 8',o:['Ossau-Iraty','Mimolette','Cantal','Salers'],a:2}],
+    charcuteries: [{id:'c1',l:'Char. 1',o:['Bayonne','Parme','Coppa','Bresaola'],a:0},{id:'c2',l:'Char. 2',o:['Saucisson','Chorizo','Salami','Sopressata'],a:0},{id:'c3',l:'Char. 3',o:['Rillettes','Pâté','Terrine','Mousse'],a:1},{id:'c4',l:'Char. 4',o:['Guémené','Andouillette','Boudin blanc','Boudin noir'],a:0},{id:'c5',l:'Char. 5',o:['Lard','Poitrine','Pancetta','Ventrèche'],a:3},{id:'c6',l:'Char. 6',o:['Noix Jambon','Rosette','Jésus','Saucisse'],a:1}],
+    chips: [{id:'ch1',l:'Chips 1',o:['Nature','Barbecue','Vinaigre','Fromage'],a:0},{id:'ch2',l:'Chips 2',o:['Paprika','Jambon Beurre','Bolognaise','Poulet'],a:1},{id:'ch3',l:'Chips 3',o:['Ciboulette','Raclette','Tartiflette','Reblochon'],a:2},{id:'ch4',l:'Chips 4',o:['Ketchup','Maïs','Curry','Tapenade'],a:3},{id:'ch5',l:'Chips 5',o:['Mer','Cocktail','Citron','Langouste'],a:1},{id:'ch6',l:'Chips 6',o:['Piment','Chili','Jalapeño','Espelette'],a:3}]
   };
 
-  let player = JSON.parse(localStorage.getItem('alex50_player')) || null;
-  let ans = JSON.parse(localStorage.getItem('alex50_ans_' + (player?.id || '0'))) || {};
+  const PTS = {vins:3, fromages:2, charcuteries:2, chips:1};
+  let player = JSON.parse(localStorage.getItem('alex50_p')) || null;
+  let ans = JSON.parse(localStorage.getItem('alex50_a_'+player?.id)) || {};
+
+  function init() {
+    onSnapshot(collection(db, 'scores'), (s) => {
+      let ps = []; s.forEach(d => ps.push(d.data()));
+      renderLB(ps);
+    });
+    if(player) showPanel('quiz');
+  }
 
   window.showPanel = (n) => {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel, .nav-btn').forEach(e => e.classList.remove('active'));
     document.getElementById('panel-'+n).classList.add('active');
-    document.getElementById('btn-'+n).classList.add('active');
-    if(n==='quiz') renderQuiz();
-    if(n==='leaderboard') loadLeaderboard();
+    if(n==='quiz') setupQuiz();
   };
 
   window.registerPlayer = () => {
     const name = document.getElementById('player-name').value.trim();
     const table = document.getElementById('player-table').value.trim();
-    if(!name) return alert("Indiquez vos prénoms !");
-    const id = name.toLowerCase().replace(/\W/g,'') + '_' + Math.floor(Math.random()*1000);
-    player = {id, name, table};
-    localStorage.setItem('alex50_player', JSON.stringify(player));
+    if(!name) return;
+    player = {id: Date.now().toString(36), name, table};
+    localStorage.setItem('alex50_p', JSON.stringify(player));
     showPanel('quiz');
   };
 
-  function renderQuiz() {
-    if(!player) { document.getElementById('quiz-not-registered').style.display='block'; return; }
+  function setupQuiz() {
+    if(!player) return;
     document.getElementById('quiz-content').style.display='block';
-    document.getElementById('quiz-player-label').innerText = '🤠 ' + player.name;
-    let html = '';
-    for(let k in QUESTIONS) {
-      html += `<div class="card"><div class="card-header">${QUESTIONS[k].label}</div><div class="card-body">`;
-      QUESTIONS[k].qs.forEach(q => {
-        const selected = ans[q.id] !== undefined;
-        html += `<div class="question-block"><div class="question-title">${q.label}</div><div class="options-grid">`;
-        q.options.forEach((o, i) => {
-          let cls = 'opt-btn' + (selected ? ' locked' : '');
-          if(ans[q.id] === i) cls += ' selected';
-          html += `<button class="${cls}" onclick="vote('${q.id}','${k}',${i})">${o}</button>`;
-        });
-        html += `</div></div>`;
-      });
-      html += `</div></div>`;
-    }
-    document.getElementById('quiz-container').innerHTML = html;
-    updateProgress();
+    document.getElementById('quiz-player-name').innerText = "🤠 " + player.name + (player.table ? " ("+player.table+")" : "");
+    renderSection('vins', '🍷 Vins');
+    renderSection('fromages', '🧀 Fromages');
+    renderSection('charcuteries', '🥩 Charcuteries');
+    renderSection('chips', '🥔 Chips');
+    updateUI();
   }
 
-  window.vote = async (qid, cat, idx) => {
+  function renderSection(cat, title) {
+    let h = `<div class="card"><div class="card-header">${title}</div><div class="card-body">`;
+    QUESTIONS[cat].forEach(q => {
+      h += `<div style="margin-bottom:1rem"><div style="font-size:0.8rem; font-weight:bold;">${q.l}</div><div class="options-grid">`;
+      q.o.forEach((o, i) => {
+        let sel = ans[q.id] === i;
+        let done = ans[q.id] !== undefined;
+        h += `<button class="opt-btn ${sel?'selected-hidden':''} ${done?'locked':''}" onclick="vote('${q.id}','${cat}',${i},${q.a},this)">${o}</button>`;
+      });
+      h += `</div></div>`;
+    });
+    document.getElementById(`quiz-${cat}-container`).innerHTML = h + `</div></div>`;
+  }
+
+  window.vote = async (qid, cat, idx, correct, btn) => {
     if(ans[qid] !== undefined) return;
     ans[qid] = idx;
-    localStorage.setItem('alex50_ans_'+player.id, JSON.stringify(ans));
-    renderQuiz();
-    const score = calc();
-    await setDoc(doc(db, 'scores', player.id), {name:player.name, table:player.table, score, answered:Object.keys(ans).length});
+    localStorage.setItem('alex50_a_'+player.id, JSON.stringify(ans));
     
+    // UI : On grise tout et on met en avant le choix de l'utilisateur (sans dire si c'est juste)
+    const grid = btn.closest('.options-grid');
+    grid.querySelectorAll('.opt-btn').forEach(b => b.classList.add('locked'));
+    btn.classList.add('selected-hidden');
+
+    updateUI();
+    const s = calc();
+    await setDoc(doc(db, 'scores', player.id), { name:player.name, table:player.table, score:s, count:Object.keys(ans).length });
+
     if(Object.keys(ans).length === 24) {
-      document.getElementById('modalScoreText').innerText = player.name + ", vous avez obtenu " + score + " / 50 points !";
+      document.getElementById('finalScoreMsg').innerText = s + " / 50 points";
       document.getElementById('finishModal').style.display = 'block';
     }
   };
 
   function calc() {
-    let s = 0;
-    for(let k in QUESTIONS) QUESTIONS[k].qs.forEach(q => { if(ans[q.id] === q.answer) s += QUESTIONS[k].pts; });
-    return s;
+    let total = 0;
+    for(let c in QUESTIONS) {
+      QUESTIONS[c].forEach(q => { if(ans[q.id] === q.a) total += PTS[c]; });
+    }
+    return total;
   }
 
-  function updateProgress() {
+  function updateUI() {
     const c = Object.keys(ans).length;
-    document.getElementById('answered-count').innerText = c;
+    document.getElementById('count').innerText = c;
     document.getElementById('quiz-progress').style.width = (c/24*100)+'%';
   }
 
-  function loadLeaderboard() {
-    onSnapshot(collection(db, 'scores'), (snap) => {
-      let ps = []; snap.forEach(d => ps.push(d.data()));
-      ps.sort((a,b) => b.score - a.score);
-      let h = `<table class="leaderboard-table"><thead><tr><th>#</th><th>Bande</th><th>Butin</th></tr></thead><tbody>`;
-      ps.forEach((p, i) => {
-        h += `<tr><td><span class="rank-badge rank-${i===0?'1':'other'}">${i+1}</span></td>
-          <td class="name-cell">${p.name}<br><small style="color:#888">${p.table}</small></td>
-          <td class="score-cell"><strong>${p.score}</strong>/50</td></tr>`;
-      });
-      document.getElementById('leaderboard-content').innerHTML = h + '</tbody></table>';
+  function renderLB(ps) {
+    ps.sort((a,b) => b.score - a.score);
+    let h = `<table class="leaderboard-table"><tr><th>#</th><th>Cowboy</th><th>Score</th></tr>`;
+    ps.forEach((p, i) => {
+      h += `<tr><td><span class="rank-badge">${i+1}</span></td><td><b>${p.name}</b><br><small>${p.table||''}</small></td><td>${p.score}</td></tr>`;
     });
+    document.getElementById('leaderboard-content').innerHTML = h + `</table>`;
   }
 
   window.closeModal = () => { document.getElementById('finishModal').style.display='none'; showPanel('leaderboard'); };
-
-  if(player) showPanel('quiz');
+  init();
 </script>
 </body>
 </html>
