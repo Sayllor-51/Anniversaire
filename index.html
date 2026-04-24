@@ -173,10 +173,8 @@
     text-align: center;
   }
   .opt-btn:hover { border-color: var(--gold); background: #fff9e6; }
-  /* Modification : On utilise seulement le jaune pour la sélection, pas de vert/rouge */
   .opt-btn.selected { border-color: var(--gold); background: var(--gold); color: var(--brown); font-weight: 700; }
-  .opt-btn.locked { pointer-events: none; cursor: default; opacity: 0.7; }
-  .opt-btn.locked.selected { opacity: 1; border: 2px solid var(--brown); }
+  .opt-btn.locked { pointer-events: none; cursor: default; }
 
   .progress-bar { background: var(--cream-dark); border-radius: 20px; height: 8px; overflow: hidden; margin: 0.5rem 0 1rem; }
   .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); border-radius: 20px; transition: width 0.4s ease; }
@@ -191,7 +189,7 @@
   .rank-3 { background: #cd7f32; color: white; }
   .rank-other { background: var(--cream-dark); color: var(--brown); }
   .name-cell { font-weight: 700; }
-  .score-cell { font-family: 'Rye', serif; color: var(--brown); font-size: 0.8rem; }
+  .score-cell { font-family: 'Rye', serif; color: var(--brown); }
   .live-dot { display: inline-block; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; margin-right: 5px; animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
   .status-bar { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; background: rgba(0,0,0,0.06); border-radius: 20px; font-size: 0.75rem; color: #555; margin-bottom: 0.8rem; width: fit-content; }
@@ -207,7 +205,7 @@
 <div class="header">
   <div class="header-stars">✦ ✦ ✦ ✦ ✦</div>
   <h1>🤠 Alexandre a 50 ans !</h1>
-  <div class="header-sub">Dégustation & Suspens</div>
+  <div class="header-sub">Dégustation & Classement</div>
   <div class="header-badge">⭐ Wild West Birthday Party ⭐</div>
 </div>
 
@@ -223,7 +221,7 @@
     <div class="card">
       <div class="card-header">🤠 Bienvenue, cowboy !</div>
       <div class="card-body">
-        <p style="margin-bottom:1rem;color:var(--brown);font-size:0.9rem;">Entrez votre prénom pour participer au grand concours !</p>
+        <p style="margin-bottom:1rem;color:var(--brown);font-size:0.9rem;">Entrez votre prénom pour participer au grand concours de dégustation !</p>
         <div class="register-form">
           <div class="input-group">
             <label>Votre prénom</label>
@@ -238,6 +236,17 @@
         <div id="register-msg"></div>
       </div>
     </div>
+    <div class="card">
+      <div class="card-header">🏆 Comment ça marche ?</div>
+      <div class="card-body" style="font-size:0.88rem;line-height:1.9;color:var(--brown);">
+        <p><strong>🍷 4 vins</strong> — devinez la région et le cépage (3 pts chacun)</p>
+        <p><strong>🧀 8 fromages</strong> — identifiez chaque fromage (2 pts chacun)</p>
+        <p><strong>🥩 6 charcuteries</strong> — nommez chaque produit (2 pts chacun)</p>
+        <p><strong>🥔 Chips Bret's</strong> — retrouvez les saveurs (1 pt chacune)</p>
+        <br/>
+        <p>Le classement se met à jour en temps réel pour tous ! 🎉</p>
+      </div>
+    </div>
   </div>
 
   <div id="panel-quiz" class="panel">
@@ -246,7 +255,8 @@
         <div class="card-body" style="text-align:center;padding:2rem 1rem;">
           <div style="font-size:2.5rem;margin-bottom:1rem;">🤠</div>
           <p style="font-weight:700;font-size:1.1rem;color:var(--brown);">Inscrivez-vous d'abord !</p>
-          <button class="btn" style="width:auto; margin-top: 1rem;" onclick="showPanel('register')">← Inscription</button>
+          <p style="color:#666;margin:0.5rem 0 1rem;">Rendez-vous dans l'onglet Inscription.</p>
+          <button class="btn" style="width:auto" onclick="showPanel('register')">← Inscription</button>
         </div>
       </div>
     </div>
@@ -254,10 +264,10 @@
       <div class="card">
         <div class="card-header" id="quiz-player-label">🤠 Cowboy</div>
         <div class="card-body">
-          <div class="status-bar"><span class="live-dot"></span>Tes réponses sont bien enregistrées</div>
+          <div class="status-bar"><span class="live-dot"></span>Connecté — réponses envoyées en direct</div>
           <div class="progress-bar"><div class="progress-fill" id="quiz-progress" style="width:0%"></div></div>
           <p style="font-size:0.78rem;color:#888;text-align:right;margin-top:-0.8rem;margin-bottom:0.3rem;">
-            <span id="answered-count">0</span> / <span id="total-count">24</span> dégustés
+            <span id="answered-count">0</span> / <span id="total-count">24</span> réponses
           </p>
         </div>
       </div>
@@ -282,10 +292,16 @@
 
   <div id="panel-leaderboard" class="panel">
     <div class="card">
-      <div class="card-header">🏆 État des dégustations</div>
+      <div class="card-header">🏆 Classement en direct</div>
       <div class="card-body">
-        <div class="status-bar"><span class="live-dot"></span>En direct — Le score final sera révélé plus tard !</div>
+        <div class="status-bar"><span class="live-dot"></span>Mise à jour instantanée</div>
         <div id="leaderboard-content"><p style="text-align:center;color:#999;padding:2rem 0;">Chargement…</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">📊 Résultats par catégorie</div>
+      <div class="card-body" id="category-stats">
+        <p style="color:#999;text-align:center;font-size:0.85rem;">Pas encore de résultats</p>
       </div>
     </div>
   </div>
@@ -386,7 +402,7 @@
     const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.random().toString(36).substring(2,6);
     currentPlayer = { name, table, id };
     localStorage.setItem('alex50_player', JSON.stringify(currentPlayer));
-    document.getElementById('register-msg').innerHTML = `<div class="msg msg-success">C'est parti <strong>${name}</strong> ! 🤠</div>`;
+    document.getElementById('register-msg').innerHTML = `<div class="msg msg-success">Bienvenue <strong>${name}</strong> ! 🤠</div>`;
     setTimeout(() => showPanel('quiz'), 800);
   };
 
@@ -409,17 +425,16 @@
   function renderCategory(cat, containerId) {
     const container = document.getElementById(containerId);
     let html = '';
-    QUESTIONS[cat].forEach((q, qi) => {
-      const userAnswer = answers[q.id];
-      const isAnswered = userAnswer !== undefined;
+    QUESTIONS[cat].forEach((q) => {
+      const isAnswered = answers[q.id] !== undefined;
       html += `<div class="question-block">
-        <div class="question-title">${q.label}</div>
+        <div class="question-title">${q.label} <span style="float:right;color:var(--gold);font-size:0.75rem">+${POINTS[cat]} pts</span></div>
         <div class="options-grid">`;
       q.options.forEach((opt, oi) => {
         let cls = 'opt-btn';
         if (isAnswered) {
           cls += ' locked';
-          if (oi === userAnswer) cls += ' selected';
+          if (oi === answers[q.id]) cls += ' selected';
         }
         html += `<button class="${cls}" onclick="selectAnswer('${q.id}','${cat}',${oi},this)">${opt}</button>`;
       });
@@ -430,14 +445,12 @@
 
   window.selectAnswer = async function(qId, cat, optionIdx, btn) {
     if (answers[qId] !== undefined) return;
-    
     answers[qId] = optionIdx;
     localStorage.setItem('alex50_answers_' + currentPlayer.id, JSON.stringify(answers));
 
-    // UI : On verrouille et on marque le choix en jaune, SANS révéler la vérité
     const grid = btn.closest('.options-grid');
     grid.querySelectorAll('.opt-btn').forEach(b => b.classList.add('locked'));
-    btn.classList.add('selected');
+    btn.classList.add('selected'); // Juste sélectionné, pas de révélation immédiate
 
     updateProgress();
     await pushScore();
@@ -470,7 +483,8 @@
     const data = {
       name: currentPlayer.name,
       table: currentPlayer.table || '',
-      score: total, 
+      score: total,
+      maxScore: MAX_SCORE,
       answered: Object.keys(answers).length,
       totalQuestions: TOTAL_Q,
       byCategory,
@@ -480,35 +494,53 @@
   }
 
   function renderLeaderboard() {
-    // On trie par nombre de réponses pour le suspens (ou par score si vous voulez le voir sur VOTRE écran)
-    const players = Object.values(allScores).sort((a,b) => b.answered - a.answered || b.ts - a.ts);
+    const players = Object.values(allScores).sort((a,b) => b.score - a.score || b.answered - a.answered);
     const container = document.getElementById('leaderboard-content');
 
     if (!players.length) {
-      container.innerHTML = '<p style="text-align:center;color:#999;padding:2rem 0;">Personne n\'a encore goûté ! 🤠</p>';
+      container.innerHTML = '<p style="text-align:center;color:#999;padding:2rem 0;">Pas encore de participants ! 🤠</p>';
       return;
     }
 
     let html = `<table class="leaderboard-table"><thead><tr>
-      <th>#</th><th>Cowboy / Cowgirl</th><th>Progression</th>
+      <th>#</th><th>Cowboy / Cowgirl</th><th>Score</th>
     </tr></thead><tbody>`;
 
     players.forEach((p, i) => {
       const rank = i + 1;
       const rankClass = rank <= 3 ? 'rank-' + rank : 'rank-other';
       const isCurrent = currentPlayer && p.name === currentPlayer.name;
-      
-      // On affiche "Terminé" ou le nombre de questions, pas le score en points.
-      const progressText = p.answered === p.totalQuestions ? 'Complété ✅' : `${p.answered} / ${p.totalQuestions}`;
-
       html += `<tr style="${isCurrent ? 'background:rgba(201,147,10,0.15);' : ''}">
         <td><span class="rank-badge ${rankClass}">${rank}</span></td>
         <td class="name-cell">${esc(p.name)}<br><span style="font-size:0.7rem;color:#888">${esc(p.table)}</span></td>
-        <td class="score-cell">${progressText}</td>
+        <td class="score-cell">${p.score}<span style="font-size:0.7rem;color:#aaa">/${MAX_SCORE}</span></td>
       </tr>`;
     });
 
     html += '</tbody></table>';
+    container.innerHTML = html;
+    renderCategoryStats(players);
+  }
+
+  function renderCategoryStats(players) {
+    const container = document.getElementById('category-stats');
+    const maxPts = { vins:4*3, fromages:8*2, charcuteries:6*2, chips:6*1 };
+    const labels = { vins:'🍷 Vins', fromages:'🧀 Fromages', charcuteries:'🥩 Charcuteries', chips:'🥔 Chips Bret\'s' };
+    let html = '';
+    for (const [cat, label] of Object.entries(labels)) {
+      const avg = players.length ? Math.round(players.reduce((s,p) => s+(p.byCategory?.[cat]||0), 0) / players.length * 10) / 10 : 0;
+      const max = maxPts[cat];
+      const pct = max ? Math.round(avg / max * 100) : 0;
+      html += `<div style="margin-bottom:0.9rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.2rem">
+          <span style="font-size:0.82rem;font-weight:700;color:var(--brown)">${label}</span>
+          <span style="font-size:0.75rem;color:#666">Moy: ${avg}/${max}</span>
+        </div>
+        <div class="progress-bar" style="height:10px;margin:0">
+          <div class="progress-fill" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+    }
     container.innerHTML = html;
   }
 
