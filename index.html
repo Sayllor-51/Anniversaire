@@ -3,644 +3,549 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤠 Alexandre 50's - Le Grand Jeu du Saloon</title>
+    <title>🤠 Alexandre 50's - Le Grand Jeu du Saloon - Version Intégrale</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* ========================================
-           VARIABLES DE COULEURS ET THÈME
-           ========================================
-        */
+        /* ============================================================
+           FEUILLE DE STYLE : VARIABLES GLOBALES
+           ============================================================ */
         :root {
-            --brown: #4A2F18;
-            --brown-light: #8B5E3C;
-            --gold: #C9930A;
-            --gold-light: #F0B429;
-            --cream: #F5EDD6;
-            --cream-dark: #E8D9B5;
-            --red: #8B1A1A;
-            --red-light: #B22222;
-            --text-dark: #2C1810;
-            --shadow: rgba(0, 0, 0, 0.5);
+            --couleur-fond-saloon: #4A2F18;
+            --couleur-bois-clair: #8B5E3C;
+            --couleur-or: #C9930A;
+            --couleur-or-eclat: #F0B429;
+            --couleur-parchemin: #F5EDD6;
+            --couleur-parchemin-ombre: #E8D9B5;
+            --couleur-rouge-vin: #8B1A1A;
+            --couleur-rouge-vif: #B22222;
+            --couleur-texte-sombre: #2C1810;
+            --couleur-noir-transparent: rgba(0, 0, 0, 0.6);
+            --police-titre: 'Rye', serif;
+            --police-corps: 'Lato', sans-serif;
+            --police-accent: 'Playfair Display', serif;
         }
 
-        /* ========================================
-           STYLES DE BASE ET RESET
-           ========================================
-        */
+        /* ============================================================
+           RESET ET STYLES DE BASE
+           ============================================================ */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-        
+
         body {
-            background-color: var(--brown);
+            background-color: var(--couleur-fond-saloon);
             background-image: 
-                linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 url('https://www.transparenttextures.com/patterns/wood-pattern.png');
-            font-family: 'Lato', sans-serif;
-            color: var(--text-dark);
+            font-family: var(--police-corps);
+            color: var(--couleur-texte-sombre);
             min-height: 100vh;
-            padding-bottom: 100px;
-            line-height: 1.5;
+            line-height: 1.6;
+            padding-bottom: 120px;
+            overflow-x: hidden;
         }
 
-        /* ========================================
+        /* ============================================================
            ENTÊTE (HEADER)
-           ========================================
-        */
-        .header {
-            background: linear-gradient(135deg, var(--red) 0%, #301010 100%);
-            border-bottom: 8px solid var(--gold);
+           ============================================================ */
+        .header-saloon {
+            background: linear-gradient(135deg, var(--couleur-rouge-vin) 0%, #301010 100%);
+            border-bottom: 8px solid var(--couleur-or);
             text-align: center;
-            padding: 3.5rem 1rem;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
             position: relative;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
-        .header h1 {
-            font-family: 'Rye', serif;
-            font-size: clamp(2rem, 10vw, 4.5rem);
-            color: var(--gold-light);
-            text-shadow: 
-                4px 4px 0 var(--brown), 
-                6px 6px 20px rgba(0, 0, 0, 0.7);
+        .header-saloon h1 {
+            font-family: var(--police-titre);
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            color: var(--couleur-or-eclat);
+            text-shadow: 4px 4px 0px var(--couleur-fond-saloon);
             margin-bottom: 15px;
             letter-spacing: 4px;
             text-transform: uppercase;
         }
 
-        .header p {
+        .header-saloon p {
             color: white;
-            font-family: 'Playfair Display', serif;
+            font-family: var(--police-accent);
             letter-spacing: 6px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             text-transform: uppercase;
-            opacity: 0.9;
+            font-weight: 300;
         }
 
-        /* Badge Anniversaire */
-        .age-badge {
+        /* BADGE ANNIVERSAIRE 50 ANS */
+        .badge-50 {
             position: absolute;
             top: 25px;
             right: 25px;
-            background: var(--gold);
-            color: var(--brown);
-            width: 95px;
-            height: 95px;
+            background: var(--couleur-or);
+            color: var(--couleur-fond-saloon);
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: 'Rye', serif;
-            border: 5px double white;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            transform: rotate(12deg);
-            z-index: 20;
-            animation: badgeShake 3s infinite ease-in-out;
+            font-family: var(--police-titre);
+            border: 6px double white;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+            transform: rotate(15deg);
+            z-index: 10;
         }
 
-        @keyframes badgeShake {
-            0% { transform: rotate(12deg) scale(1); }
-            50% { transform: rotate(8deg) scale(1.08); }
-            100% { transform: rotate(12deg) scale(1); }
-        }
-
-        .age-badge span {
-            font-size: 2.2rem;
-            font-weight: 900;
+        .badge-50 span {
+            font-size: 2.5rem;
             line-height: 1;
         }
 
-        .age-badge small {
-            font-size: 0.8rem;
+        .badge-50 small {
+            font-size: 0.9rem;
             text-transform: uppercase;
-            font-weight: 700;
         }
 
-        /* ========================================
-           BARRE DE NAVIGATION
-           ========================================
-        */
-        .nav {
+        /* ============================================================
+           NAVIGATION (MENUS TACTILES)
+           ============================================================ */
+        .menu-navigation {
             display: flex;
-            justify-content: center;
-            background: #1e110a;
-            border-bottom: 5px solid var(--gold);
+            background-color: #1a0f0a;
+            border-bottom: 5px solid var(--couleur-or);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
             overflow-x: auto;
             scrollbar-width: none;
         }
 
-        .nav::-webkit-scrollbar {
+        .menu-navigation::-webkit-scrollbar {
             display: none;
         }
 
-        .nav-btn {
+        .bouton-nav {
             background: none;
             border: none;
-            color: var(--cream-dark);
-            font-family: 'Lato', sans-serif;
-            font-size: 0.9rem;
+            color: var(--couleur-parchemin-ombre);
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
+            cursor: pointer;
+            flex: 1;
+            min-width: 160px;
             font-weight: 900;
             text-transform: uppercase;
-            padding: 1.5rem 1.2rem;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
             letter-spacing: 2px;
-            flex: 1;
-            min-width: 150px;
+            transition: all 0.4s ease;
             white-space: nowrap;
-            outline: none;
         }
 
-        .nav-btn.active {
-            color: var(--gold-light);
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom: 6px solid var(--gold-light);
+        .bouton-nav.actif {
+            color: var(--couleur-or-eclat);
+            background-color: rgba(255, 255, 255, 0.1);
+            border-bottom: 6px solid var(--couleur-or-eclat);
         }
 
-        .nav-btn:hover:not(.active) {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
+        /* ============================================================
+           STRUCTURE DES PANNEAUX ET CARTES
+           ============================================================ */
+        .conteneur-principal {
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
 
-        /* ========================================
-           CONTENEURS PRINCIPAUX
-           ========================================
-        */
-        .main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem;
+        .panneau {
+            display: none;
         }
 
-        .card {
-            background: var(--cream);
+        .panneau.actif {
+            display: block;
+            animation: effetApparition 0.8s ease-out forwards;
+        }
+
+        @keyframes effetApparition {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0px); }
+        }
+
+        .carte-saloon {
+            background-color: var(--couleur-parchemin);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             border-radius: 25px;
-            border: 4px solid var(--gold);
-            box-shadow: 0 15px 45px var(--shadow);
-            margin-bottom: 3rem;
+            border: 5px solid var(--couleur-or);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            margin-bottom: 4rem;
             overflow: hidden;
             position: relative;
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            pointer-events: none;
-            opacity: 0.5;
-            z-index: 0;
-        }
-
-        .card-header {
-            background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
-            color: var(--gold-light);
-            font-family: 'Rye', serif;
-            padding: 1.8rem;
-            font-size: 1.5rem;
-            letter-spacing: 2px;
-            border-bottom: 4px solid var(--gold);
+        .carte-entete {
+            background: linear-gradient(90deg, var(--couleur-fond-saloon) 0%, var(--couleur-bois-clair) 100%);
+            color: var(--couleur-or-eclat);
+            font-family: var(--police-titre);
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
             text-align: center;
-            position: relative;
-            z-index: 1;
+            font-size: 1.8rem;
+            border-bottom: 5px solid var(--couleur-or);
+            letter-spacing: 2px;
         }
 
-        .card-body {
+        .carte-corps {
             padding: 2.5rem;
+        }
+
+        /* ============================================================
+           SECTION : INSTRUCTIONS DU SHÉRIF
+           ============================================================ */
+        .affiche-sheriff {
+            background-color: #f1dca7;
+            border: 4px dashed var(--couleur-fond-saloon);
+            padding: 30px;
+            margin-bottom: 40px;
             position: relative;
-            z-index: 1;
         }
 
-        .panel {
-            display: none;
+        .affiche-sheriff h3 {
+            font-family: var(--police-titre);
+            color: var(--couleur-rouge-vin);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-decoration: underline;
         }
 
-        .panel.active {
-            display: block;
-            animation: panelFadeIn 0.7s ease-out;
+        .affiche-sheriff ul {
+            list-style-type: none;
         }
 
-        @keyframes panelFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .affiche-sheriff li {
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: flex-start;
         }
 
-        /* ========================================
-           ÉCRAN DE SÉLECTION DE MODE
-           ========================================
-        */
-        .mode-selection-grid {
+        .affiche-sheriff li::before {
+            content: '🤠';
+            margin-right: 15px;
+        }
+
+        /* ============================================================
+           SÉLECTION DES MODES DE JEU
+           ============================================================ */
+        .grille-modes {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 40px;
         }
 
-        .mode-card {
-            padding: 40px 20px;
+        .bloc-mode {
+            padding-top: 50px;
+            padding-bottom: 50px;
+            padding-left: 20px;
+            padding-right: 20px;
             border-radius: 20px;
-            border: 5px solid var(--gold);
+            border: 6px solid var(--couleur-or);
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-        }
-
-        .mode-card.mode-terroir {
-            background: var(--red);
-            color: white;
-            box-shadow: 0 8px 0 #5a1111;
-        }
-
-        .mode-card.mode-chips {
-            background: var(--cream-dark);
-            color: var(--brown);
-            box-shadow: 0 8px 0 #b3a586;
-        }
-
-        .mode-card:hover {
-            transform: translateY(-5px);
-            filter: brightness(1.1);
-        }
-
-        .mode-card:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-
-        .mode-icon {
-            font-size: 4rem;
-        }
-
-        .mode-title {
-            font-family: 'Rye', serif;
-            font-size: 1.6rem;
-            text-transform: uppercase;
-        }
-
-        .mode-desc {
-            font-size: 0.9rem;
-            font-weight: 700;
-            opacity: 0.9;
-        }
-
-        /* ========================================
-           FORMULAIRES ET BOUTONS
-           ========================================
-        */
-        .input-group {
-            margin-bottom: 30px;
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: 900;
-            color: var(--brown);
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            font-size: 1rem;
-            letter-spacing: 1px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 20px;
-            border-radius: 12px;
-            border: 4px solid var(--cream-dark);
-            font-size: 1.3rem;
-            font-family: 'Lato', sans-serif;
-            outline: none;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .input-field:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(201, 147, 10, 0.4);
-        }
-
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            color: var(--brown);
-            border: none;
-            border-radius: 15px;
-            font-family: 'Rye', serif;
-            padding: 1.6rem;
-            width: 100%;
-            cursor: pointer;
-            font-size: 1.6rem;
-            box-shadow: 0 8px 0 #8c6607;
-            transition: all 0.1s;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .btn-gold:active {
-            transform: translateY(5px);
-            box-shadow: 0 3px 0 #8c6607;
-        }
-
-        /* ========================================
-           SYSTÈME DE QUESTIONS (QUIZ)
-           ========================================
-        */
-        .q-block {
-            margin-bottom: 3.5rem;
-            border-bottom: 3px dashed var(--cream-dark);
-            padding-bottom: 2.5rem;
-        }
-
-        .q-block:last-child {
-            border-bottom: none;
-        }
-
-        .q-title {
-            font-weight: 900;
-            color: var(--brown);
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .q-title::before {
-            content: '➤';
-            color: var(--gold);
-        }
-
-        .opt-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            justify-content: center;
             gap: 20px;
         }
 
-        .opt-btn {
-            background: white;
-            border: 3px solid var(--cream-dark);
+        .mode-terroir {
+            background-color: var(--couleur-rouge-vin);
+            color: white;
+            box-shadow: 0 10px 0px #5a1111;
+        }
+
+        .mode-chips {
+            background-color: var(--couleur-parchemin-ombre);
+            color: var(--couleur-fond-saloon);
+            box-shadow: 0 10px 0px #b3a586;
+        }
+
+        .bloc-mode:hover {
+            transform: translateY(-10px);
+            filter: brightness(1.1);
+        }
+
+        .bloc-mode:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        .icone-mode {
+            font-size: 4.5rem;
+        }
+
+        .titre-mode {
+            font-family: var(--police-titre);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+           STYLE DES QUESTIONS ET BOUTONS DE RÉPONSE
+           ============================================================ */
+        .separateur-categorie {
+            background-color: var(--couleur-fond-saloon);
+            color: var(--couleur-or-eclat);
+            padding: 15px;
+            font-family: var(--police-titre);
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .bloc-question {
+            background-color: white;
+            border-left: 10px solid var(--couleur-or);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .label-question {
+            display: block;
+            font-weight: 900;
+            font-size: 1.3rem;
+            color: var(--couleur-fond-saloon);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .grille-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .bouton-option {
+            background-color: #fdfbf5;
+            border: 3px solid var(--couleur-parchemin-ombre);
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 10px;
+            padding-right: 10px;
             border-radius: 12px;
-            padding: 18px;
-            cursor: pointer;
             font-weight: 800;
+            font-family: var(--police-corps);
+            cursor: pointer;
             font-size: 1.1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Lato', sans-serif;
-            box-shadow: 0 4px 0 var(--cream-dark);
+            transition: all 0.2s ease;
             text-align: center;
         }
 
-        .opt-btn:hover:not(.locked) {
-            transform: translateY(-3px);
-            border-color: var(--gold);
-            box-shadow: 0 7px 0 var(--gold);
+        .bouton-option:hover:not(.verrouille) {
+            border-color: var(--couleur-or);
+            background-color: white;
+            transform: scale(1.02);
         }
 
-        .opt-btn.selected {
-            background: var(--brown) !important;
+        .bouton-option.selectionne {
+            background-color: var(--couleur-fond-saloon) !important;
             color: white !important;
-            border-color: var(--text-dark);
-            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.6);
-            transform: translateY(3px);
+            border-color: var(--couleur-texte-sombre);
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
         }
 
-        .opt-btn.locked {
+        .bouton-option.verrouille {
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.7;
         }
 
-        /* ========================================
-           PROGRESSION
-           ========================================
-        */
-        .pg-container {
+        /* ============================================================
+           INPUTS ET BOUTONS GENERIQUES
+           ============================================================ */
+        .champ-saisie {
+            width: 100%;
+            padding: 22px;
+            border-radius: 15px;
+            border: 4px solid var(--couleur-or);
+            font-size: 1.4rem;
             margin-bottom: 25px;
+            font-family: var(--police-corps);
+            outline: none;
+            transition: border-color 0.3s;
         }
 
-        .pg-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1rem;
-            font-weight: 900;
-            margin-bottom: 10px;
+        .champ-saisie:focus {
+            border-color: var(--couleur-rouge-vin);
+        }
+
+        .bouton-action-gold {
+            background: linear-gradient(135deg, var(--couleur-or) 0%, var(--couleur-or-eclat) 100%);
+            color: var(--couleur-fond-saloon);
+            border: none;
+            padding: 22px;
+            width: 100%;
+            border-radius: 15px;
+            font-family: var(--police-titre);
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 8px 0px #8c6607;
             text-transform: uppercase;
-            color: var(--brown);
+            transition: all 0.1s;
         }
 
-        .pg-bar {
-            background: var(--cream-dark);
-            border-radius: 25px;
-            height: 25px;
-            overflow: hidden;
-            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
-            border: 2px solid white;
+        .bouton-action-gold:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0px #8c6607;
         }
 
-        .pg-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--red) 0%, var(--red-light) 100%);
-            transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-            width: 0%;
-        }
-
-        /* ========================================
-           CLASSEMENTS (LEADERBOARDS)
-           ========================================
-        */
-        .lb-table {
+        /* ============================================================
+           TABLEAUX DES SCORES (LEADERBOARD)
+           ============================================================ */
+        .tableau-scores {
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 12px;
-            margin-top: 15px;
+            border-spacing: 0 15px;
         }
 
-        .lb-row {
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+        .ligne-score {
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .lb-row:hover {
-            transform: scale(1.01);
+        .cellule-score {
+            padding: 20px;
         }
 
-        .lb-td {
-            padding: 20px 15px;
-        }
-
-        .lb-td:first-child {
+        .cellule-score:first-child {
             border-top-left-radius: 15px;
             border-bottom-left-radius: 15px;
+            width: 80px;
+            text-align: center;
         }
 
-        .lb-td:last-child {
+        .cellule-score:last-child {
             border-top-right-radius: 15px;
             border-bottom-right-radius: 15px;
+            text-align: right;
+            font-family: var(--police-titre);
+            font-size: 1.8rem;
+            color: var(--couleur-rouge-vin);
         }
 
-        .rank-badge {
+        .rang-badge {
+            background-color: var(--couleur-fond-saloon);
+            color: var(--couleur-or);
+            width: 45px;
+            height: 45px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
             border-radius: 50%;
-            font-weight: 900;
-            font-family: 'Rye', serif;
-            background: var(--cream-dark);
-            color: var(--brown);
-            font-size: 1.2rem;
+            font-family: var(--police-titre);
+            font-size: 1.3rem;
         }
 
-        .rank-badge.gold-medal {
-            background: var(--gold);
-            color: white;
-            border: 3px solid var(--brown);
-            transform: scale(1.2);
-            box-shadow: 0 0 15px rgba(201, 147, 10, 0.6);
-        }
-
-        .team-info .team-name {
+        .nom-equipe-score {
             font-weight: 900;
-            font-size: 1.2rem;
-            color: var(--brown);
+            font-size: 1.3rem;
+            color: var(--couleur-fond-saloon);
             display: block;
         }
 
-        .team-info .team-meta {
-            font-size: 0.75rem;
-            color: #777;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .score-display {
-            font-family: 'Rye', serif;
-            font-size: 2rem;
-            color: var(--red);
-            text-align: right;
-        }
-
-        /* ========================================
-           MODALE DE RÉSULTAT (WANTED)
-           ========================================
-        */
-        .modal-overlay {
+        /* ============================================================
+           MODALE DE FIN (REWARD)
+           ============================================================ */
+        .rideau-modale {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background-color: rgba(0, 0, 0, 0.95);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 3000;
-            padding: 25px;
         }
 
-        .modal-overlay.active {
+        .rideau-modale.visible {
             display: flex;
         }
 
-        .wanted-poster {
-            background: #e9d1a3;
+        .affiche-wanted {
+            background-color: #f1dca7;
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 50px 40px;
+            padding: 60px;
             border: 20px solid #5C3A1E;
-            border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 15px, #8B5E3C 15px, #8B5E3C 30px) 40;
+            border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 20px, #8B5E3C 20px, #8B5E3C 40px) 20;
             max-width: 550px;
-            width: 100%;
+            width: 95%;
             text-align: center;
-            box-shadow: 0 0 80px black;
-            position: relative;
+            box-shadow: 0 0 100px black;
         }
 
-        .wanted-poster h2 {
-            font-family: 'Rye', serif;
-            font-size: 3.5rem;
-            color: #2C1810;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            border-bottom: 4px solid #2C1810;
+        .affiche-wanted h2 {
+            font-family: var(--police-titre);
+            font-size: 4rem;
+            color: var(--couleur-texte-sombre);
+            border-bottom: 6px solid var(--couleur-texte-sombre);
+            margin-bottom: 30px;
             padding-bottom: 10px;
         }
 
-        .wanted-poster p {
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #5C3A1E;
-        }
-
-        .big-reward {
-            font-family: 'Rye', serif;
-            font-size: 7rem;
-            color: var(--red);
-            margin: 30px 0;
-            text-shadow: 4px 4px 0px white;
+        .score-final-chiffre {
+            font-family: var(--police-titre);
+            font-size: 8rem;
+            color: var(--couleur-rouge-vin);
+            margin-top: 30px;
+            margin-bottom: 30px;
             line-height: 1;
+            text-shadow: 4px 4px 0px white;
         }
 
-        /* ========================================
-           RESPONSIVE DESIGN (MOBILE)
-           ========================================
-        */
-        @media (max-width: 650px) {
-            .mode-selection-grid {
-                grid-template-columns: 1fr;
-            }
-            .opt-grid {
-                grid-template-columns: 1fr;
-            }
-            .header {
-                padding: 2.5rem 1rem;
-            }
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            .nav-btn {
-                font-size: 0.75rem;
-                padding: 1.2rem 0.8rem;
-                min-width: 120px;
-            }
-            .wanted-poster {
-                padding: 30px 20px;
-                border-width: 12px;
-            }
-            .big-reward {
-                font-size: 5rem;
-            }
+        /* ============================================================
+           RESPONSIVE (ADAPTATION MOBILE)
+           ============================================================ */
+        @media (max-width: 768px) {
+            .grille-modes { grid-template-columns: 1fr; }
+            .grille-options { grid-template-columns: 1fr; }
+            .header-saloon { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+            .header-saloon h1 { font-size: 2.8rem; }
+            .affiche-wanted { padding: 30px; border-width: 10px; }
+            .score-final-chiffre { font-size: 5rem; }
         }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="age-badge">
+    <header class="header-saloon">
+        <div class="badge-50">
             <span>50</span>
             <small>ans</small>
         </div>
@@ -648,98 +553,84 @@
         <p>Le Grand Jeu du Saloon</p>
     </header>
 
-    <nav class="nav">
-        <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'Équipe</button>
-        <button class="nav-btn" id="nav-quiz" onclick="showPanel('quiz')">Dégustation</button>
-        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Classement Terroir</button>
-        <button class="nav-btn" id="nav-chips-lb" onclick="showPanel('chips-lb')">Chips Master</button>
+    <nav class="menu-navigation">
+        <button class="bouton-nav actif" id="nav-accueil" onclick="afficherPanneau('accueil')">L'Équipe</button>
+        <button class="bouton-nav" id="nav-jeu" onclick="afficherPanneau('jeu')">Dégustation</button>
+        <button class="bouton-nav" id="nav-score-terroir" onclick="afficherPanneau('score-terroir')">Rang Terroir</button>
+        <button class="bouton-nav" id="nav-score-chips" onclick="afficherPanneau('score-chips')">Chips Master</button>
     </nav>
 
-    <main class="main">
-        
-        <section id="panel-register" class="panel active">
-            <div class="card">
-                <div class="card-header">🐎 BIENVENUE AU RANCH</div>
-                <div class="card-body">
+    <main class="conteneur-principal">
+
+        <section id="panneau-accueil" class="panneau actif">
+            <div class="carte-saloon">
+                <div class="carte-entete">🐎 BIENVENUE AU RANCH</div>
+                <div class="carte-corps">
                     
-                    <div id="reg-step-1">
-                        <div class="input-group">
-                            <label for="p-name">NOM DE VOTRE ÉQUIPE (OU PRÉNOMS) :</label>
-                            <input type="text" id="p-name" class="input-field" placeholder="Ex: Les Gringos du Pilat" autocomplete="off">
-                        </div>
-                        <button class="btn-gold" onclick="goToGameSelection()">🌵 ÉTAPE SUIVANTE</button>
+                    <div class="affiche-sheriff">
+                        <h3>📜 LES INSTRUCTIONS DU SHÉRIF</h3>
+                        <ul>
+                            <li><b>Étape 1 :</b> Identifiez votre bande ci-dessous.</li>
+                            <li><b>Étape 2 :</b> Choisissez votre défi (Terroir ou Chips).</li>
+                            <li><b>Étape 3 :</b> Dégustez et analysez avec précision.</li>
+                            <li><b>Attention :</b> Une réponse cliquée ne peut être modifiée !</li>
+                        </ul>
                     </div>
 
-                    <div id="reg-step-2" style="display: none;">
-                        <p style="text-align: center; font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">
-                            Choisissez votre défi pour cette session :
-                        </p>
-                        
-                        <div class="mode-selection-grid">
-                            <div class="mode-card mode-terroir" onclick="startSession('terroir')">
-                                <span class="mode-icon">🍷</span>
-                                <span class="mode-title">TERROIR</span>
-                                <span class="mode-desc">Vins, Fromages & Charcuteries</span>
+                    <div id="etape-nom">
+                        <label style="font-weight:900; margin-bottom:15px; display:block; text-transform:uppercase;">Nom de votre bande de cowboys :</label>
+                        <input type="text" id="nom-equipe-input" class="champ-saisie" placeholder="Ex: Les Gringos du Pilat" autocomplete="off">
+                        <button class="bouton-action-gold" onclick="allerEtapeSelection()">SUIVANT ➔</button>
+                    </div>
+
+                    <div id="etape-selection" style="display:none;">
+                        <p style="text-align:center; font-weight:900; margin-bottom:20px; font-size:1.2rem;">CHOISISSEZ VOTRE ÉPREUVE :</p>
+                        <div class="grille-modes">
+                            <div class="bloc-mode mode-terroir" onclick="lancerLaPartie('terroir')">
+                                <span class="icone-mode">🍷</span>
+                                <span class="titre-mode">TERROIR</span>
+                                <small>Vins, Fromages & Charcuterie</small>
                             </div>
-
-                            <div class="mode-card mode-chips" onclick="startSession('chips')">
-                                <span class="mode-icon">🍟</span>
-                                <span class="mode-title">CHIPS</span>
-                                <span class="mode-desc">L'Expertise Bret's</span>
+                            <div class="bloc-mode mode-chips" onclick="lancerLaPartie('chips')">
+                                <span class="icone-mode">🍟</span>
+                                <span class="titre-mode">CHIPS</span>
+                                <small>Le Championnat Bret's</small>
                             </div>
                         </div>
-
-                        <button style="margin-top: 30px; background: none; border: none; color: var(--brown); font-weight: 900; text-decoration: underline; cursor: pointer; width: 100%;" onclick="backToName()">
-                            ⬅ Modifier le nom d'équipe
-                        </button>
+                        <button style="margin-top:40px; background:none; border:none; color:var(--couleur-fond-saloon); cursor:pointer; text-decoration:underline; width:100%; font-weight:700;" onclick="retourNom()">⬅ Modifier le nom d'équipe</button>
                     </div>
 
                 </div>
             </div>
         </section>
 
-        <section id="panel-quiz" class="panel">
-            <div class="card" style="margin-bottom: 1.5rem; background: var(--brown); color: var(--gold-light); border: none;">
-                <div class="card-body" style="padding: 1.5rem; text-align: center;">
-                    <h2 id="display-mode-title" style="font-family: 'Rye', serif; font-size: 1.8rem; margin-bottom: 5px;">---</h2>
-                    <p id="display-team-name" style="font-weight: 900; text-transform: uppercase; letter-spacing: 2px;"></p>
+        <section id="panneau-jeu" class="panneau">
+            <div class="carte-saloon" style="background-color: var(--couleur-fond-saloon); border: none; margin-bottom: 20px;">
+                <div class="carte-corps" style="text-align: center; color: var(--couleur-or-eclat); padding: 1.5rem;">
+                    <h2 id="titre-quiz-header" style="font-family: var(--police-titre); font-size: 2rem;">---</h2>
+                    <p id="nom-equipe-header" style="font-weight: 900; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; opacity: 0.8;"></p>
                 </div>
             </div>
 
-            <div class="card" style="margin-bottom: 1.5rem;">
-                <div class="card-body" style="padding: 1.5rem;">
-                    <div class="pg-container">
-                        <div class="pg-label">
-                            <span id="pg-text">Progression de l'analyse</span>
-                            <span id="pg-percent">0%</span>
-                        </div>
-                        <div class="pg-bar">
-                            <div class="pg-fill" id="pg-fill-bar"></div>
-                        </div>
-                    </div>
+            <div id="zone-questions">
                 </div>
-            </div>
-
-            <div id="quiz-container"></div>
         </section>
 
-        <section id="panel-leaderboard" class="panel">
-            <div class="card">
-                <div class="card-header">🏆 CLASSEMENT GÉNÉRAL TERROIR</div>
-                <div class="card-body">
-                    <p style="text-align: center; font-style: italic; margin-bottom: 15px;">(Basé sur les Vins, Fromages et Charcuteries - Max 32 pts)</p>
-                    <div id="leaderboard-terroir-area">
+        <section id="panneau-score-terroir" class="panneau">
+            <div class="carte-saloon">
+                <div class="carte-entete">🏆 CLASSEMENT GÉNÉRAL TERROIR</div>
+                <div class="carte-corps">
+                    <div id="liste-scores-terroir">
                         </div>
                 </div>
             </div>
         </section>
 
-        <section id="panel-chips-lb" class="panel">
-            <div class="card">
-                <div class="card-header">🍟 CHAMPIONNAT CHIPS MASTER</div>
-                <div class="card-body">
-                    <p style="text-align: center; font-style: italic; margin-bottom: 15px;">(Basé exclusivement sur les 10 variétés Bret's - Max 10 pts)</p>
-                    <div id="leaderboard-chips-area">
+        <section id="panneau-score-chips" class="panneau">
+            <div class="carte-saloon">
+                <div class="carte-entete">🍟 CHAMPIONNAT CHIPS MASTER</div>
+                <div class="carte-corps">
+                    <div id="liste-scores-chips">
                         </div>
                 </div>
             </div>
@@ -747,25 +638,22 @@
 
     </main>
 
-    <div class="modal-overlay" id="finish-modal">
-        <div class="wanted-poster">
+    <div class="rideau-modale" id="modale-fin">
+        <div class="affiche-wanted">
             <h2>REWARD</h2>
-            <p id="modal-msg-top">SCORE OBTENU PAR L'ÉQUIPE :</p>
-            <div class="big-reward" id="modal-final-score">0</div>
-            <p id="modal-msg-bottom">POINTS DE PRESTIGE</p>
-            
-            <div style="margin-top: 30px;">
-                <button class="btn-gold" onclick="closeFinishModal()">CONSULTER LES CLASSEMENTS</button>
-            </div>
+            <p style="font-weight:900; letter-spacing:2px;">SCORE TOTAL OBTENU :</p>
+            <div class="score-final-chiffre" id="valeur-score-final">0</div>
+            <p style="font-weight:700; text-transform:uppercase;">Points de prestige au Saloon</p>
+            <button class="bouton-action-gold" style="margin-top:40px;" onclick="fermerModale()">CONSULTER LE CLASSEMENT</button>
         </div>
     </div>
 
     <script type="module">
-        // Importation des modules Firebase
+        /* IMPORTATION DES MODULES FIREBASE */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Configuration Firebase (Alexandre 50)
+        /* CONFIGURATION FIREBASE */
         const firebaseConfig = {
             apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
             authDomain: "alexandre50.firebaseapp.com",
@@ -778,339 +666,351 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        /* ========================================
-           BASE DE DONNÉES DES QUESTIONS (INTÉGRALE)
-           ========================================
-        */
-        const QUESTIONS = {
+        /* ============================================================
+           BASE DE DONNÉES DES QUESTIONS (8 FROMAGES + 5 VIANDES + 10 CHIPS)
+           ============================================================ */
+        const BASE_QUESTIONS = {
             terroir: [
-                // LES VINS (3 pts)
-                { id: 'v1', type: 'vin', label: '🍷 Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], answer: 1 },
-                { id: 'v2', type: 'vin', label: '🍷 Vin Blanc n°2', options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], answer: 2 },
-                { id: 'v3', type: 'vin', label: '🍷 Vin Rouge n°1', options: ['Pinot Noir', 'Syrah', 'Merlot', 'Gamay'], answer: 0 },
-                { id: 'v4', type: 'vin', label: '🍷 Vin Rouge n°2', options: ['Bordeaux', 'Côte du Rhône', 'Beaujolais', 'Chinon'], answer: 3 },
-                // LES FROMAGES (2 pts)
-                { id: 'f1', type: 'fromage', label: '🧀 Fromage 1', options: ['Cantal', 'Laguiole', 'Salers', 'Morbier'], answer: 0 },
-                { id: 'f2', type: 'fromage', label: '🧀 Fromage 2', options: ['Tomme de Savoie', 'Tome de brebis', 'Ossau-Iraty', 'Cantal Jeune'], answer: 1 },
-                { id: 'f3', type: 'fromage', label: '🧀 Fromage 3', options: ['Briquette de chèvre', 'Briquette de saint nizier', 'Vacherin', 'Pavé d\'Affinois'], answer: 1 },
-                { id: 'f4', type: 'fromage', label: '🧀 Fromage 4', options: ['Saint nectaire', 'Morbier', 'Tomme', 'Reblochon'], answer: 0 },
-                { id: 'f5', type: 'fromage', label: '🧀 Fromage 5', options: ['Brillat-Savarin', 'Comtesse de Vichy', 'Chaource', 'Coulommiers'], answer: 1 },
-                { id: 'f6', type: 'fromage', label: '🧀 Fromage 6', options: ['Comté 12 mois', 'Comté 18 mois', 'Comté 24 mois', 'Beaufort'], answer: 1 },
-                { id: 'f7', type: 'fromage', label: '🧀 Fromage 7', options: ['Beaufort', 'Abondance', 'Comté d\'été', 'Emmental'], answer: 0 },
-                { id: 'f8', type: 'fromage', label: '🧀 Fromage 8', options: ['Fourme d\'Ambert', 'Fourme de Montbrison', 'Bleu d\'Auvergne', 'Roquefort'], answer: 1 },
-                // CHARCUTERIES (2 pts)
-                { id: 'c1', type: 'meat', label: '🥩 Charcuterie 1', options: ['Saucisson', 'Rosette', 'Jésus', 'Salami'], answer: 0 },
-                { id: 'c2', type: 'meat', label: '🥩 Charcuterie 2', options: ['Saucisson', 'Rosette', 'Chorizo', 'Coppa'], answer: 1 },
-                { id: 'c3', type: 'meat', label: '🥩 Charcuterie 3', options: ['Jambon cru', 'Serrano', 'Parme', 'Cécina'], answer: 0 },
-                { id: 'c4', type: 'meat', label: '🥩 Charcuterie 4', options: ['Noix de jambon', 'Jambonette forezienne', 'Andouille', 'Lomo'], answer: 1 },
-                { id: 'c5', type: 'meat', label: '🥩 Charcuterie 5', options: ['Rillettes', 'Pâte de campagne', 'Terrine', 'Mousse de foie'], answer: 1 }
+                /* --- LES VINS (3 PTS) --- */
+                { id: 'v1', cat: 'vin', label: '🍷 Vin Blanc n°1 : Robe dorée, nez floral...', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], correct: 1 },
+                { id: 'v2', cat: 'vin', label: '🍷 Vin Blanc n°2 : Minéralité calcaire, finale vive...', options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], correct: 2 },
+                { id: 'v3', cat: 'vin', label: '🍷 Vin Rouge n°1 : Fruit rouge croquant, tanins souples...', options: ['Pinot Noir', 'Syrah', 'Merlot', 'Gamay'], correct: 0 },
+                { id: 'v4', cat: 'vin', label: '🍷 Vin Rouge n°2 : Épicé, charpenté, puissant...', options: ['Bordeaux', 'Côte du Rhône', 'Beaujolais', 'Chinon'], correct: 3 },
+                
+                /* --- LES 8 FROMAGES (2 PTS) - AVEC PIÈGES --- */
+                { id: 'f1', cat: 'from', label: '🧀 Fromage 1 : Pâte pressée non cuite, croûte grise et épaisse.', options: ['Cantal', 'Laguiole', 'Salers', 'Tomme'], correct: 0 }, // Piège : Salers/Laguiole sont proches
+                { id: 'f2', cat: 'from', label: '🧀 Fromage 2 : Un goût lactique typique des pâturages pyrénéens.', options: ['Ossau-Iraty', 'Tome de brebis', 'Laguiole', 'Manchego'], correct: 1 }, // Piège : Ossau-Iraty
+                { id: 'f3', cat: 'from', label: '🧀 Fromage 3 : Petite briquette très crémeuse produite localement.', options: ['Pavé d\'Affinois', 'Briquette de St Nizier', 'St Marcellin', 'St Félicien'], correct: 1 }, // Piège : Pavé d'Affinois
+                { id: 'f4', cat: 'from', label: '🧀 Fromage 4 : Pâte onctueuse, croûte fleurie, typique du Cantal (mais pas un Cantal !).', options: ['Saint Nectaire', 'Morbier', 'Tomme de Savoie', 'Reblochon'], correct: 0 },
+                { id: 'f5', cat: 'from', label: '🧀 Fromage 5 : Entouré d\'un liseré d\'épicéa, ultra-fondant.', options: ['Brillat-Savarin', 'Comtesse de Vichy', 'Vacherin Mont-d\'Or', 'Epoisses'], correct: 1 },
+                { id: 'f6', cat: 'from', label: '🧀 Fromage 6 : Un affinage équilibré, pâte ferme aux cristaux de sel.', options: ['Comté 12 mois', 'Comté 18 mois', 'Comté 24 mois', 'Beaufort'], correct: 1 }, // Piège : 12 ou 24 mois
+                { id: 'f7', cat: 'from', label: '🧀 Fromage 7 : Le "Prince des Montagnes", sans aucun trou.', options: ['Beaufort', 'Abondance', 'Comté d\'été', 'Emmental'], correct: 0 },
+                { id: 'f8', cat: 'from', label: '🧀 Fromage 8 : Bleu orangé typique des monts du Forez.', options: ['Fourme d\'Ambert', 'Fourme de Montbrison', 'Bleu d\'Auvergne', 'Roquefort'], correct: 1 }, // Piège : Ambert (même forme)
+                
+                /* --- LA CHARCUTERIE (2 PTS) - AVEC PIÈGES --- */
+                { id: 'c1', cat: 'meat', label: '🥩 Viande 1 : Le pilier de l\'apéro, hachage moyen.', options: ['Saucisson', 'Rosette', 'Jésus', 'Salami'], correct: 0 },
+                { id: 'c2', cat: 'meat', label: '🥩 Viande 2 : Une pièce longue, hachage fin, boyau naturel.', options: ['Saucisson', 'Rosette', 'Coppa', 'Lomo'], correct: 1 }, // Piège : Jésus
+                { id: 'c3', cat: 'meat', label: '🥩 Viande 3 : Salée et séchée pendant de longs mois.', options: ['Jambon cru', 'Serrano', 'Parme', 'Cécina'], correct: 0 },
+                { id: 'c4', cat: 'meat', label: '🥩 Viande 4 : Spécialité locale en forme de petite poire.', options: ['Noix de jambon', 'Jambonette forezienne', 'Andouille', 'Bresaola'], correct: 1 },
+                { id: 'c5', cat: 'meat', label: '🥩 Viande 5 : Texture rustique, saveur authentique de campagne.', options: ['Rillettes', 'Pâté de campagne', 'Terrine de foie', 'Mousse de canard'], correct: 1 }
             ],
             chips: [
-                // BRET'S (1 pt)
-                { id: 'ch1', type: 'chips', label: '🥔 Bret\'s n°1', options: ['Nature', 'Sel de Guérande', 'Vinaigre', 'Moutarde'], answer: 1 },
-                { id: 'ch2', type: 'chips', label: '🥔 Bret\'s n°2', options: ['Oignon Grillé', 'Fromage', 'Poulet Rôti', 'Barbecue'], answer: 0 },
-                { id: 'ch3', type: 'chips', label: '🥔 Bret\'s n°3', options: ['Aioli', 'Pesto', 'Truffe Noir', 'Cheddar'], answer: 0 },
-                { id: 'ch4', type: 'chips', label: '🥔 Bret\'s n°4', options: ['Camembert', 'Fromage du Jura', 'Chèvre Piment', 'Bleu'], answer: 1 },
-                { id: 'ch5', type: 'chips', label: '🥔 Bret\'s n°5', options: ['Piment d\'Espelette', 'Chili', 'Curry', 'Poivre'], answer: 0 },
-                { id: 'ch6', type: 'chips', label: '🥔 Bret\'s n°6', options: ['Cèpes', 'Truffe', 'Champignon', 'Morilles'], answer: 0 },
-                { id: 'ch7', type: 'chips', label: '🥔 Bret\'s n°7', options: ['Moutarde', 'Pickles', 'Ketchup', 'Mayonnaise'], answer: 0 },
-                { id: 'ch8', type: 'chips', label: '🥔 Bret\'s n°8', options: ['Tartine Grillée', 'Bacon', 'Jambon Sec', 'Poulet Rôti'], answer: 3 },
-                { id: 'ch9', type: 'chips', label: '🥔 Bret\'s n°9', options: ['Indienne', 'Mexicaine', 'Yakitori', 'Thaï'], answer: 1 },
-                { id: 'ch10', type: 'chips', label: '🥔 Bret\'s n°10', options: ['Miel Moutarde', 'Caramel Sel', 'Barbecue', 'Tex Mex'], answer: 2 }
+                /* --- LES 10 VARIÉTÉS BRET'S (1 PT) --- */
+                { id: 'ch1', cat: 'chip', label: '🥔 Bret\'s n°1', options: ['Nature', 'Sel de Guérande', 'Vinaigre', 'Moutarde'], correct: 1 },
+                { id: 'ch2', cat: 'chip', label: '🥔 Bret\'s n°2', options: ['Oignon Grillé', 'Fromage', 'Poulet Rôti', 'Barbecue'], correct: 0 },
+                { id: 'ch3', cat: 'chip', label: '🥔 Bret\'s n°3', options: ['Aioli', 'Pesto', 'Truffe Noir', 'Cheddar'], correct: 0 },
+                { id: 'ch4', cat: 'chip', label: '🥔 Bret\'s n°4', options: ['Camembert', 'Fromage du Jura', 'Chèvre Piment', 'Bleu'], correct: 1 },
+                { id: 'ch5', cat: 'chip', label: '🥔 Bret\'s n°5', options: ['Piment d\'Espelette', 'Chili', 'Curry', 'Poivre'], correct: 0 },
+                { id: 'ch6', cat: 'chip', label: '🥔 Bret\'s n°6', options: ['Cèpes', 'Truffe', 'Champignon', 'Morilles'], correct: 0 },
+                { id: 'ch7', cat: 'chip', label: '🥔 Bret\'s n°7', options: ['Moutarde', 'Pickles', 'Ketchup', 'Mayonnaise'], correct: 0 },
+                { id: 'ch8', cat: 'chip', label: '🥔 Bret\'s n°8', options: ['Tartine Grillée', 'Bacon', 'Jambon Sec', 'Poulet Rôti'], correct: 3 },
+                { id: 'ch9', cat: 'chip', label: '🥔 Bret\'s n°9', options: ['Indienne', 'Mexicaine', 'Yakitori', 'Thaï'], correct: 1 },
+                { id: 'ch10', cat: 'chip', label: '🥔 Bret\'s n°10', options: ['Miel Moutarde', 'Caramel Sel', 'Barbecue', 'Tex Mex'], correct: 2 }
             ]
         };
 
-        const POINTS_CONFIG = { vin: 3, fromage: 2, meat: 2, chips: 1 };
+        const BAREME = { vin: 3, from: 2, meat: 2, chip: 1 };
 
-        // État de l'application
-        let currentPlayer = JSON.parse(localStorage.getItem('alex_player'));
-        let currentMode = localStorage.getItem('alex_mode'); // 'terroir' ou 'chips'
-        let currentAnswers = {};
-        let allScoresData = {};
+        /* ÉTAT DU JEU */
+        let equipeActuelle = JSON.parse(localStorage.getItem('alex50_equipe'));
+        let modeActuel = localStorage.getItem('alex50_mode');
 
-        /* ========================================
-           GESTION DE LA NAVIGATION ET ÉCRANS
-           ========================================
-        */
-        window.showPanel = (panelId) => {
-            const allPanels = document.querySelectorAll('.panel');
-            allPanels.forEach(p => p.classList.remove('active'));
-            
-            const allBtns = document.querySelectorAll('.nav-btn');
-            allBtns.forEach(b => b.classList.remove('active'));
-            
-            document.getElementById('panel-' + panelId).classList.add('active');
-            const navBtn = document.getElementById('nav-' + panelId);
-            if (navBtn) navBtn.classList.add('active');
+        /* ============================================================
+           GESTION DE L'AFFICHAGE DES PANNEAUX
+           ============================================================ */
+        window.afficherPanneau = function(nomPanneau) {
+            // Désactiver tous les panneaux
+            const tousLesPanneaux = document.querySelectorAll('.panneau');
+            tousLesPanneaux.forEach(p => {
+                p.classList.remove('actif');
+            });
 
-            if (panelId === 'quiz') renderQuizContent();
-            if (panelId === 'leaderboard' || panelId === 'chips-lb') renderLeaderboards();
-            
+            // Désactiver tous les boutons de nav
+            const tousLesBoutons = document.querySelectorAll('.bouton-nav');
+            tousLesBoutons.forEach(b => {
+                b.classList.remove('actif');
+            });
+
+            // Activer le bon panneau
+            const cible = document.getElementById('panneau-' + nomPanneau);
+            if (cible) {
+                cible.classList.add('actif');
+            }
+
+            // Activer le bouton correspondant
+            const boutonCible = document.getElementById('nav-' + nomPanneau);
+            if (boutonCible) {
+                boutonCible.classList.add('actif');
+            }
+
+            // Charger les données si nécessaire
+            if (nomPanneau === 'jeu') {
+                genererQuiz();
+            }
+
             window.scrollTo(0, 0);
         };
 
-        // Inscription : Passage au choix du jeu
-        window.goToGameSelection = () => {
-            const name = document.getElementById('p-name').value.trim();
-            if (!name) {
-                alert("Hé Cowboy ! Identifie ton équipe d'abord !");
+        /* ============================================================
+           LOGIQUE D'INSCRIPTION ET SÉLECTION
+           ============================================================ */
+        window.allerEtapeSelection = function() {
+            const nom = document.getElementById('nom-equipe-input').value.trim();
+            if (nom === "") {
+                alert("Nom d'équipe obligatoire, Cowboy !");
                 return;
             }
-            document.getElementById('reg-step-1').style.display = 'none';
-            document.getElementById('reg-step-2').style.display = 'block';
+            document.getElementById('etape-nom').style.display = 'none';
+            document.getElementById('etape-selection').style.display = 'block';
         };
 
-        // Retour en arrière sur le nom
-        window.backToName = () => {
-            document.getElementById('reg-step-1').style.display = 'block';
-            document.getElementById('reg-step-2').style.display = 'none';
+        window.retourNom = function() {
+            document.getElementById('etape-nom').style.display = 'block';
+            document.getElementById('etape-selection').style.display = 'none';
         };
 
-        // Initialisation de la session de jeu
-        window.startSession = (mode) => {
-            const name = document.getElementById('p-name').value.trim();
-            const playerId = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Date.now();
+        window.lancerLaPartie = function(mode) {
+            const nom = document.getElementById('nom-equipe-input').value.trim();
+            const idUnique = nom.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Date.now();
             
-            currentPlayer = { id: playerId, name: name };
-            currentMode = mode;
-            currentAnswers = {};
+            equipeActuelle = { id: idUnique, nom: nom };
+            modeActuel = mode;
 
-            localStorage.setItem('alex_player', JSON.stringify(currentPlayer));
-            localStorage.setItem('alex_mode', mode);
+            localStorage.setItem('alex50_equipe', JSON.stringify(equipeActuelle));
+            localStorage.setItem('alex50_mode', mode);
             
-            showPanel('quiz');
+            // On s'assure que les réponses locales sont vides pour une nouvelle session
+            localStorage.removeItem('reponses_' + idUnique);
+
+            afficherPanneau('jeu');
         };
 
-        /* ========================================
-           LOGIQUE DU QUIZ
-           ========================================
-        */
-        function renderQuizContent() {
-            if (!currentPlayer) {
-                showPanel('register');
+        /* ============================================================
+           GÉNÉRATION DU QUIZ
+           ============================================================ */
+        function genererQuiz() {
+            if (!equipeActuelle) {
+                afficherPanneau('accueil');
                 return;
             }
 
-            const quizArea = document.getElementById('quiz-container');
-            const titleArea = document.getElementById('display-mode-title');
-            const nameArea = document.getElementById('display-team-name');
+            const zoneQuestions = document.getElementById('zone-questions');
+            document.getElementById('titre-quiz-header').textContent = modeActuel === 'terroir' ? "🍷 SESSION TERROIR" : "🍟 SESSION CHIPS MASTER";
+            document.getElementById('nom-equipe-header').textContent = "Équipe : " + equipeActuelle.nom;
 
-            titleArea.textContent = currentMode === 'terroir' ? "🍷 SESSION TERROIR" : "🍟 SESSION BRET'S";
-            nameArea.textContent = "Équipe : " + currentPlayer.name;
+            const listeQ = BASE_QUESTIONS[modeActuel];
+            let codeHtml = "";
 
-            const questionsList = QUESTIONS[currentMode];
-            let html = "";
+            // On récupère les réponses déjà données
+            const reponsesSauvegardees = JSON.parse(localStorage.getItem('reponses_' + equipeActuelle.id)) || {};
 
-            // Récupération des réponses déjà stockées localement pour cette équipe
-            const savedAns = JSON.parse(localStorage.getItem('ans_' + currentPlayer.id)) || {};
-            currentAnswers = savedAns;
+            let categorieCourante = "";
 
-            questionsList.forEach((q, index) => {
-                const userChoice = currentAnswers[q.id];
-                const isAnswered = userChoice !== undefined;
+            listeQ.forEach((q, index) => {
+                // Ajouter un séparateur si on change de type (ex: Vin -> Fromage)
+                if (q.cat !== categorieCourante) {
+                    categorieCourante = q.cat;
+                    let labelCat = "";
+                    if (q.cat === 'vin') labelCat = "LES VINS (3 pts)";
+                    if (q.cat === 'from') labelCat = "LES FROMAGES (2 pts)";
+                    if (q.cat === 'meat') labelCat = "LA CHARCUTERIE (2 pts)";
+                    if (q.cat === 'chip') labelCat = "DÉGUSTATION BRET'S (1 pt)";
+                    
+                    codeHtml += `<div class="separateur-categorie">${labelCat}</div>`;
+                }
 
-                html += `
-                <div class="card">
-                    <div class="card-body">
-                        <div class="q-block">
-                            <div class="q-title">${q.label}</div>
-                            <div class="opt-grid">
+                const dejaRepondu = reponsesSauvegardees[q.id] !== undefined;
+
+                codeHtml += `
+                <div class="bloc-question">
+                    <span class="label-question">${index + 1}. ${q.label}</span>
+                    <div class="grille-options">
                 `;
 
-                q.options.forEach((opt, optIdx) => {
-                    let btnClass = "opt-btn";
-                    if (isAnswered) {
-                        btnClass += " locked";
-                        if (optIdx === userChoice) btnClass += " selected";
+                q.options.forEach((opt, idxOpt) => {
+                    let classesBouton = "bouton-option";
+                    if (dejaRepondu) {
+                        classesBouton += " verrouille";
+                        if (reponsesSauvegardees[q.id] === idxOpt) {
+                            classesBouton += " selectionne";
+                        }
                     }
 
-                    html += `
-                        <button class="${btnClass}" onclick="submitAnswer('${q.id}', ${optIdx})">
+                    codeHtml += `
+                        <button class="${classesBouton}" onclick="soumettreReponse('${q.id}', ${idxOpt})">
                             ${opt}
                         </button>
                     `;
                 });
 
-                html += `
-                            </div>
-                        </div>
+                codeHtml += `
                     </div>
                 </div>
                 `;
             });
 
-            quizArea.innerHTML = html;
-            updateProgressBar();
+            zoneQuestions.innerHTML = codeHtml;
         }
 
-        window.submitAnswer = async (questionId, choiceIdx) => {
-            if (currentAnswers[questionId] !== undefined) return;
+        /* ============================================================
+           SOUCOUMISSION D'UNE RÉPONSE
+           ============================================================ */
+        window.soumettreReponse = async function(idQuestion, indexChoisi) {
+            let reponses = JSON.parse(localStorage.getItem('reponses_' + equipeActuelle.id)) || {};
+            
+            // Empêcher de répondre deux fois
+            if (reponses[idQuestion] !== undefined) return;
 
-            // Enregistrement local
-            currentAnswers[questionId] = choiceIdx;
-            localStorage.setItem('ans_' + currentPlayer.id, JSON.stringify(currentAnswers));
+            // Enregistrer localement
+            reponses[idQuestion] = indexChoisi;
+            localStorage.setItem('reponses_' + equipeActuelle.id, JSON.stringify(reponses));
 
-            // Rerender immédiat pour le feedback visuel
-            renderQuizContent();
+            // Rafraîchir l'affichage
+            genererQuiz();
 
-            // Calcul du score global de l'équipe (tous modes confondus s'ils ont joué aux deux)
-            await syncScoreWithFirebase();
+            // Calculer et envoyer le score à Firebase
+            await synchroniserScoreFirebase();
 
-            // Vérification si le quiz actuel est fini
-            const questionsInMode = QUESTIONS[currentMode].length;
-            const answersInMode = QUESTIONS[currentMode].filter(q => currentAnswers[q.id] !== undefined).length;
+            // Vérifier si c'est fini
+            const totalQuestionsMode = BASE_QUESTIONS[modeActuel].length;
+            const reponsesDonneesMode = BASE_QUESTIONS[modeActuel].filter(q => reponses[q.id] !== undefined).length;
 
-            if (answersInMode === questionsInMode) {
-                showFinishModal();
+            if (reponsesDonneesMode === totalQuestionsMode) {
+                afficherResultatFinal();
             }
         };
 
-        async function syncScoreWithFirebase() {
+        /* ============================================================
+           CALCUL ET SYNCHRO FIREBASE
+           ============================================================ */
+        async function synchroniserScoreFirebase() {
+            let reponses = JSON.parse(localStorage.getItem('reponses_' + equipeActuelle.id)) || {};
             let scoreTerroir = 0;
             let scoreChips = 0;
 
-            // Calcul sur les questions Terroir
-            QUESTIONS.terroir.forEach(q => {
-                if (currentAnswers[q.id] === q.answer) {
-                    scoreTerroir += POINTS_CONFIG[q.type];
+            // Calcul Terroir
+            BASE_QUESTIONS.terroir.forEach(q => {
+                if (reponses[q.id] === q.correct) {
+                    scoreTerroir += BAREME[q.cat];
                 }
             });
 
-            // Calcul sur les questions Chips
-            QUESTIONS.chips.forEach(q => {
-                if (currentAnswers[q.id] === q.answer) {
-                    scoreChips += POINTS_CONFIG[q.type];
+            // Calcul Chips
+            BASE_QUESTIONS.chips.forEach(q => {
+                if (reponses[q.id] === q.correct) {
+                    scoreChips += BAREME[q.cat];
                 }
             });
 
-            const totalDone = Object.keys(currentAnswers).length;
-
-            // Envoi à Firebase
-            await setDoc(doc(db, "scores", currentPlayer.id), {
-                name: currentPlayer.name,
-                terroir: scoreTerroir,
-                chips: scoreChips,
-                totalProgress: totalDone,
-                lastUpdate: Date.now()
+            // Envoi Firebase
+            await setDoc(doc(db, "scores", equipeActuelle.id), {
+                nom: equipeActuelle.nom,
+                pointsTerroir: scoreTerroir,
+                pointsChips: scoreChips,
+                date: Date.now()
             });
         }
 
-        function updateProgressBar() {
-            const questionsInMode = QUESTIONS[currentMode].length;
-            const answersInMode = QUESTIONS[currentMode].filter(q => currentAnswers[q.id] !== undefined).length;
-            const percentage = Math.round((answersInMode / questionsInMode) * 100);
+        /* ============================================================
+           RÉSULTAT ET MODALE
+           ============================================================ */
+        function afficherResultatFinal() {
+            let reponses = JSON.parse(localStorage.getItem('reponses_' + equipeActuelle.id)) || {};
+            let scoreFinal = 0;
 
-            document.getElementById('pg-fill-bar').style.width = percentage + "%";
-            document.getElementById('pg-percent').textContent = percentage + "%";
-            document.getElementById('pg-text').textContent = `${answersInMode} sur ${questionsInMode} analysés`;
-        }
-
-        /* ========================================
-           CLASSEMENTS ET RÉSULTATS
-           ========================================
-        */
-        function renderLeaderboards() {
-            const dataList = Object.values(allScoresData);
-            if (dataList.length === 0) return;
-
-            // 1. Leaderboard Terroir
-            const terroirSorted = [...dataList].sort((a, b) => b.terroir - a.terroir || a.lastUpdate - b.lastUpdate);
-            const terroirArea = document.getElementById('leaderboard-terroir-area');
-            let tHtml = '<table class="lb-table">';
-
-            terroirSorted.forEach((p, i) => {
-                const isTop = i === 0;
-                tHtml += `
-                <tr class="lb-row">
-                    <td class="lb-td" width="70">
-                        <span class="rank-badge ${isTop ? 'gold-medal' : ''}">${i + 1}</span>
-                    </td>
-                    <td class="lb-td">
-                        <div class="team-info">
-                            <span class="team-name">${p.name}</span>
-                            <span class="team-meta">Activité : ${p.totalProgress} étapes</span>
-                        </div>
-                    </td>
-                    <td class="lb-td">
-                        <div class="score-display">${p.terroir}</div>
-                    </td>
-                </tr>
-                `;
+            BASE_QUESTIONS[modeActuel].forEach(q => {
+                if (reponses[q.id] === q.correct) {
+                    scoreFinal += BAREME[q.cat];
+                }
             });
-            terroirArea.innerHTML = tHtml + '</table>';
 
-            // 2. Leaderboard Chips
-            const chipsSorted = [...dataList].sort((a, b) => b.chips - a.chips || a.lastUpdate - b.lastUpdate);
-            const chipsArea = document.getElementById('leaderboard-chips-area');
-            let cHtml = '<table class="lb-table">';
+            document.getElementById('valeur-score-final').textContent = scoreFinal;
+            document.getElementById('modale-fin').classList.add('visible');
 
-            chipsSorted.forEach((p, i) => {
-                const isTop = i === 0;
-                cHtml += `
-                <tr class="lb-row">
-                    <td class="lb-td" width="70">
-                        <span class="rank-badge ${isTop ? 'gold-medal' : ''}">${i + 1}</span>
-                    </td>
-                    <td class="lb-td">
-                        <div class="team-info">
-                            <span class="team-name">${p.name}</span>
-                        </div>
-                    </td>
-                    <td class="lb-td">
-                        <div class="score-display" style="color: var(--brown)">${p.chips}</div>
-                    </td>
-                </tr>
-                `;
-            });
-            chipsArea.innerHTML = cHtml + '</table>';
-        }
+            // Animation Confetti
+            const duree = 5 * 1000;
+            const fin = Date.now() + duree;
 
-        function showFinishModal() {
-            let finalScore = 0;
-            if (currentMode === 'terroir') {
-                QUESTIONS.terroir.forEach(q => { if (currentAnswers[q.id] === q.answer) finalScore += POINTS_CONFIG[q.type]; });
-                document.getElementById('modal-msg-bottom').textContent = "POINTS SUR 32 (TERROIR)";
-            } else {
-                QUESTIONS.chips.forEach(q => { if (currentAnswers[q.id] === q.answer) finalScore += POINTS_CONFIG[q.type]; });
-                document.getElementById('modal-msg-bottom').textContent = "POINTS SUR 10 (BRET'S)";
-            }
-
-            document.getElementById('modal-final-score').textContent = finalScore;
-            document.getElementById('finish-modal').classList.add('active');
-            
-            // Lancement des confettis
-            const duration = 4 * 1000;
-            const end = Date.now() + duration;
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#C9930A', '#8B1A1A'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#C9930A', '#8B1A1A'] });
-                if (Date.now() < end) requestAnimationFrame(frame);
+                confetti({
+                    particleCount: 4,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#C9930A', '#8B1A1A']
+                });
+                confetti({
+                    particleCount: 4,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#C9930A', '#8B1A1A']
+                });
+
+                if (Date.now() < fin) {
+                    requestAnimationFrame(frame);
+                }
             }());
         }
 
-        window.closeFinishModal = () => {
-            document.getElementById('finish-modal').classList.remove('active');
-            showPanel(currentMode === 'terroir' ? 'leaderboard' : 'chips-lb');
+        window.fermerModale = function() {
+            document.getElementById('modale-fin').classList.remove('visible');
+            if (modeActuel === 'terroir') {
+                afficherPanneau('score-terroir');
+            } else {
+                afficherPanneau('score-chips');
+            }
         };
 
-        /* ========================================
-           INITIALISATION ET TEMPS RÉEL
-           ========================================
-        */
+        /* ============================================================
+           FIREBASE : ÉCOUTE EN TEMPS RÉEL DES SCORES
+           ============================================================ */
         onSnapshot(collection(db, "scores"), (snapshot) => {
-            allScoresData = {};
+            const dataScores = [];
             snapshot.forEach(doc => {
-                allScoresData[doc.id] = doc.data();
+                dataScores.push(doc.data());
             });
-            // Mise à jour des classements si visibles
-            renderLeaderboards();
+
+            // Rendu Classement Terroir
+            const containerTerroir = document.getElementById('liste-scores-terroir');
+            const scoresTriesTerroir = [...dataScores].sort((a, b) => b.pointsTerroir - a.pointsTerroir);
+            
+            let htmlTerroir = '<table class="tableau-scores">';
+            scoresTriesTerroir.forEach((s, i) => {
+                htmlTerroir += `
+                    <tr class="ligne-score">
+                        <td class="cellule-score"><span class="rang-badge">${i + 1}</span></td>
+                        <td class="cellule-score"><span class="nom-equipe-score">${s.nom}</span></td>
+                        <td class="cellule-score">${s.pointsTerroir} <small>pts</small></td>
+                    </tr>
+                `;
+            });
+            htmlTerroir += '</table>';
+            containerTerroir.innerHTML = htmlTerroir;
+
+            // Rendu Classement Chips
+            const containerChips = document.getElementById('liste-scores-chips');
+            const scoresTriesChips = [...dataScores].sort((a, b) => b.pointsChips - a.pointsChips);
+            
+            let htmlChips = '<table class="tableau-scores">';
+            scoresTriesChips.forEach((s, i) => {
+                htmlChips += `
+                    <tr class="ligne-score">
+                        <td class="cellule-score"><span class="rang-badge" style="background-color:#8B5E3C;">${i + 1}</span></td>
+                        <td class="cellule-score"><span class="nom-equipe-score">${s.nom}</span></td>
+                        <td class="cellule-score" style="color:#4A2F18;">${s.pointsChips} <small>pts</small></td>
+                    </tr>
+                `;
+            });
+            htmlChips += '</table>';
+            containerChips.innerHTML = htmlChips;
         });
 
-        // Au démarrage, si un joueur existe, on va au quiz, sinon inscription
-        if (currentPlayer) {
-            showPanel('quiz');
+        /* DÉMARRAGE */
+        if (equipeActuelle) {
+            afficherPanneau('jeu');
         } else {
-            showPanel('register');
+            afficherPanneau('accueil');
         }
 
     </script>
