@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤠 Alexandre a 50 ans ! - Le Jeu du Saloon</title>
+    <title>🤠 Alexandre 50's - Le Grand Jeu du Saloon</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
     
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
+        /* --- VARIABLES DE COULEURS --- */
         :root {
-            --brown: #5C3A1E;
+            --brown: #4A2F18;
             --brown-light: #8B5E3C;
             --gold: #C9930A;
             --gold-light: #F0B429;
@@ -17,369 +21,464 @@
             --red: #8B1A1A;
             --red-light: #B22222;
             --text-dark: #2C1810;
-            --shadow: rgba(0,0,0,0.4);
+            --shadow: rgba(0,0,0,0.5);
         }
 
+        /* --- RESET DE BASE --- */
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
         }
-
+        
         body {
             background-color: var(--brown);
             background-image: 
-                linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 12px);
+                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                url('https://www.transparenttextures.com/patterns/wood-pattern.png');
             font-family: 'Lato', sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
-            padding-bottom: 50px;
+            padding-bottom: 80px;
         }
 
         /* --- HEADER & BADGE 50 ANS --- */
         .header {
-            background: linear-gradient(135deg, var(--red) 0%, var(--brown) 50%, var(--red) 100%);
-            border-bottom: 6px solid var(--gold);
+            background: linear-gradient(135deg, var(--red) 0%, #301010 100%);
+            border-bottom: 8px solid var(--gold);
             text-align: center;
-            padding: 2.5rem 1rem;
+            padding: 3rem 1rem;
             position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
         }
 
         .header h1 {
             font-family: 'Rye', serif;
-            font-size: clamp(1.8rem, 8vw, 3.8rem);
+            font-size: clamp(1.8rem, 9vw, 4rem);
             color: var(--gold-light);
-            text-shadow: 3px 3px 0 var(--brown), 5px 5px 10px rgba(0,0,0,0.5);
-            margin-bottom: 5px;
-            letter-spacing: 2px;
+            text-shadow: 4px 4px 0 var(--brown), 6px 6px 15px rgba(0,0,0,0.6);
+            margin-bottom: 10px;
+            letter-spacing: 3px;
         }
 
         .header p {
             color: white;
             font-family: 'Playfair Display', serif;
-            letter-spacing: 4px;
-            font-size: 0.9rem;
+            letter-spacing: 5px;
+            font-size: 1rem;
             text-transform: uppercase;
-            opacity: 0.9;
+            opacity: 0.8;
         }
 
         .age-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--gold);
+            position: absolute; 
+            top: 20px; 
+            right: 20px;
+            background: var(--gold); 
             color: var(--brown);
-            width: 70px;
-            height: 70px;
+            width: 85px; 
+            height: 85px; 
             border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
             justify-content: center;
-            font-family: 'Rye', serif;
-            border: 3px double white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.6);
-            transform: rotate(12deg);
-            z-index: 10;
+            font-family: 'Rye', serif; 
+            border: 4px double white;
+            box-shadow: 0 0 25px rgba(0,0,0,0.7); 
+            transform: rotate(15deg);
+            z-index: 10; 
+            animation: badgePulse 2s infinite ease-in-out;
         }
 
-        .age-badge span { font-size: 1.6rem; font-weight: bold; }
-        .age-badge small { font-size: 0.7rem; text-transform: uppercase; }
+        @keyframes badgePulse { 
+            0% { transform: rotate(15deg) scale(1); } 
+            50% { transform: rotate(10deg) scale(1.05); } 
+            100% { transform: rotate(15deg) scale(1); } 
+        }
+
+        .age-badge span { 
+            font-size: 2rem; 
+            font-weight: bold; 
+            line-height: 1; 
+        }
+
+        .age-badge small { 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+        }
 
         /* --- NAVIGATION --- */
         .nav {
-            display: flex;
-            justify-content: center;
-            background: var(--brown);
-            border-bottom: 3px solid var(--gold);
-            position: sticky;
-            top: 0;
+            display: flex; 
+            justify-content: center; 
+            background: #2c1a0c;
+            border-bottom: 4px solid var(--gold); 
+            position: sticky; 
+            top: 0; 
             z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+            overflow-x: auto;
         }
 
         .nav-btn {
-            background: none;
-            border: none;
+            background: none; 
+            border: none; 
             color: var(--cream-dark);
-            font-family: 'Lato', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 1.2rem;
+            font-family: 'Lato', sans-serif; 
+            font-size: 0.85rem; 
+            font-weight: 900;
+            text-transform: uppercase; 
+            padding: 1.4rem 1rem; 
             cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-            flex: 1;
-            max-width: 200px;
+            transition: all 0.3s; 
+            letter-spacing: 1.5px; 
+            flex: 1; 
+            min-width: 140px;
         }
 
         .nav-btn.active {
-            color: var(--gold-light);
-            border-bottom: 4px solid var(--gold-light);
-            background: rgba(255,255,255,0.05);
+            color: var(--gold-light); 
+            background: rgba(255,255,255,0.08);
+            border-bottom: 5px solid var(--gold-light);
         }
 
         /* --- STRUCTURE PRINCIPALE --- */
-        .main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1.5rem 1rem;
+        .main { 
+            max-width: 850px; 
+            margin: 0 auto; 
+            padding: 2rem 1rem; 
         }
 
         .card {
-            background: var(--cream);
-            border-radius: 15px;
-            border: 2px solid var(--gold);
-            box-shadow: 0 8px 25px var(--shadow);
-            margin-bottom: 2rem;
+            background: var(--cream); 
+            border-radius: 20px; 
+            border: 3px solid var(--gold);
+            box-shadow: 0 12px 35px var(--shadow); 
+            margin-bottom: 2.5rem; 
             overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            pointer-events: none; 
+            opacity: 0.4;
         }
 
         .card-header {
             background: linear-gradient(90deg, var(--brown) 0%, var(--brown-light) 100%);
-            color: var(--gold-light);
+            color: var(--gold-light); 
             font-family: 'Rye', serif;
-            padding: 1.2rem;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            border-bottom: 2px solid var(--gold);
-        }
-
-        .card-body { padding: 1.5rem; }
-
-        .panel { display: none; }
-        .panel.active { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
-
-        /* --- ÉQUIPE / REGISTER --- */
-        .union-box {
-            background: var(--red);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 1.5rem; 
+            font-size: 1.3rem; 
+            letter-spacing: 1.5px;
+            border-bottom: 3px solid var(--gold); 
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1rem;
-            line-height: 1.5;
-            border: 2px solid var(--gold);
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
         }
 
-        .input-group { margin-bottom: 20px; }
+        .card-body { 
+            padding: 2rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+
+        .panel { 
+            display: none; 
+        }
+
+        .panel.active { 
+            display: block; 
+            animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* --- ÉQUIPE & REGISTER --- */
+        .union-box {
+            background: var(--red); 
+            color: white; 
+            padding: 25px; 
+            border-radius: 12px;
+            text-align: center; 
+            margin-bottom: 30px; 
+            border: 3px solid var(--gold);
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .input-group { 
+            margin-bottom: 25px; 
+        }
+
         .input-group label {
-            display: block;
-            font-weight: 900;
+            display: block; 
+            font-weight: 900; 
             color: var(--brown);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
+            margin-bottom: 10px; 
+            text-transform: uppercase; 
+            font-size: 0.9rem;
         }
 
         .input-field {
-            width: 100%;
-            padding: 14px;
-            border-radius: 8px;
-            border: 2px solid var(--cream-dark);
-            font-size: 1.1rem;
-            font-family: 'Lato', sans-serif;
-            outline: none;
-            transition: border-color 0.3s;
+            width: 100%; 
+            padding: 16px; 
+            border-radius: 10px; 
+            border: 3px solid var(--cream-dark);
+            font-size: 1.2rem; 
+            font-family: 'Lato', sans-serif; 
+            outline: none; 
+            transition: 0.3s;
         }
 
-        .input-field:focus { border-color: var(--gold); }
+        .input-field:focus { 
+            border-color: var(--gold); 
+            box-shadow: 0 0 10px rgba(201, 147, 10, 0.3); 
+        }
 
         .btn-gold {
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            color: var(--brown);
-            border: none;
-            border-radius: 8px;
-            font-family: 'Rye', serif;
-            padding: 1.2rem;
+            color: var(--brown); 
+            border: none; 
+            border-radius: 12px;
+            font-family: 'Rye', serif; 
+            padding: 1.4rem; 
             width: 100%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 0 #8c6607;
-            transition: all 0.1s;
+            cursor: pointer; 
+            font-size: 1.4rem; 
+            box-shadow: 0 6px 0 #8c6607;
+            transition: all 0.1s; 
             text-transform: uppercase;
         }
 
-        .btn-gold:active { transform: translateY(3px); box-shadow: 0 2px 0 #8c6607; }
-
-        /* --- QUIZ & SECRET DES RÉPONSES --- */
-        .q-block {
-            margin-bottom: 2rem;
-            border-bottom: 1px dashed var(--brown-light);
-            padding-bottom: 1.5rem;
+        .btn-gold:active { 
+            transform: translateY(4px); 
+            box-shadow: 0 2px 0 #8c6607; 
         }
 
-        .q-block:last-child { border-bottom: none; }
+        /* --- QUIZ DESIGN --- */
+        .q-block { 
+            margin-bottom: 2.5rem; 
+            border-bottom: 2px dashed var(--cream-dark); 
+            padding-bottom: 2rem; 
+        }
+
+        .q-block:last-child { 
+            border-bottom: none; 
+        }
 
         .q-title {
-            font-weight: 900;
-            color: var(--brown);
-            margin-bottom: 12px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .opt-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            font-weight: 900; 
+            color: var(--brown); 
+            margin-bottom: 15px;
+            font-size: 1.1rem; 
+            text-transform: uppercase; 
+            display: flex; 
+            align-items: center; 
             gap: 12px;
         }
 
+        .opt-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+
         .opt-btn {
-            background: white;
-            border: 2px solid var(--cream-dark);
-            border-radius: 8px;
-            padding: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            background: white; 
+            border: 2px solid var(--cream-dark); 
+            border-radius: 10px;
+            padding: 15px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             font-family: 'Lato', sans-serif;
+            box-shadow: 0 3px 0 var(--cream-dark);
+        }
+
+        .opt-btn:hover:not(.locked) { 
+            transform: translateY(-2px); 
+            border-color: var(--gold); 
+            box-shadow: 0 5px 0 var(--gold); 
         }
 
         .opt-btn.selected {
-            background: var(--brown) !important;
+            background: var(--brown) !important; 
             color: white !important;
-            border-color: var(--text-dark);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            border-color: var(--text-dark); 
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.6);
+            transform: translateY(2px);
         }
 
-        .opt-btn.locked {
-            pointer-events: none;
-            opacity: 0.7;
+        .opt-btn.locked { 
+            pointer-events: none; 
+            opacity: 0.6; 
         }
 
-        /* --- CLASSEMENT & SCROLLBAR --- */
-        .lb-scroll {
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 10px;
-            margin: 10px 0;
+        /* --- PROGRESS BAR --- */
+        .pg-container { 
+            margin-bottom: 20px; 
         }
 
-        .lb-scroll::-webkit-scrollbar { width: 12px; }
-        .lb-scroll::-webkit-scrollbar-track { background: var(--cream-dark); border-radius: 10px; }
-        .lb-scroll::-webkit-scrollbar-thumb { 
-            background: var(--gold); 
-            border-radius: 10px; 
-            border: 3px solid var(--brown);
+        .pg-label { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 0.9rem; 
+            font-weight: 900; 
+            margin-bottom: 8px; 
+            text-transform: uppercase; 
         }
 
-        .lb-table {
-            width: 100%;
-            border-collapse: collapse;
+        .pg-bar { 
+            background: var(--cream-dark); 
+            border-radius: 20px; 
+            height: 20px; 
+            overflow: hidden; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); 
         }
 
-        .lb-table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+        .pg-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); 
+            transition: width 1s ease; 
+        }
 
-        .lb-table td {
-            padding: 15px 10px;
-            border-bottom: 1px solid var(--cream-dark);
+        /* --- CLASSEMENT & STATS --- */
+        .lb-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+        }
+
+        .lb-table tr { 
+            transition: 0.3s; 
+        }
+
+        .lb-table td { 
+            padding: 18px 12px; 
+            border-bottom: 1px solid var(--cream-dark); 
         }
 
         .rank-pill {
-            display: inline-flex;
-            align-items: center;
+            display: inline-flex; 
+            align-items: center; 
             justify-content: center;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-weight: bold;
-            font-family: 'Rye', serif;
-            background: var(--cream-dark);
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%; 
+            font-weight: 900;
+            font-family: 'Rye', serif; 
+            background: var(--cream-dark); 
             color: var(--brown);
         }
 
         .top1 { 
             background: var(--gold); 
             color: white; 
-            border: 2px solid var(--brown);
-            transform: scale(1.1);
+            border: 3px solid var(--brown); 
+            transform: scale(1.15); 
+            box-shadow: 0 0 15px var(--gold); 
         }
-
-        /* --- MODALE WANTED (RÉSULTATS) --- */
-        .modal-overlay {
-            position: fixed;
-            top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
         
-        .wanted-card {
-            background: #e3c08d;
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 30px;
-            border: 15px solid #5C3A1E;
-            border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 10px, #8B5E3C 10px, #8B5E3C 20px) 20;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
-            position: relative;
+        .stat-card { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            border-left: 5px solid var(--gold); 
         }
 
-        .wanted-card h2 { font-family: 'Rye', serif; font-size: 2.5rem; color: #2C1810; margin-bottom: 10px; text-transform: uppercase; border-bottom: 2px solid #2C1810; }
-        .wanted-card .score-big { font-family: 'Rye', serif; font-size: 5rem; color: var(--red); margin: 20px 0; text-shadow: 2px 2px 0px white; }
-        .wanted-card p { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.2rem; color: #2C1810; margin-bottom: 20px; }
-
-        /* --- PROGRESS BARS --- */
-        .pg-container { margin-bottom: 15px; }
-        .pg-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+        .stat-val { 
+            font-family: 'Rye', serif; 
+            font-size: 1.5rem; 
+            color: var(--red); 
         }
 
-        .pg-bar {
-            background: var(--cream-dark);
-            border-radius: 20px;
-            height: 16px;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-        }
-
-        .pg-fill {
+        /* --- MODALE WANTED --- */
+        .modal-overlay {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
             height: 100%;
-            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
-            transition: width 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        }
-
-        .footer {
-            text-align: center;
+            background: rgba(0,0,0,0.92); 
+            display: none; 
+            align-items: center;
+            justify-content: center; 
+            z-index: 2000; 
             padding: 20px;
-            color: rgba(255,255,255,0.3);
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
-        @media (max-width: 500px) {
-            .opt-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 2.2rem; }
-            .nav-btn { font-size: 0.75rem; padding: 1rem 0.5rem; }
+        .modal-overlay.active { 
+            display: flex; 
+        }
+
+        .wanted-card {
+            background: #e3c08d; 
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 40px; 
+            border: 18px solid #5C3A1E;
+            border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 15px, #8B5E3C 15px, #8B5E3C 30px) 30;
+            max-width: 500px; 
+            width: 100%; 
+            text-align: center; 
+            box-shadow: 0 0 60px black;
+        }
+
+        .wanted-card h2 { 
+            font-family: 'Rye', serif; 
+            font-size: 3rem; 
+            color: #2C1810; 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            border-bottom: 3px solid #2C1810; 
+        }
+
+        .score-big { 
+            font-family: 'Rye', serif; 
+            font-size: 6rem; 
+            color: var(--red); 
+            margin: 25px 0; 
+            text-shadow: 3px 3px 0px white; 
+            line-height: 1; 
+        }
+        
+        @media (max-width: 600px) {
+            .opt-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .header h1 { 
+                font-size: 2.2rem; 
+            }
+            .nav-btn { 
+                font-size: 0.7rem; 
+                padding: 1.2rem 0.5rem; 
+            }
+            .wanted-card { 
+                padding: 20px; 
+                border-width: 10px; 
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="age-badge"><span>50</span><small>ans</small></div>
+        <div class="age-badge">
+            <span>50</span>
+            <small>ans</small>
+        </div>
         <h1>🤠 Alexandre 50's</h1>
         <p>Le Grand Jeu du Saloon</p>
     </div>
@@ -387,44 +486,34 @@
     <nav class="nav">
         <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'Équipe</button>
         <button class="nav-btn" id="nav-quiz" onclick="showPanel('quiz')">Dégustation</button>
-        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Les Scores</button>
+        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Le Général</button>
+        <button class="nav-btn" id="nav-chips-lb" onclick="showPanel('chips-lb')">🍟 Chips Master</button>
     </nav>
 
     <div class="main">
-
         <div id="panel-register" class="panel active">
             <div class="card">
-                <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
+                <div class="card-header">🐎 BIENVENUE AU RANCH</div>
                 <div class="card-body">
                     <div class="union-box">
-                        <strong>L’UNION FAIT LA FORCE POUR LES 50 ANS D’ALEXANDRE !</strong><br>
-                        "Les adultent dégustent le vin, les enfants savourent les chips : jouez en équipe pour gagner le trophée du Saloon en combinant vos connaissances !"
+                        <strong>L’UNION FAIT LA FORCE !</strong><br>
+                        "Les adultes dégustent le vin, les enfants savourent les chips : collaborez pour devenir les légendes du Saloon d'Alexandre !"
                     </div>
-                    
                     <div class="input-group">
-                        <label>NOM DU COWBOY/COWGIRL</label>
-                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Marie & Gaël">
+                        <label>NOM DE VOTRE EQUIPE (OU PRÉNOMS)</label>
+                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Les Gringos du Pilat">
                     </div>
-
-                    <div class="input-group">
-                        <label>NOM DE VOTRE EQUIPE (OPTIONNEL)</label>
-                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table du Grand Canyon">
-                    </div>
-
                     <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
-                    <div id="reg-feedback" style="text-align:center; margin-top:15px;"></div>
                 </div>
             </div>
-            
             <div class="card">
-                <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
-                <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
-                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse (12 pts)</p>
-                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse (16 pts)</p>
-                    <p>🥩 <strong>6 CHARCUTERIES :</strong> 2 points par réponse (12 pts)</p>
-                    <p>🥔 <strong>6 CHIPS BRET'S :</strong> 1 point par réponse (6 pts)</p>
-                    <hr style="margin:10px 0; opacity:0.2;">
-                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Attention : Un clic est définitif, on ne revient pas en arrière !</p>
+                <div class="card-header">📜 BARÈME DU SHÉRIF</div>
+                <div class="card-body" style="font-weight: 700;">
+                    <p>🍷 Vins : 3 pts / bonne réponse</p>
+                    <p>🧀 Fromages : 2 pts / bonne réponse</p>
+                    <p>🥩 Charcuteries : 2 pts / bonne réponse</p>
+                    <p>🍟 Chips Bret's : 1 pt / bonne réponse</p>
+                    <p style="color: var(--red); margin-top: 15px; text-align: center;">⚠️ UN CLIC EST DÉFINITIF !</p>
                 </div>
             </div>
         </div>
@@ -432,49 +521,65 @@
         <div id="panel-quiz" class="panel">
             <div class="card">
                 <div class="card-body">
-                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.4rem; color:var(--brown); margin-bottom:10px;">Cowboy : ...</div>
-                    <div class="pg-container">
-                        <div class="pg-label"><span>Progression Générale</span><span id="q-percent">0%</span></div>
-                        <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
+                    <div id="q-team-display" style="font-family:'Rye'; font-size:1.6rem; color:var(--brown); margin-bottom:15px;">
+                        Equipe : ...
                     </div>
-                    <p style="text-align:right; font-size:0.8rem; font-weight:900; color:var(--brown-light);"><span id="q-done-count">0</span> / 24 ÉLÉMENTS ANALYSÉS</p>
+                    <div class="pg-container">
+                        <div class="pg-label">
+                            <span>Analyse en cours...</span>
+                            <span id="q-percent">0%</span>
+                        </div>
+                        <div class="pg-bar">
+                            <div class="pg-fill" id="q-main-fill" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <p style="text-align:right; font-size:0.85rem; font-weight:900; color:var(--brown-light);">
+                        <span id="q-done-count">0</span> / 27 ÉTAPES FRANCHIES
+                    </p>
                 </div>
             </div>
+            
             <div id="quiz-render-area"></div>
+            
         </div>
 
         <div id="panel-leaderboard" class="panel">
             <div class="card">
-                <div class="card-header">🏆 CLASSEMENT DU SALOON</div>
+                <div class="card-header">🏆 CLASSEMENT GÉNÉRAL</div>
                 <div class="card-body">
-                    <div class="lb-scroll">
-                        <table class="lb-table" id="lb-display">
-                            <tr><td align="center">Recherche des scores dans l'Ouest...</td></tr>
-                        </table>
-                    </div>
+                    <div id="lb-display-gen"></div>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-header">📊 ANALYSE DES EXPERTS</div>
-                <div class="card-body" id="category-stats-area">
-                    </div>
+                <div class="card-body" id="stats-area-gen"></div>
             </div>
         </div>
 
+        <div id="panel-chips-lb" class="panel">
+            <div class="card">
+                <div class="card-header">🍟 CHAMPIONNAT CHIPS MASTER</div>
+                <div class="card-body">
+                    <p style="text-align: center; font-style: italic; margin-bottom: 20px;">
+                        Le classement exclusif des 10 variétés Bret's !
+                    </p>
+                    <div id="lb-display-chips"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="result-modal">
         <div class="wanted-card">
             <h2>REWARD</h2>
-            <p>VOTRE SCORE FINAL EST DE :</p>
-            <div class="score-big" id="final-score-val">0</div>
-            <p>POINTS SUR 46</p>
-            <button class="btn-gold" onclick="closeResultModal()">VOIR LE CLASSEMENT</button>
+            <p>VOTRE SCORE FINAL AU GÉNÉRAL :</p>
+            <div class="score-big" id="final-score-gen">0</div>
+            <p>POINTS SUR 42</p>
+            <hr style="margin: 20px 0; border: 1px solid #2C1810; opacity: 0.3;">
+            <p>SCORE CHIPS MASTER : <strong id="final-score-chips">0</strong> / 10</p>
+            <button class="btn-gold" style="margin-top:25px;" onclick="closeResultModal()">VOIR LES CLASSEMENTS</button>
         </div>
     </div>
-
-    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre - 23/05/2026 🎉</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -488,174 +593,568 @@
             messagingSenderId: "159600747281",
             appId: "1:159600747281:web:09f382f707b2c481a922b0"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- BASE DE DONNÉES DES PRODUITS ---
         const QUESTIONS_DB = {
             vins: [
-                { id: 'v1', label: 'Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], answer: 1 },
-                { id: 'v2', label: 'Vin Blanc n°2', options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], answer: 2 },
-                { id: 'v3', label: 'Vin Rouge n°1', options: ['Pinot Noir', 'Syrah', 'Merlot', 'Gamay'], answer: 0 },
-                { id: 'v4', label: 'Vin Rouge n°2', options: ['Bordeaux', 'Côte du Rhône', 'Beaujolais', 'Chinon'], answer: 3 }
+                { 
+                    id: 'v1', 
+                    label: '🍷 Vin Blanc n°1', 
+                    options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'v2', 
+                    label: '🍷 Vin Blanc n°2', 
+                    options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], 
+                    answer: 2 
+                },
+                { 
+                    id: 'v3', 
+                    label: '🍷 Vin Rouge n°1', 
+                    options: ['Pinot Noir', 'Syrah', 'Merlot', 'Gamay'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'v4', 
+                    label: '🍷 Vin Rouge n°2', 
+                    options: ['Bordeaux', 'Côte du Rhône', 'Beaujolais', 'Chinon'], 
+                    answer: 3 
+                }
             ],
             fromages: [
-                { id: 'f1', label: 'Fromage 1', options: ['Camembert', 'Brie', 'Coulommiers', 'Chaource'], answer: 0 },
-                { id: 'f2', label: 'Fromage 2', options: ['Comté 12 mois', 'Comté 24 mois', 'Beaufort', 'Abondance'], answer: 1 },
-                { id: 'f3', label: 'Fromage 3', options: ['Morbier', 'Raclette', 'Saint-Nectaire', 'Reblochon'], answer: 2 },
-                { id: 'f4', label: 'Fromage 4', options: ['Roquefort', 'Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Gorgonzola'], answer: 0 },
-                { id: 'f5', label: 'Fromage 5', options: ['Chèvre Frais', 'Sainte-Maure', 'Crottin Chavignol', 'Pélardon'], answer: 1 },
-                { id: 'f6', label: 'Fromage 6', options: ['Munster', 'Époisses', 'Livarot', 'Maroilles'], answer: 1 },
-                { id: 'f7', label: 'Fromage 7', options: ['Ossau-Iraty', 'Manchego', 'Cantal', 'Salers'], answer: 0 },
-                { id: 'f8', label: 'Fromage 8', options: ['Tomme de Savoie', 'Tomme de Brebis', 'Mimolette', 'Gruyère'], answer: 2 }
+                { 
+                    id: 'f1', 
+                    label: '🧀 Fromage 1', 
+                    options: ['Cantal', 'Laguiole', 'Salers', 'Morbier'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'f2', 
+                    label: '🧀 Fromage 2', 
+                    options: ['Tomme de Savoie', 'Tome de brebis', 'Ossau-Iraty', 'Cantal Jeune'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'f3', 
+                    label: '🧀 Fromage 3', 
+                    options: ['Briquette de chèvre', 'Briquette de saint nizier', 'Vacherin', 'Pavé d\'Affinois'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'f4', 
+                    label: '🧀 Fromage 4', 
+                    options: ['Saint nectaire', 'Morbier', 'Tomme', 'Reblochon'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'f5', 
+                    label: '🧀 Fromage 5', 
+                    options: ['Brillat-Savarin', 'Comtesse de Vichy', 'Chaource', 'Coulommiers'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'f6', 
+                    label: '🧀 Fromage 6', 
+                    options: ['Comté 12 mois', 'Comté 18 mois', 'Comté 24 mois', 'Beaufort'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'f7', 
+                    label: '🧀 Fromage 7', 
+                    options: ['Beaufort', 'Abondance', 'Comté d\'été', 'Emmental'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'f8', 
+                    label: '🧀 Fromage 8', 
+                    options: ['Fourme d\'Ambert', 'Fourme de Montbrison', 'Bleu d\'Auvergne', 'Roquefort'], 
+                    answer: 1 
+                }
             ],
             charcuteries: [
-                { id: 'c1', label: 'Charcuterie 1', options: ['Jambon de Bayonne', 'Serrano', 'Parme', 'San Daniele'], answer: 0 },
-                { id: 'c2', label: 'Charcuterie 2', options: ['Rosette Lyon', 'Saucisson Sec', 'Jésus', 'Chorizo'], answer: 3 },
-                { id: 'c3', label: 'Charcuterie 3', options: ['Coppa', 'Pancetta', 'Lomo', 'Bresaola'], answer: 0 },
-                { id: 'c4', label: 'Charcuterie 4', options: ['Andouille de Guémené', 'Andouillette', 'Boudin Noir', 'Saucisson à l\'ail'], answer: 0 },
-                { id: 'c5', label: 'Charcuterie 5', options: ['Rillettes Pur Porc', 'Pâté de Campagne', 'Terrine de Sanglier', 'Mousse de canard'], answer: 1 },
-                { id: 'c6', label: 'Charcuterie 6', options: ['Viande des Grisons', 'Cécina', 'Noix de Jambon', 'Magret Séché'], answer: 2 }
+                { 
+                    id: 'c1', 
+                    label: '🥩 Charcuterie 1', 
+                    options: ['Saucisson', 'Rosette', 'Jésus', 'Salami'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'c2', 
+                    label: '🥩 Charcuterie 2', 
+                    options: ['Saucisson', 'Rosette', 'Chorizo', 'Coppa'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'c3', 
+                    label: '🥩 Charcuterie 3', 
+                    options: ['Jambon cru', 'Serrano', 'Parme', 'Cécina'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'c4', 
+                    label: '🥩 Charcuterie 4', 
+                    options: ['Noix de jambon', 'Jambonette forezienne', 'Andouille', 'Lomo'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'c5', 
+                    label: '🥩 Charcuterie 5', 
+                    options: ['Rillettes', 'Pâte de campagne', 'Terrine', 'Mousse de foie'], 
+                    answer: 1 
+                }
             ],
             chips: [
-                { id: 'ch1', label: 'Bret\'s n°1', options: ['Nature', 'Sel de Guérande', 'Barbecue', 'Poulet Rôti'], answer: 1 },
-                { id: 'ch2', label: 'Bret\'s n°2', options: ['Oignon Grillé', 'Fromage du Jura', 'Camembert', 'Chèvre Piment'], answer: 0 },
-                { id: 'ch3', label: 'Bret\'s n°3', options: ['Aioli', 'Pesto', 'Tartine Grillée', 'Cheddar'], answer: 0 },
-                { id: 'ch4', label: 'Bret\'s n°4', options: ['Vinaigre', 'Moutarde', 'Pickles', 'Ketchup'], answer: 1 },
-                { id: 'ch5', label: 'Bret\'s n°5', options: ['Piment d\'Espelette', 'Chili', 'Curry', 'Mexicaine'], answer: 0 },
-                { id: 'ch6', label: 'Bret\'s n°6', options: ['Truffe', 'Cèpes', 'Morilles', 'Champignons'], answer: 1 }
+                { 
+                    id: 'ch1', 
+                    label: '🥔 Bret\'s n°1', 
+                    options: ['Nature', 'Sel de Guérande', 'Vinaigre', 'Moutarde'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'ch2', 
+                    label: '🥔 Bret\'s n°2', 
+                    options: ['Oignon Grillé', 'Fromage', 'Poulet Rôti', 'Barbecue'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'ch3', 
+                    label: '🥔 Bret\'s n°3', 
+                    options: ['Aioli', 'Pesto', 'Truffe Noir', 'Cheddar'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'ch4', 
+                    label: '🥔 Bret\'s n°4', 
+                    options: ['Camembert', 'Fromage du Jura', 'Chèvre Piment', 'Bleu'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'ch5', 
+                    label: '🥔 Bret\'s n°5', 
+                    options: ['Piment d\'Espelette', 'Chili', 'Curry', 'Poivre'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'ch6', 
+                    label: '🥔 Bret\'s n°6', 
+                    options: ['Cèpes', 'Truffe', 'Champignon', 'Morilles'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'ch7', 
+                    label: '🥔 Bret\'s n°7', 
+                    options: ['Moutarde', 'Pickles', 'Ketchup', 'Mayonnaise'], 
+                    answer: 0 
+                },
+                { 
+                    id: 'ch8', 
+                    label: '🥔 Bret\'s n°8', 
+                    options: ['Tartine Grillée', 'Bacon', 'Jambon Sec', 'Poulet Rôti'], 
+                    answer: 3 
+                },
+                { 
+                    id: 'ch9', 
+                    label: '🥔 Bret\'s n°9', 
+                    options: ['Indienne', 'Mexicaine', 'Yakitori', 'Thaï'], 
+                    answer: 1 
+                },
+                { 
+                    id: 'ch10', 
+                    label: '🥔 Bret\'s n°10', 
+                    options: ['Miel Moutarde', 'Caramel Sel', 'Barbecue', 'Tex Mex'], 
+                    answer: 2 
+                }
             ]
         };
 
-        const BAREME = { vins: 3, fromages: 2, charcuteries: 2, chips: 1 };
-        const MAX_SCORE = 46;
-
+        const BAREME = { 
+            vins: 3, 
+            fromages: 2, 
+            charcuteries: 2, 
+            chips: 1 
+        };
+        
         let player = JSON.parse(localStorage.getItem('alex_50_p'));
         let answers = player ? (JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {}) : {};
         let liveScores = {};
 
+        // --- GESTION DE LA NAVIGATION ---
         window.showPanel = (panelId) => {
-            document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-' + panelId).classList.add('active');
-            document.getElementById('nav-' + panelId).classList.add('active');
-            if(panelId === 'quiz') renderQuiz();
-            if(panelId === 'leaderboard') renderLeaderboard();
+            // Cacher tous les panneaux et désélectionner tous les boutons
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(el => el.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(el => el.classList.remove('active'));
+            
+            // Afficher le panneau demandé
+            const targetPanel = document.getElementById('panel-' + panelId);
+            if(targetPanel) {
+                targetPanel.classList.add('active');
+            }
+            
+            // Activer le bouton correspondant
+            const btnMap = { 
+                'register': 'nav-register', 
+                'quiz': 'nav-quiz', 
+                'leaderboard': 'nav-leaderboard', 
+                'chips-lb': 'nav-chips-lb' 
+            };
+            
+            const targetBtn = document.getElementById(btnMap[panelId]);
+            if(targetBtn) {
+                targetBtn.classList.add('active');
+            }
+            
+            // Recharger les données si nécessaire
+            if(panelId === 'quiz') {
+                renderQuiz();
+            }
+            if(panelId === 'leaderboard' || panelId === 'chips-lb') {
+                renderLeaderboards();
+            }
+            
+            // Remonter en haut de page
             window.scrollTo(0,0);
         };
 
-        window.registerPlayer = function() {
-            const name = document.getElementById('p-name').value.trim();
-            const table = document.getElementById('p-table').value.trim();
-            if(!name) { alert("Nom d'équipe obligatoire !"); return; }
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random()*10000);
-            player = { id, name, table };
+        // --- ENREGISTREMENT DU JOUEUR ---
+        window.registerPlayer = () => {
+            const nameInput = document.getElementById('p-name');
+            const name = nameInput.value.trim();
+            
+            if(!name) {
+                return alert("Hé Cowboy ! Il faut un nom d'équipe pour participer !");
+            }
+            
+            // Création d'un ID unique basé sur le nom
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random() * 1000);
+            
+            player = { id: id, name: name };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
-            answers = JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {};
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi !</b>";
-            setTimeout(() => showPanel('quiz'), 1000);
+            
+            showPanel('quiz');
         };
 
+        // --- AFFICHAGE DU QUIZ COMPLET ---
         function renderQuiz() {
-            if(!player) { showPanel('register'); return; }
-            document.getElementById('q-player-name').textContent = "🤠 Équipe : " + player.name;
+            if(!player) {
+                return showPanel('register');
+            }
+            
+            const teamDisplay = document.getElementById('q-team-display');
+            teamDisplay.textContent = "🤠 Equipe : " + player.name;
+            
             let html = "";
-            const catTitles = { vins: '🍷 LES VINS (3 pts)', fromages: '🧀 LES FROMAGES (2 pts)', charcuteries: '🥩 LA CHARCUTERIE (2 pts)', chips: '🥔 CHIPS BRET\'S (1 pt)' };
+            const catNames = { 
+                vins: '🍷 LES VINS (3 pts)', 
+                fromages: '🧀 LES FROMAGES (2 pts)', 
+                charcuteries: '🥩 CHARCUTERIES (2 pts)', 
+                chips: '🥔 CHIPS BRET\'S (1 pt)' 
+            };
+
             for(const cat in QUESTIONS_DB) {
-                html += `<div class="card"><div class="card-header">${catTitles[cat]}</div><div class="card-body">`;
+                // Début de la carte pour la catégorie
+                html += `
+                    <div class="card">
+                        <div class="card-header">${catNames[cat]}</div>
+                        <div class="card-body">
+                `;
+                
                 QUESTIONS_DB[cat].forEach(q => {
                     const userAns = answers[q.id];
                     const isLocked = userAns !== undefined;
-                    html += `<div class="q-block"><div class="q-title">${q.label}</div><div class="opt-grid">`;
+                    
+                    html += `
+                        <div class="q-block">
+                            <div class="q-title">${q.label}</div>
+                            <div class="opt-grid">
+                    `;
+                    
                     q.options.forEach((opt, idx) => {
                         let btnClass = "opt-btn";
-                        if(isLocked) { btnClass += " locked"; if(idx === userAns) btnClass += " selected"; }
-                        html += `<button class="${btnClass}" onclick="handleVote('${q.id}', '${cat}', ${idx})">${opt}</button>`;
+                        if(isLocked) { 
+                            btnClass += " locked"; 
+                            if(idx === userAns) {
+                                btnClass += " selected"; 
+                            }
+                        }
+                        
+                        html += `
+                            <button class="${btnClass}" onclick="handleVote('${q.id}', '${cat}', ${idx})">
+                                ${opt}
+                            </button>
+                        `;
                     });
-                    html += `</div></div>`;
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
                 });
-                html += `</div></div>`;
+                
+                // Fin de la carte
+                html += `
+                        </div>
+                    </div>
+                `;
             }
-            document.getElementById('quiz-render-area').innerHTML = html;
-            updateQuizProgress();
+            
+            const renderArea = document.getElementById('quiz-render-area');
+            renderArea.innerHTML = html;
+            
+            updateProgress();
         }
 
+        // --- GESTION DU CLIC SUR UNE RÉPONSE ---
         window.handleVote = async (qId, cat, choiceIdx) => {
-            if(answers[qId] !== undefined) return;
+            // Si la réponse est déjà donnée, on annule (sécurité)
+            if(answers[qId] !== undefined) {
+                return;
+            }
+            
             answers[qId] = choiceIdx;
             localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
+            
+            // Mise à jour visuelle instantanée
             renderQuiz();
 
-            let score = 0;
-            let byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
+            let sGen = 0;
+            let sChips = 0;
+            let byCat = { 
+                vins: 0, 
+                fromages: 0, 
+                charcuteries: 0, 
+                chips: 0 
+            };
+            
+            // Calcul des scores
             for(const c in QUESTIONS_DB) {
                 QUESTIONS_DB[c].forEach(q => {
-                    if(answers[q.id] === q.answer) { score += BAREME[c]; byCat[c] += BAREME[c]; }
+                    if(answers[q.id] === q.answer) {
+                        const points = BAREME[c];
+                        if(c === 'chips') { 
+                            sChips += points; 
+                            byCat[c] += points; 
+                        } else { 
+                            sGen += points; 
+                            byCat[c] += points; 
+                        }
+                    }
                 });
             }
 
+            const doneCount = Object.keys(answers).length;
+            
+            // Sauvegarde dans Firebase
             await setDoc(doc(db, "scores", player.id), {
-                name: player.name, table: player.table, score: score, byCat: byCat,
-                done: Object.keys(answers).length, lastUpdate: Date.now()
+                name: player.name, 
+                sGen: sGen, 
+                sChips: sChips, 
+                total: sGen + sChips, 
+                byCat: byCat,
+                done: doneCount, 
+                lastUpdate: Date.now()
             });
 
-            if(Object.keys(answers).length === 24) {
-                document.getElementById('final-score-val').textContent = score;
+            // Si toutes les questions sont répondues (27 au total)
+            if(doneCount === 27) {
+                document.getElementById('final-score-gen').textContent = sGen;
+                document.getElementById('final-score-chips').textContent = sChips;
+                
+                // Affichage de la modale de résultat
                 document.getElementById('result-modal').classList.add('active');
+                
+                // Lancement de l'effet Confetti !
+                triggerConfetti();
             }
         };
 
+        // --- EFFET CONFETTI POUR LA VICTOIRE ---
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 3000 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              
+              confetti(Object.assign({}, defaults, { 
+                  particleCount, 
+                  origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } 
+              }));
+              confetti(Object.assign({}, defaults, { 
+                  particleCount, 
+                  origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } 
+              }));
+            }, 250);
+        }
+
+        // --- MISE À JOUR DE LA BARRE DE PROGRESSION ---
+        function updateProgress() {
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / 27) * 100);
+            
+            document.getElementById('q-main-fill').style.width = pct + "%";
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-done-count').textContent = done;
+        }
+
+        // --- AFFICHAGE DES CLASSEMENTS ---
+        function renderLeaderboards() {
+            const list = Object.values(liveScores);
+            if(list.length === 0) {
+                return;
+            }
+
+            // 1. LEADERBOARD GÉNÉRAL (Trié par points généraux, puis par date)
+            const genSorted = [...list].sort((a,b) => b.sGen - a.sGen || a.lastUpdate - b.lastUpdate);
+            let hGen = `<table class="lb-table">`;
+            
+            genSorted.forEach((p, i) => {
+                let medal = "";
+                if(i === 0) medal = "top1";
+                
+                hGen += `
+                    <tr>
+                        <td width="60">
+                            <span class="rank-pill ${medal}">${i+1}</span>
+                        </td>
+                        <td>
+                            <div style="font-weight:900;">${p.name}</div>
+                            <div style="font-size:0.7rem; color:gray;">${p.done}/27 terminés</div>
+                        </td>
+                        <td align="right" style="font-family:'Rye'; font-size:1.6rem; color:var(--red);">
+                            ${p.sGen}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            hGen += `</table>`;
+            document.getElementById('lb-display-gen').innerHTML = hGen;
+
+            // 2. LEADERBOARD CHIPS (Trié par points Chips, puis par date)
+            const chipsSorted = [...list].sort((a,b) => b.sChips - a.sChips || a.lastUpdate - b.lastUpdate);
+            let hChips = `<table class="lb-table">`;
+            
+            chipsSorted.forEach((p, i) => {
+                let medal = "";
+                if(i === 0) medal = "top1";
+                
+                hChips += `
+                    <tr>
+                        <td width="60">
+                            <span class="rank-pill ${medal}">${i+1}</span>
+                        </td>
+                        <td>
+                            <div style="font-weight:900;">${p.name}</div>
+                        </td>
+                        <td align="right" style="font-family:'Rye'; font-size:1.6rem; color:var(--brown);">
+                            ${p.sChips}<small style="font-size:1rem;">/10</small>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            hChips += `</table>`;
+            document.getElementById('lb-display-chips').innerHTML = hChips;
+
+            // Appel de la fonction pour les statistiques
+            renderStats(list);
+        }
+
+        // --- AFFICHAGE DES STATISTIQUES GLOBALES ---
+        function renderStats(list) {
+            // Points maximum possibles par catégorie
+            const maxPoints = { 
+                vins: 12, 
+                fromages: 16, 
+                charcuteries: 10, 
+                chips: 10 
+            };
+            
+            const labels = { 
+                vins: '🍷 Moyenne Vins', 
+                fromages: '🧀 Moyenne Fromages', 
+                charcuteries: '🥩 Moyenne Viandes', 
+                chips: '🍟 Moyenne Chips' 
+            };
+            
+            let html = "";
+            
+            for(const c in maxPoints) {
+                // Calcul de la moyenne des points obtenus par tous les joueurs pour la catégorie "c"
+                let totalPointsCat = 0;
+                list.forEach(p => {
+                    if(p.byCat && p.byCat[c]) {
+                        totalPointsCat += p.byCat[c];
+                    }
+                });
+                
+                const avg = (totalPointsCat / list.length).toFixed(1);
+                const percentAvg = (avg / maxPoints[c]) * 100;
+                
+                html += `
+                    <div class="stat-card">
+                        <div class="pg-label">
+                            <span>${labels[c]}</span>
+                            <span class="stat-val">${avg} / ${maxPoints[c]}</span>
+                        </div>
+                        <div class="pg-bar">
+                            <div class="pg-fill" style="width:${percentAvg}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            const statsArea = document.getElementById('stats-area-gen');
+            if(statsArea) {
+                statsArea.innerHTML = html;
+            }
+        }
+
+        // --- FERMETURE DE LA MODALE ---
         window.closeResultModal = () => {
             document.getElementById('result-modal').classList.remove('active');
             showPanel('leaderboard');
         };
 
-        function updateQuizProgress() {
-            const total = 24;
-            const done = Object.keys(answers).length;
-            const pct = Math.round((done / total) * 100);
-            if(document.getElementById('q-done-count')) document.getElementById('q-done-count').textContent = done;
-            if(document.getElementById('q-percent')) document.getElementById('q-percent').textContent = pct + "%";
-            if(document.getElementById('q-main-fill')) document.getElementById('q-main-fill').style.width = pct + "%";
-        }
-
-        function renderLeaderboard() {
-            const list = Object.values(liveScores).sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
-            let html = `<table class="lb-table">`;
-            if(list.length === 0) { html += `<tr><td align="center">Recherche des scores...</td></tr>`; } 
-            else {
-                list.forEach((p, index) => {
-                    const rank = index + 1;
-                    const displayRank = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
-                    html += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${displayRank}</span></td>
-                        <td><div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div><div style="font-size:0.75rem;">${escapeHtml(p.table)}</div></td>
-                        <td align="right"><div style="font-family:'Rye'; font-size:1.4rem; color:var(--red);">${p.score}</div></td></tr>`;
-                });
+        // --- ÉCOUTE DE FIREBASE EN TEMPS RÉEL ---
+        onSnapshot(collection(db, "scores"), (snap) => {
+            liveScores = {}; 
+            snap.forEach(doc => { 
+                liveScores[doc.id] = doc.data(); 
+            });
+            
+            // Mise à jour des classements si l'un d'eux est affiché
+            const isGenActive = document.getElementById('panel-leaderboard').classList.contains('active');
+            const isChipsActive = document.getElementById('panel-chips-lb').classList.contains('active');
+            
+            if(isGenActive || isChipsActive) {
+                renderLeaderboards();
             }
-            document.getElementById('lb-display').innerHTML = html + `</table>`;
-            renderCategoryStats(list);
-        }
-
-        function renderCategoryStats(list) {
-            if(list.length === 0) return;
-            const cats = { vins: 12, fromages: 16, charcuteries: 12, chips: 6 };
-            const labels = { vins: '🍷 Vins', fromages: '🧀 Fromages', charcuteries: '🥩 Charcuterie', chips: '🥔 Chips' };
-            let html = "";
-            for(const c in cats) {
-                const avg = (list.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / list.length).toFixed(1);
-                html += `<div class="pg-container"><div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg}</span></div>
-                    <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c])*100}%"></div></div></div>`;
-            }
-            document.getElementById('category-stats-area').innerHTML = html;
-        }
-
-        function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-
-        onSnapshot(collection(db, "scores"), (snapshot) => {
-            liveScores = {}; snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
-            if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboard();
         });
 
-        if(player) showPanel('quiz');
+        // --- INITIALISATION AU CHARGEMENT ---
+        if(player) {
+            showPanel('quiz');
+        }
+
     </script>
 </body>
 </html>
