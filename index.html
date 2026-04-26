@@ -9,15 +9,9 @@
     
     <style>
         :root {
-            --brown: #4A2F1E;
-            --brown-light: #6B4429;
-            --leather: #8B5A2B;
-            --gold: #D4A017;
-            --gold-light: #F4C95D;
-            --cream: #F5E8C7;
-            --cream-dark: #E8D9B0;
-            --red: #9C2A2A;
-            --text-dark: #2C1F14;
+            --brown: #4A2F1E; --brown-light: #6B4429; --leather: #8B5A2B;
+            --gold: #D4A017; --gold-light: #F4C95D; --cream: #F5E8C7;
+            --cream-dark: #E8D9B0; --red: #9C2A2A; --text-dark: #2C1F14;
             --shadow: rgba(0,0,0,0.55);
         }
 
@@ -25,67 +19,48 @@
 
         body {
             background-color: var(--brown);
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.18), rgba(0,0,0,0.18)),
+            background-image: linear-gradient(rgba(0,0,0,0.18), rgba(0,0,0,0.18)),
                 url('https://www.transparenttextures.com/patterns/old-wall.png'),
                 repeating-linear-gradient(45deg, rgba(139,90,43,0.09) 0px, rgba(139,90,43,0.09) 4px, transparent 4px, transparent 24px);
             background-attachment: fixed;
-            font-family: 'Lato', sans-serif;
-            color: var(--text-dark);
-            min-height: 100vh;
-            padding-bottom: 60px;
+            font-family: 'Lato', sans-serif; color: var(--text-dark); min-height: 100vh; padding-bottom: 60px;
         }
 
         .header {
             background: linear-gradient(135deg, var(--red) 0%, var(--leather) 50%, var(--red) 100%);
-            border-bottom: 8px solid var(--gold);
-            text-align: center;
-            padding: 2.8rem 1rem 2.2rem;
-            position: relative;
-            box-shadow: 0 8px 25px var(--shadow);
+            border-bottom: 8px solid var(--gold); text-align: center; padding: 2.8rem 1rem 2.2rem;
+            position: relative; box-shadow: 0 8px 25px var(--shadow);
         }
 
         .header h1 {
-            font-family: 'Rye', serif;
-            font-size: clamp(2.1rem, 9vw, 4.3rem);
-            color: var(--gold-light);
-            text-shadow: 4px 4px 0 var(--brown), 7px 7px 15px rgba(0,0,0,0.7);
-            margin-bottom: 8px;
-            letter-spacing: 3px;
+            font-family: 'Rye', serif; font-size: clamp(2.1rem, 9vw, 4.3rem);
+            color: var(--gold-light); text-shadow: 4px 4px 0 var(--brown), 7px 7px 15px rgba(0,0,0,0.7);
+            margin-bottom: 8px; letter-spacing: 3px;
         }
 
         .header p {
-            color: #f8f1d9;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 5px;
-            font-size: 1.02rem;
-            text-transform: uppercase;
-            opacity: 0.95;
+            color: #f8f1d9; font-family: 'Playfair Display', serif; letter-spacing: 5px;
+            font-size: 1.02rem; text-transform: uppercase; opacity: 0.95;
         }
 
         .age-badge {
-            position: absolute; top: 20px; right: 20px;
-            background: var(--gold); color: var(--brown);
-            width: 80px; height: 80px; border-radius: 50%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Rye', serif; border: 4px double #f8f1d9;
-            box-shadow: 0 0 25px rgba(0,0,0,0.7); transform: rotate(12deg); z-index: 10;
+            position: absolute; top: 20px; right: 20px; background: var(--gold); color: var(--brown);
+            width: 80px; height: 80px; border-radius: 50%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; font-family: 'Rye', serif;
+            border: 4px double #f8f1d9; box-shadow: 0 0 25px rgba(0,0,0,0.7);
+            transform: rotate(12deg); z-index: 10;
         }
 
         .nav {
-            display: flex; justify-content: center;
-            background: linear-gradient(var(--brown), var(--brown-light));
-            border-bottom: 5px solid var(--gold);
-            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: center; background: linear-gradient(var(--brown), var(--brown-light));
+            border-bottom: 5px solid var(--gold); position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         .nav-btn {
-            background: none; border: none; color: #e8d9b0;
-            font-family: 'Rye', serif; font-size: 0.98rem; font-weight: 700;
-            text-transform: uppercase; padding: 1.35rem 1rem;
-            cursor: pointer; transition: all 0.3s ease; letter-spacing: 1.8px;
-            flex: 1; max-width: 230px;
+            background: none; border: none; color: #e8d9b0; font-family: 'Rye', serif;
+            font-size: 0.98rem; font-weight: 700; text-transform: uppercase; padding: 1.35rem 1rem;
+            cursor: pointer; transition: all 0.3s ease; letter-spacing: 1.8px; flex: 1; max-width: 230px;
         }
 
         .nav-btn.active {
@@ -96,22 +71,14 @@
         .main { max-width: 820px; margin: 0 auto; padding: 1.8rem 1rem; }
 
         .card {
-            background: var(--cream);
-            border-radius: 18px;
-            border: 3px solid var(--leather);
-            box-shadow: 0 12px 35px var(--shadow);
-            margin-bottom: 2.3rem;
-            overflow: hidden;
+            background: var(--cream); border-radius: 18px; border: 3px solid var(--leather);
+            box-shadow: 0 12px 35px var(--shadow); margin-bottom: 2.3rem; overflow: hidden;
         }
 
         .card-header {
             background: linear-gradient(90deg, var(--brown) 0%, var(--leather) 100%);
-            color: var(--gold-light);
-            font-family: 'Rye', serif;
-            padding: 1.35rem 1.5rem;
-            font-size: 1.28rem;
-            letter-spacing: 2px;
-            border-bottom: 3px solid var(--gold);
+            color: var(--gold-light); font-family: 'Rye', serif; padding: 1.35rem 1.5rem;
+            font-size: 1.28rem; letter-spacing: 2px; border-bottom: 3px solid var(--gold);
         }
 
         .card-body { padding: 1.7rem; }
@@ -127,10 +94,9 @@
 
         .btn-gold {
             background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-            color: var(--brown); border: none; border-radius: 10px;
-            font-family: 'Rye', serif; padding: 1.3rem; width: 100%;
-            cursor: pointer; font-size: 1.28rem; box-shadow: 0 6px 0 #9c7a1a;
-            transition: all 0.12s; text-transform: uppercase; letter-spacing: 1.2px;
+            color: var(--brown); border: none; border-radius: 10px; font-family: 'Rye', serif;
+            padding: 1.3rem; width: 100%; cursor: pointer; font-size: 1.28rem;
+            box-shadow: 0 6px 0 #9c7a1a; transition: all 0.12s; text-transform: uppercase; letter-spacing: 1.2px;
         }
         .btn-gold:active { transform: translateY(4px); box-shadow: 0 2px 0 #9c7a1a; }
 
@@ -147,17 +113,12 @@
 
         .opt-btn {
             background: #fffaf0; border: 2.5px solid var(--cream-dark); border-radius: 10px;
-            padding: 14px 12px; cursor: pointer; font-weight: 700; font-size: 0.94rem;
-            transition: all 0.2s;
+            padding: 14px 12px; cursor: pointer; font-weight: 700; font-size: 0.94rem; transition: all 0.2s;
         }
         .opt-btn.selected { background: var(--brown) !important; color: white !important; border-color: var(--text-dark); }
 
-        /* Scrollbar stylée pour les classements */
         .lb-scroll {
-            max-height: 520px;
-            overflow-y: auto;
-            padding-right: 12px;
-            margin: 12px 0;
+            max-height: 520px; overflow-y: auto; padding-right: 12px; margin: 12px 0;
         }
         .lb-scroll::-webkit-scrollbar { width: 14px; }
         .lb-scroll::-webkit-scrollbar-track { background: var(--cream-dark); border-radius: 10px; }
@@ -183,13 +144,10 @@
         .modal-overlay.active { display: flex; }
 
         .wanted-card {
-            background: #e3c08d;
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 30px 25px;
-            border: 15px solid #5C3A1E;
+            background: #e3c08d; background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            padding: 30px 25px; border: 15px solid #5C3A1E;
             border-image: repeating-linear-gradient(45deg, #5C3A1E, #5C3A1E 10px, #8B5E3C 10px, #8B5E3C 20px) 20;
-            max-width: 460px; width: 100%; text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            max-width: 460px; width: 100%; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
         .wanted-card h2 { font-family: 'Rye', serif; font-size: 2.8rem; color: #2C1810; margin-bottom: 8px; text-transform: uppercase; border-bottom: 3px solid #2C1810; letter-spacing: 3px; }
         .wanted-card .score-big { font-family: 'Rye', serif; font-size: 6rem; color: var(--red); margin: 15px 0; text-shadow: 3px 3px 0 white, -2px -2px 0 white; line-height: 1; }
@@ -219,7 +177,6 @@
 
     <div class="main">
 
-        <!-- Enregistrement -->
         <div id="panel-register" class="panel active">
             <div class="card">
                 <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
@@ -243,7 +200,6 @@
             </div>
         </div>
 
-        <!-- Choix du parcours -->
         <div id="panel-choice" class="panel">
             <div class="card">
                 <div class="card-header">📍 CHOIX DU PARCOURS</div>
@@ -264,7 +220,6 @@
             </div>
         </div>
 
-        <!-- Quiz -->
         <div id="panel-quiz" class="panel">
             <div class="card">
                 <div class="card-body">
@@ -279,26 +234,15 @@
             <div id="quiz-render-area"></div>
         </div>
 
-        <!-- Classements -->
         <div id="panel-leaderboard" class="panel">
             <div class="card">
                 <div class="card-header">🏆 CLASSEMENT GÉNÉRAL - TERROIR (Adultes)</div>
-                <div class="card-body">
-                    <div class="lb-scroll">
-                        <table class="lb-table" id="lb-general"></table>
-                    </div>
-                </div>
+                <div class="card-body"><div class="lb-scroll"><table class="lb-table" id="lb-general"></table></div></div>
             </div>
-
             <div class="card">
                 <div class="card-header">🥔 CLASSEMENT INDÉPENDANT - CHIPS BRET'S (Enfants)</div>
-                <div class="card-body">
-                    <div class="lb-scroll">
-                        <table class="lb-table" id="lb-chips"></table>
-                    </div>
-                </div>
+                <div class="card-body"><div class="lb-scroll"><table class="lb-table" id="lb-chips"></table></div></div>
             </div>
-
             <div class="card">
                 <div class="card-header">📊 ANALYSE DES EXPERTS</div>
                 <div class="card-body" id="category-stats-area"></div>
@@ -307,7 +251,6 @@
 
     </div>
 
-    <!-- Modale Reward -->
     <div class="modal-overlay" id="result-modal">
         <div class="wanted-card">
             <h2>REWARD</h2>
@@ -376,8 +319,8 @@
 
         const BAREME = { vins: 3, fromages: 2, charcuteries: 2, chips: 1 };
 
-        let player = JSON.parse(localStorage.getItem('alex_50_p')) || null;
-        let answers = player ? (JSON.parse(localStorage.getItem('alex_50_ans_' + player.id)) || {}) : {};
+        let player = null;
+        let answers = {};
         let liveScores = {};
 
         window.showPanel = (panelId) => {
@@ -497,9 +440,8 @@
         function renderLeaderboards() {
             const allPlayers = Object.values(liveScores);
 
-            // Classement Terroir
             const terroirPlayers = allPlayers.filter(p => p.path === 'terroir')
-                .sort((a,b) => b.score - a.score || a.lastUpdate - b.lastUpdate);
+                .sort((a,b) => b.score - a.score || (b.lastUpdate || 0) - (a.lastUpdate || 0));
 
             let htmlGeneral = `<table class="lb-table">`;
             terroirPlayers.forEach((p, i) => {
@@ -515,9 +457,8 @@
             if (terroirPlayers.length === 0) htmlGeneral += `<tr><td align="center">Aucun score pour le moment...</td></tr>`;
             document.getElementById('lb-general').innerHTML = htmlGeneral + `</table>`;
 
-            // Classement Chips
-            const chipsPlayers = allPlayers.filter(p => p.path === 'chips' && p.byCat && p.byCat.chips !== undefined)
-                .sort((a,b) => (b.byCat.chips || 0) - (a.byCat.chips || 0) || a.lastUpdate - b.lastUpdate);
+            const chipsPlayers = allPlayers.filter(p => p.path === 'chips' && p.byCat && typeof p.byCat.chips === 'number')
+                .sort((a,b) => (b.byCat.chips || 0) - (a.byCat.chips || 0) || (b.lastUpdate || 0) - (a.lastUpdate || 0));
 
             let htmlChips = `<table class="lb-table">`;
             if (chipsPlayers.length === 0) {
@@ -544,9 +485,9 @@
             const labels = { vins: '🍷 Vins', fromages: '🧀 Fromages', charcuteries: '🥩 Charcuterie', chips: '🥔 Chips' };
             let html = "";
             for (const c in cats) {
-                const filtered = list.filter(p => p.byCat && p.byCat[c] !== undefined);
+                const filtered = list.filter(p => p.byCat && typeof p.byCat[c] === 'number');
                 if (filtered.length === 0) continue;
-                const avg = (filtered.reduce((acc, curr) => acc + (curr.byCat?.[c] || 0), 0) / filtered.length).toFixed(1);
+                const avg = (filtered.reduce((acc, curr) => acc + (curr.byCat[c] || 0), 0) / filtered.length).toFixed(1);
                 html += `<div class="pg-container">
                     <div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg}</span></div>
                     <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c])*100}%"></div></div>
@@ -562,16 +503,19 @@
             return div.innerHTML;
         }
 
+        // Mise à jour en temps réel du classement
         onSnapshot(collection(db, "scores"), (snapshot) => {
             liveScores = {};
             snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
-            if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
+            if (document.getElementById('panel-leaderboard').classList.contains('active')) {
+                renderLeaderboards();
+            }
         });
 
-        if (player) {
-            if (player.path) showPanel('quiz');
-            else showPanel('choice');
-        }
+        // Au chargement → on force toujours l'écran d'inscription
+        window.onload = () => {
+            showPanel('register');
+        };
     </script>
 </body>
 </html>
