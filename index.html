@@ -4,266 +4,349 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤠 Alexandre a 50 ans ! - Le Grand Saloon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Bangers&family=Lato:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&family=Bangers&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
-            --gold: #d4a017;
-            --gold-light: #f4c95d;
-            --wood: #2c1810;
-            --paper: #f2d9ad;
-            --red-wax: #8b0000;
+            --brown: #3C2414;
+            --brown-light: #5C3A1E;
+            --leather: #8B5A2B;
+            --gold: #D4A017;
+            --gold-light: #F4C95D;
+            --cream: #F5E8C7;
+            --red: #9C2A2A;
+            --dark-red: #6B1E1E;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: #1a0f0a url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)),
+                        url('https://picsum.photos/id/1015/1920/1080') center/cover no-repeat fixed;
             font-family: 'Lato', sans-serif;
-            color: #3c2414;
+            color: #2C1F14;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* BANDEAU SUPÉRIEUR - COMME SUR L'IMAGE */
-        .top-bar {
-            background: linear-gradient(to bottom, #4a2c1d, #2c1810);
-            border-bottom: 5px solid var(--gold);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .header {
+            background: linear-gradient(135deg, var(--dark-red) 0%, #5C3A1E 50%, var(--dark-red) 100%);
+            border-bottom: 14px solid var(--gold);
+            text-align: center;
+            padding: 2.8rem 1rem 2.2rem;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            overflow: hidden;
         }
 
-        .top-bar h1 {
-            font-family: 'Rye';
+        .header::before {
+            content: "🏜️ 🤠 🐎";
+            position: absolute;
+            top: -30px;
+            left: 0; right: 0;
+            font-size: 5rem;
+            opacity: 0.08;
+            letter-spacing: 60px;
+        }
+
+        .header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(2.8rem, 10vw, 5.2rem);
             color: var(--gold-light);
-            font-size: 3rem;
+            text-shadow: 4px 4px 0 #3C2414, 8px 8px 20px rgba(0,0,0,0.9);
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-family: 'Playfair Display', serif;
+            color: #f8e9c0;
+            font-size: 1.2rem;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            text-shadow: 2px 2px 0px #000;
-            margin: 0 40px;
         }
 
-        .top-bar .icon { font-size: 2.5rem; }
-
-        .age-badge-top {
-            position: absolute; right: 30px; top: 10px;
-            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'), var(--paper);
-            padding: 10px 20px; border: 4px double var(--wood);
-            border-radius: 10px; font-family: 'Bangers'; text-align: center;
-            transform: rotate(5deg); box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+        .age-badge {
+            position: absolute; top: 25px; right: 25px;
+            background: linear-gradient(var(--gold), #f4c95d);
+            color: #3C2414;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Rye', serif;
+            border: 7px double #f8e9c0;
+            box-shadow: 0 0 35px rgba(212,160,23,0.9);
+            transform: rotate(12deg);
+            z-index: 10;
         }
 
-        /* NAVIGATION STYLE ONGLÉTS */
-        .nav-container {
-            display: flex; justify-content: center; gap: 10px; padding: 15px;
+        .nav {
+            display: flex; justify-content: center;
+            background: linear-gradient(var(--brown), var(--brown-light));
+            border-bottom: 6px solid var(--gold);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
         }
 
         .nav-btn {
-            background: #5c3a1e; border: 2px solid var(--gold);
-            color: var(--gold-light); padding: 10px 25px; border-radius: 50px;
-            font-family: 'Rye'; cursor: pointer; transition: 0.3s;
+            background: none; border: none; color: #e8d9b0;
+            font-family: 'Rye', serif; font-size: 1rem; font-weight: 700;
+            text-transform: uppercase; padding: 1.4rem 1rem;
+            cursor: pointer; transition: all 0.3s; letter-spacing: 2px;
         }
 
-        .nav-btn.active { background: var(--gold); color: var(--wood); }
-
-        /* STRUCTURE EN COLONNES (DASHBOARD) */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 280px 1fr 300px;
-            gap: 20px;
-            padding: 20px;
-            flex-grow: 1;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
+        .nav-btn.active {
+            color: var(--gold-light);
+            border-bottom: 6px solid var(--gold-light);
+            background: rgba(255,255,255,0.1);
         }
 
-        /* COLONNES */
-        .col { display: flex; flex-direction: column; gap: 20px; }
+        .main { max-width: 860px; margin: 0 auto; padding: 1.8rem 1rem; }
 
         .card {
-            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'), var(--paper);
-            border: 4px solid var(--wood);
+            background: #f5e8c7;
+            border: 8px solid #5C3A1E;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.7);
             border-radius: 8px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
+            overflow: hidden;
         }
 
         .card-header {
-            background: var(--wood);
+            background: linear-gradient(90deg, #3C2414, #8B5A2B);
             color: var(--gold-light);
-            font-family: 'Rye';
-            padding: 10px;
-            text-align: center;
-            font-size: 1.1rem;
-            border-bottom: 2px solid var(--gold);
+            font-family: 'Rye', serif;
+            padding: 1.5rem 1.6rem;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            border-bottom: 6px solid var(--gold);
         }
 
-        .card-body { padding: 15px; flex-grow: 1; }
-
-        /* ÉLÉMENTS DE JEU */
-        .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            border: 2px solid var(--wood); color: var(--wood);
-            font-family: 'Rye'; padding: 12px; cursor: pointer; width: 100%;
-            border-radius: 5px; box-shadow: 0 4px 0 #9c7a1a; margin-top: 10px;
-        }
-
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-        .opt-btn {
-            background: white; border: 1px solid var(--wood); padding: 8px;
-            font-size: 0.85rem; font-weight: bold; cursor: pointer; border-radius: 4px;
-        }
-        .opt-btn.selected { background: var(--red-wax) !important; color: white; }
-
-        .chips-zone { min-height: 50px; display: flex; flex-direction: column; gap: 5px; }
-        .chip-item { 
-            background: white; border: 1px solid var(--wood); padding: 8px; 
-            font-size: 0.8rem; cursor: grab; display: flex; align-items: center; gap: 5px;
-        }
-
-        /* LEADERBOARD LOOK IMAGE */
-        .lb-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
-        .lb-table tr:nth-child(even) { background: rgba(0,0,0,0.05); }
-        .rank-circle { 
-            background: var(--gold); color: white; border-radius: 50%;
-            width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: bold;
-        }
-
-        /* WANTED MODAL */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000;
-        }
-        .modal-overlay.active { display: flex; }
-        .wanted-card {
-            background: #e3c08d url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            border: 15px solid var(--wood); padding: 30px; text-align: center;
-            transform: rotate(-1deg); box-shadow: 0 0 50px #000;
-        }
-        .wanted-card h2 { font-family: 'Bangers'; font-size: 3.5rem; color: var(--red-wax); }
-        .wanted-card .score-big { font-family: 'Rye'; font-size: 5rem; }
-
-        /* RESPONSIVE */
-        @media (max-width: 1000px) {
-            .dashboard { grid-template-columns: 1fr; }
-            .col:nth-child(3) { order: -1; } /* Scores en haut sur mobile */
-        }
+        .card-body { padding: 1.8rem; }
 
         .panel { display: none; }
-        .panel.active { display: block; }
+        .panel.active { display: block; animation: fadeInUp 0.6s ease forwards; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group { margin-bottom: 22px; }
+        .input-group label { display: block; font-weight: 900; color: var(--brown); margin-bottom: 8px; text-transform: uppercase; font-size: 0.86rem; letter-spacing: 1px; }
+        .input-field { width: 100%; padding: 14px; border-radius: 10px; border: 2px solid var(--cream-dark); font-size: 1.1rem; outline: none; transition: all 0.3s; }
+        .input-field:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,160,23,0.2); }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            color: #3C2414;
+            border: 5px solid #3C2414;
+            font-family: 'Rye', serif;
+            padding: 1.4rem;
+            font-size: 1.35rem;
+            box-shadow: 0 8px 0 #9c7a1a;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .btn-gold:active { transform: translateY(6px); box-shadow: 0 2px 0 #9c7a1a; }
+
+        .choice-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
+        .choice-box { background: #fffaf0; border: 4px solid var(--cream-dark); border-radius: 16px; padding: 26px 16px; text-align: center; cursor: pointer; transition: all 0.4s; }
+        .choice-box:hover { transform: scale(1.08) rotate(2deg); box-shadow: 0 20px 30px rgba(0,0,0,0.3); }
+
+        .q-title { font-weight: 900; color: var(--brown); margin-bottom: 14px; font-size: 1.02rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 500px) { .opt-grid { grid-template-columns: 1fr; } }
+
+        .opt-btn {
+            background: #fffaf0; border: 2.5px solid var(--cream-dark); border-radius: 10px;
+            padding: 13px; cursor: pointer; font-weight: 700; font-size: 0.93rem; transition: all 0.3s ease; text-align: left;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        }
+        .opt-btn:hover:not(.locked) { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(212,160,23,0.5); }
+        .opt-btn.selected { background: var(--brown) !important; color: white !important; border-color: var(--text-dark); cursor: default; }
+        .opt-btn.locked { cursor: default; }
+
+        .vote-confirmed {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #e8f0e8; border: 2px solid #5a8a5a; border-radius: 10px;
+            padding: 10px 16px; margin-top: 10px; font-weight: 900; font-size: 0.9rem; color: #2d5a2d; font-family: 'Rye', serif;
+        }
+
+        .serie-badge {
+            display: inline-block; background: var(--red); color: var(--gold-light);
+            font-family: 'Rye', serif; font-size: 0.75rem; padding: 3px 10px;
+            border-radius: 20px; margin-bottom: 14px; letter-spacing: 1px;
+        }
+
+        /* Chips */
+        .chips-instructions { background: #fffaf0; border: 2px solid var(--gold); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 0.88rem; color: var(--brown); line-height: 1.5; }
+        .chips-zone { display: flex; flex-direction: column; gap: 8px; min-height: 40px; padding: 8px; border-radius: 12px; transition: background 0.2s; }
+        .chips-zone.drag-over { background: rgba(212,160,23,0.15); border: 2px dashed var(--gold); }
+        .chip-item { 
+            background: linear-gradient(135deg, #fffaf0, #fff3d6); border: 2.5px solid var(--cream-dark);
+            border-radius: 10px; padding: 12px 16px; cursor: grab; font-weight: 700;
+            font-size: 0.95rem; color: var(--brown); display: flex; align-items: center; gap: 10px;
+            transition: all 0.2s; user-select: none; box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        .chip-item:hover { border-color: var(--gold); transform: translateX(4px); }
+        .chip-item.dragging { opacity: 0.4; cursor: grabbing; }
+        .chip-item.validated-neutral { border-color: var(--leather); background: linear-gradient(135deg, #f5ecd6, #ede0c4); cursor: default; opacity: 0.85; }
+
+        .chips-validate-btn {
+            background: linear-gradient(135deg, var(--red) 0%, #c0392b 100%); color: var(--gold-light); border: none;
+            border-radius: 10px; font-family: 'Rye', serif; padding: 1rem; width: 100%; cursor: pointer;
+            font-size: 1.1rem; box-shadow: 0 5px 0 #5c1a1a; margin-top: 14px;
+        }
+
+        .chips-score-display {
+            margin-top: 14px; padding: 18px; border-radius: 12px; text-align: center;
+            background: linear-gradient(135deg, var(--brown), var(--leather)); border: 3px solid var(--gold);
+        }
+        .chips-score-display .score-number { font-family: 'Rye', serif; color: var(--gold-light); font-size: 2.8rem; line-height: 1; }
+
+        .lb-scroll { max-height: 520px; overflow-y: auto; padding-right: 12px; margin: 12px 0; }
+        .lb-table { width: 100%; border-collapse: collapse; }
+        .rank-pill { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; font-weight: bold; font-family: 'Bangers', cursive; background: var(--cream-dark); color: var(--brown); }
+        .top1 { background: var(--gold); color: white; border: 2px solid var(--brown); transform: scale(1.1); }
+
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+
+        .wanted-card {
+            background: #e3c08d url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            border: 22px solid #3C2414;
+            border-image: repeating-linear-gradient(45deg, #3C2414, #3C2414 25px, #8B5A2B 25px, #8B5A2B 50px) 22;
+            box-shadow: 0 0 90px rgba(156,42,42,0.95);
+            transform: rotate(-1.5deg);
+            max-width: 460px; width: 100%; text-align: center;
+        }
+
+        .wanted-card h2 { font-family: 'Bangers', cursive; font-size: 3.2rem; color: #9C2A2A; text-shadow: 3px 3px 0 #000; }
+        .wanted-card .score-big { font-family: 'Rye', serif; font-size: 5.8rem; color: var(--red); margin: 15px 0; line-height: 1; }
+
+        .footer { text-align: center; padding: 30px; color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <span class="icon">🤠</span>
+    <div class="header">
+        <div class="age-badge"><span>50</span><small>ans</small></div>
         <h1>ALEXANDRE 50's</h1>
-        <span class="icon">🐎</span>
-        <div class="age-badge-top">50<br><small>ans</small></div>
+        <p>LE GRAND SALOON DU FAR WEST</p>
     </div>
 
-    <div class="nav-container">
+    <nav class="nav">
         <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'Équipe</button>
         <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">Dégustation</button>
         <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Les Scores</button>
-    </div>
+    </nav>
 
-    <div class="dashboard">
-        
-        <div class="col">
-            <div id="panel-register" class="panel active">
-                <div class="card">
-                    <div class="card-header">📜 ENREGISTREMENT</div>
-                    <div class="card-body">
-                        <input type="text" id="p-name" class="opt-btn" style="width:100%; padding:12px; margin-bottom:10px;" placeholder="Nom du Cowboy">
-                        <input type="text" id="p-table" class="opt-btn" style="width:100%; padding:12px; margin-bottom:15px;" placeholder="Table (Optionnel)">
-                        <button class="btn-gold" onclick="registerPlayer()">EN SELLE !</button>
-                        <div id="reg-feedback" style="margin-top:10px; font-size:0.8rem; text-align:center"></div>
+    <div class="main">
+
+        <!-- REGISTER -->
+        <div id="panel-register" class="panel active">
+            <div class="card">
+                <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <label>NOM DU COWBOY / COWGIRL</label>
+                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Marie & Gaël">
                     </div>
-                </div>
-                <div class="card" style="margin-top:20px;">
-                    <div class="card-header">📖 RÈGLES DU SHÉRIF</div>
-                    <div class="card-body" style="font-size:0.8rem; line-height:1.4;">
-                        🍷 <b>4 Vins</b> (3 pts)<br>
-                        🧀 <b>8 Fromages</b> (2 pts)<br>
-                        🥩 <b>5 Charcuteries</b> (2 pts)<br>
-                        🥔 <b>Chips</b> (Parcours enfant)
+                    <div class="input-group">
+                        <label>NOM DE VOTRE TABLE / ÉQUIPE (OPTIONNEL)</label>
+                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table du Grand Canyon">
                     </div>
+                    <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
+                    <div id="reg-feedback" style="text-align:center; margin-top:15px;"></div>
                 </div>
             </div>
-
-            <div id="panel-choice" class="panel">
-                <div class="card">
-                    <div class="card-header">📍 TON PARCOURS</div>
-                    <div class="card-body">
-                        <button class="btn-gold" onclick="setPath('terroir')">🍷 TERROIR (Adultes)</button>
-                        <button class="btn-gold" style="background:var(--paper)" onclick="setPath('chips')">🥔 CHIPS (Enfants)</button>
-                    </div>
+            
+            <div class="card">
+                <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
+                <div class="card-body" style="font-size: 0.92rem; line-height: 1.7;">
+                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse correcte (12 pts max)</p>
+                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse correcte (16 pts max)</p>
+                    <p>🥩 <strong>5 CHARCUTERIES :</strong> 2 points par réponse correcte (10 pts max)</p>
+                    <p>🥔 <strong>CHIPS BRET'S :</strong> parcours indépendant enfants — 2 séries de 8</p>
+                    <hr style="margin:12px 0; opacity:0.3;">
+                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Une fois validée, votre réponse est définitive !</p>
                 </div>
             </div>
         </div>
 
-        <div class="col">
-            <div id="panel-quiz" class="panel">
-                <div class="card" style="margin-bottom:15px; background:var(--wood); color:white;">
-                    <div class="card-body" style="padding:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <span id="q-player-name" style="font-family:'Rye'">🤠 ...</span>
-                        <div style="width:150px; background:#444; height:10px; border-radius:5px; overflow:hidden;">
-                            <div id="q-main-fill" style="width:0%; background:var(--gold); height:100%;"></div>
+        <!-- CHOIX PARCOURS -->
+        <div id="panel-choice" class="panel">
+            <div class="card">
+                <div class="card-header">📍 CHOIX DU PARCOURS</div>
+                <div class="card-body">
+                    <div class="choice-container">
+                        <div class="choice-box" onclick="setPath('terroir')">
+                            <div style="font-size:2.6rem;margin-bottom:12px;">🍷🧀🥩</div>
+                            <h3 style="font-family:'Rye';">TERROIR</h3>
+                            <p>Vins • Fromages • Charcuterie<br><strong>38 pts max</strong></p>
+                        </div>
+                        <div class="choice-box" onclick="setPath('chips')">
+                            <div style="font-size:2.6rem;margin-bottom:12px;">🥔</div>
+                            <h3 style="font-family:'Rye';">CHIPS BRET'S</h3>
+                            <p>Parcours enfants<br><strong>2 séries de 8</strong></p>
                         </div>
                     </div>
                 </div>
-                <div id="quiz-render-area"></div>
-            </div>
-            
-            <div id="quiz-placeholder" style="text-align:center; color:rgba(255,255,255,0.3); margin-top:50px;">
-                <h3>Veuillez vous enregistrer à gauche pour commencer la dégustation</h3>
             </div>
         </div>
 
-        <div class="col">
+        <!-- QUIZ -->
+        <div id="panel-quiz" class="panel">
             <div class="card">
-                <div class="card-header">🏆 TERROIR (Adultes)</div>
                 <div class="card-body">
-                    <table class="lb-table" id="lb-general"></table>
+                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.55rem; color:var(--brown); margin-bottom:12px;">🤠 Équipe : ...</div>
+                    <div class="pg-container">
+                        <div class="pg-label"><span>Progression</span><span id="q-percent">0%</span></div>
+                        <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
+                    </div>
+                    <p style="text-align:right; font-size:0.85rem; font-weight:900; color:var(--brown-light);">
+                        <span id="q-done-count">0</span> / <span id="q-total-count">17</span> questions
+                    </p>
+                </div>
+            </div>
+            <div id="quiz-render-area"></div>
+        </div>
+
+        <!-- LEADERBOARD -->
+        <div id="panel-leaderboard" class="panel">
+            <div class="card">
+                <div class="card-header">🏆 CLASSEMENT GÉNÉRAL - TERROIR (Adultes)</div>
+                <div class="card-body">
+                    <div class="lb-scroll"><table class="lb-table" id="lb-general"></table></div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">🥔 CHIPS BRET'S</div>
+                <div class="card-header">🥔 CLASSEMENT - CHIPS BRET'S (Enfants)</div>
                 <div class="card-body">
-                    <table class="lb-table" id="lb-chips"></table>
+                    <div class="lb-scroll"><table class="lb-table" id="lb-chips"></table></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL -->
     <div class="modal-overlay" id="result-modal">
         <div class="wanted-card">
-            <p>REWARD FOR</p>
-            <h2 id="modal-player-name">ALEXANDRE</h2>
+            <h2>REWARD</h2>
+            <p style="margin:15px 0 5px;">VOTRE SCORE FINAL EST DE :</p>
             <div class="score-big" id="final-score-val">0</div>
             <p>POINTS SUR <span id="final-max-score">38</span></p>
-            <button class="btn-gold" onclick="closeResultModal()">VOIR LE SALOON</button>
+            <button class="btn-gold" onclick="closeResultModal()" style="margin-top:25px;">VOIR LE CLASSEMENT DU SALOON</button>
         </div>
     </div>
 
-    <div style="text-align:center; color:white; padding:15px; font-size:0.7rem; opacity:0.4;">
-        🤠 Réalisé pour les 50 ans d'Alexandre — 23/05/2026 🎉
-    </div>
+    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre — 23/05/2026 🎉</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // CONFIG FIREBASE (IDENTIQUE)
         const firebaseConfig = {
             apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
             authDomain: "alexandre50.firebaseapp.com",
@@ -272,44 +355,45 @@
             messagingSenderId: "159600747281",
             appId: "1:159600747281:web:09f382f707b2c481a922b0"
         };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // DONNÉES (Rétablies à 100%)
+        // DONNÉES
         const SERIES_TERROIR = [
             { id: 's1', label: 'SÉRIE 1', questions: [
                 {id:'f1', type:'fromage', label:'Fromage 1', options:['Salers', 'Laguiole', 'Cantal', 'Fourme d\'Ambert'], correct:2},
                 {id:'f2', type:'fromage', label:'Fromage 2', options:['Ossau-Iraty', 'Tome de brebis', 'Tomme de Savoie', 'Pecorino'], correct:1},
-                {id:'v1', type:'vin', label:'Vin Série 1', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:0}
+                {id:'v1', type:'vin', label:'Vin de la Série 1', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:0}
             ]},
             { id: 's2', label: 'SÉRIE 2', questions: [
-                {id:'f3', type:'fromage', label:'Fromage 3', options:['Crottin', 'Briquette du Forez', 'Briquette de St-Nizier', 'Picodon'], correct:2},
-                {id:'f4', type:'fromage', label:'Fromage 4', options:['Camembert', 'Chabichou', 'Comté 12m', 'Comtesse de Vichy'], correct:3},
-                {id:'v2', type:'vin', label:'Vin Série 2', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:1}
+                {id:'f3', type:'fromage', label:'Fromage 3', options:['Crottin de Chavignol', 'Briquette du Forez', 'Briquette de Saint-Nizier', 'Picodon'], correct:2},
+                {id:'f4', type:'fromage', label:'Fromage 4', options:['Camembert de Normandie', 'Chabichou du Poitou', 'Comté 12 mois', 'Comtesse de Vichy'], correct:3},
+                {id:'v2', type:'vin', label:'Vin de la Série 2', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:1}
             ]},
             { id: 's3', label: 'SÉRIE 3', questions: [
-                {id:'f5', type:'fromage', label:'Fromage 5', options:['Murol', 'Reblochon', 'St-Félicien', 'St-Nectaire'], correct:3},
-                {id:'f6', type:'fromage', label:'Fromage 6', options:['Bleu', 'Fourme d\'Ambert', 'Fourme de Montbrison', 'Roquefort'], correct:2},
-                {id:'v3', type:'vin', label:'Vin Série 3', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:2}
+                {id:'f5', type:'fromage', label:'Fromage 5', options:['Murol', 'Reblochon', 'Saint-Félicien', 'Saint-Nectaire'], correct:3},
+                {id:'f6', type:'fromage', label:'Fromage 6', options:['Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Fourme de Montbrison', 'Roquefort'], correct:2},
+                {id:'v3', type:'vin', label:'Vin de la Série 3', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:2}
             ]},
             { id: 's4', label: 'SÉRIE 4', questions: [
-                {id:'f7', type:'fromage', label:'Fromage 7', options:['Abondance', 'Beaufort', 'Comté 18m', 'Gruyère'], correct:2},
-                {id:'f8', type:'fromage', label:'Fromage 8', options:['Beaufort', 'Abondance', 'Emmental', 'Tomme'], correct:0},
-                {id:'v4', type:'vin', label:'Vin Série 4', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:3}
+                {id:'f7', type:'fromage', label:'Fromage 7', options:['Abondance', 'Beaufort', 'Comté 18 mois', 'Gruyère de Savoie'], correct:2},
+                {id:'f8', type:'fromage', label:'Fromage 8', options:['Beaufort', 'Abondance', 'Emmental de Savoie', 'Tomme de Chartreuse'], correct:0},
+                {id:'v4', type:'vin', label:'Vin de la Série 4', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:3}
             ]}
         ];
 
         const CHARCUTERIES = [
-            {id:'c1', label:'Charcuterie 1', options:['Rosette','Jésus','Saucisson sec','Saucisson ail'], correct:2},
-            {id:'c2', label:'Charcuterie 2', options:['Rosette','Saucisson Lyon','Rosette Lyon','Cervelas'], correct:0},
-            {id:'c3', label:'Charcuterie 3', options:['Parme','Bayonne','Serrano','Jambon cru'], correct:1},
+            {id:'c1', label:'Charcuterie 1', options:['Rosette de Lyon','Jésus de Lyon','Saucisson sec','Saucisson à l\'ail'], correct:2},
+            {id:'c2', label:'Charcuterie 2', options:['Rosette','Saucisson de Lyon','Rosette de Lyon','Cervelas'], correct:0},
+            {id:'c3', label:'Charcuterie 3', options:['Jambon de Parme','Jambon de Bayonne','Jambon Serrano','Jambon cru'], correct:1},
             {id:'c4', label:'Charcuterie 4', options:['Andouillette','Jambonnette','Jambon cru roulé','Jambonette Forézienne'], correct:3},
-            {id:'c5', label:'Charcuterie 5', options:['Terrine','Pâte campagne','Pâté foie','Rillettes'], correct:1}
+            {id:'c5', label:'Charcuterie 5', options:['Terrine de campagne','Pâte de campagne','Pâté de foie','Rillettes'], correct:1}
         ];
 
         const CHIPS_SERIES = [
-            {id:'chips1', label:'SÉRIE 1 (1 à 8)', correctOrder: ['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
-            {id:'chips2', label:'SÉRIE 2 (9 à 16)', correctOrder: ['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
+            {id:'chips1', label:'SÉRIE 1 (chips 1 à 8)', correctOrder: ['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
+            {id:'chips2', label:'SÉRIE 2 (chips 9 à 16)', correctOrder: ['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
         ];
 
         let player = null;
@@ -318,15 +402,12 @@
         let liveScores = {};
         let dragState = { serieId: null, draggedIdx: null };
 
-        // NAVIGATION & PANELS
-        window.showPanel = (id) => {
+        window.showPanel = (panelId) => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-' + id).classList.add('active');
-            if (document.getElementById('nav-' + id)) document.getElementById('nav-' + id).classList.add('active');
-            if (id === 'quiz') { 
-                document.getElementById('quiz-placeholder').style.display = 'none';
-                renderQuiz(); 
-            }
+            document.getElementById('panel-' + panelId).classList.add('active');
+            if (document.getElementById('nav-' + panelId)) document.getElementById('nav-' + panelId).classList.add('active');
+            if (panelId === 'quiz') renderQuiz();
+            if (panelId === 'leaderboard') renderLeaderboards();
         };
 
         window.handleQuizNav = () => {
@@ -335,99 +416,223 @@
             else showPanel('quiz');
         };
 
-        // ACTIONS
-        window.registerPlayer = () => {
+        window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
-            if (!name) return alert("Nom du cowboy requis !");
-            player = { id: name.toLowerCase().replace(/\s/g, '') + Date.now(), name, path: null };
-            document.getElementById('reg-feedback').innerHTML = "🤠 Prêt !";
-            setTimeout(() => showPanel('choice'), 500);
+            const table = document.getElementById('p-table').value.trim();
+            if (!name) { alert("Le nom est obligatoire !"); return; }
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random() * 10000);
+            player = { id, name, table, path: null };
+            localStorage.setItem('alex_50_p', JSON.stringify(player));
+            answers = {}; chipsState = {};
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:#4ade80;'>Enregistrement réussi ! 🤠</b>";
+            setTimeout(() => showPanel('choice'), 800);
         };
 
         window.setPath = async (p) => {
             player.path = p;
-            await setDoc(doc(db, "scores", player.id), { name: player.name, path: p, score: 0 }, { merge: true });
+            localStorage.setItem('alex_50_p', JSON.stringify(player));
+            await setDoc(doc(db, "scores", player.id), { name: player.name, table: player.table, path: p, score: 0 }, { merge: true });
             showPanel('quiz');
         };
 
         function renderQuiz() {
-            const area = document.getElementById('quiz-render-area');
-            document.getElementById('q-player-name').textContent = `🤠 ${player.name}`;
-            if (player.path === 'terroir') renderTerroir(area);
-            else renderChips(area);
+            if (!player) return;
+            document.getElementById('q-player-name').textContent = `🤠 Équipe : ${player.name}`;
+            if (player.path === 'terroir') renderTerroirQuiz();
+            else renderChipsQuiz();
         }
 
-        function renderTerroir(area) {
+        function renderTerroirQuiz() {
             let html = "";
-            [...SERIES_TERROIR.map(s => ({...s, group: 'serie'})), {label:'🥩 CHARCUTERIES', questions: CHARCUTERIES, group: 'charc'}].forEach(sec => {
-                html += `<div class="card" style="margin-bottom:15px;"><div class="card-header">${sec.label}</div><div class="card-body">`;
-                sec.questions.forEach(q => {
-                    const isAns = answers[q.id] !== undefined;
-                    html += `<div style="margin-bottom:15px"><p style="font-size:0.8rem; font-weight:bold">${q.label}</p><div class="opt-grid">`;
-                    q.options.forEach((o, i) => {
-                        html += `<button class="opt-btn ${isAns && answers[q.id] === i ? 'selected' : ''}" onclick="vote('${q.id}', ${i})" ${isAns?'disabled':''}>${o}</button>`;
-                    });
-                    html += `</div></div>`;
+            SERIES_TERROIR.forEach(serie => {
+                html += `<div class="card"><div class="card-header">🍽️ ${serie.label} — Fromages & Vin</div><div class="card-body">`;
+                serie.questions.forEach(q => {
+                    const userAns = answers[q.id];
+                    const isAnswered = userAns !== undefined;
+                    const pts = q.type === 'vin' ? 3 : 2;
+                    html += `<div class="q-block">
+                        <div style="margin-bottom:8px;"><span class="serie-badge">${q.type==='vin'?'🍷':'🧀'} ${q.type.toUpperCase()} — ${pts} pts</span></div>
+                        <div class="q-title">${q.label}</div>`;
+                    if (isAnswered) {
+                        html += `<div class="opt-grid">`;
+                        q.options.forEach((opt, idx) => html += `<button class="opt-btn locked${idx===userAns?' selected':''}">${opt}</button>`);
+                        html += `</div><div class="vote-confirmed">✓ Réponse enregistrée</div>`;
+                    } else {
+                        html += `<div class="opt-grid">`;
+                        q.options.forEach((opt, idx) => html += `<button class="opt-btn" onclick="handleVote('${q.id}', ${idx})">${opt}</button>`);
+                        html += `</div>`;
+                    }
+                    html += `</div>`;
                 });
                 html += `</div></div>`;
             });
-            area.innerHTML = html;
-            const done = Object.keys(answers).length;
-            document.getElementById('q-main-fill').style.width = (done/17)*100 + "%";
-        }
 
-        window.vote = async (qid, idx) => {
-            answers[qid] = idx;
-            renderQuiz();
-            let score = 0;
-            [...SERIES_TERROIR.flatMap(s=>s.questions), ...CHARCUTERIES].forEach(q => {
-                if(answers[q.id] === q.correct) score += (q.id.startsWith('v') ? 3 : 2);
-            });
-            await setDoc(doc(db, "scores", player.id), { score, done: Object.keys(answers).length }, { merge: true });
-            if (Object.keys(answers).length === 17) finish(score, 38);
-        };
-
-        // CHIPS (Drag & Drop complet rétabli)
-        function renderChips(area) {
-            let html = `<div class="card"><div class="card-header">🥔 DÉFI CHIPS</div><div class="card-body">`;
-            CHIPS_SERIES.forEach(s => {
-                if(!chipsState[s.id]) chipsState[s.id] = { order: [...s.correctOrder].sort(()=>Math.random()-0.5), validated: false, score: 0 };
-                const state = chipsState[s.id];
-                html += `<p style="font-family:'Rye'; margin:10px 0">${s.label}</p>`;
-                if (state.validated) {
-                    html += `<div class="chips-zone">${state.order.map(c => `<div class="chip-item" style="background:#eee">${c}</div>`).join('')}</div>`;
+            html += `<div class="card"><div class="card-header">🥩 LES CHARCUTERIES (2 pts chacune)</div><div class="card-body">`;
+            CHARCUTERIES.forEach(q => {
+                const userAns = answers[q.id];
+                const isAnswered = userAns !== undefined;
+                html += `<div class="q-block"><div class="q-title">${q.label}</div>`;
+                if (isAnswered) {
+                    html += `<div class="opt-grid">`;
+                    q.options.forEach((opt, idx) => html += `<button class="opt-btn locked${idx===userAns?' selected':''}">${opt}</button>`);
+                    html += `</div><div class="vote-confirmed">✓ Réponse enregistrée</div>`;
                 } else {
-                    html += `<div class="chips-zone" ondragover="event.preventDefault()">
-                        ${state.order.map((c, i) => `<div class="chip-item" draggable="true" ondragstart="dragState={sid:'${s.id}',idx:${i}}" ondrop="drop(event, '${s.id}', ${i})">${i+1}. ${c}</div>`).join('')}
-                    </div><button class="btn-gold" onclick="valChips('${s.id}')">VALIDER</button>`;
+                    html += `<div class="opt-grid">`;
+                    q.options.forEach((opt, idx) => html += `<button class="opt-btn" onclick="handleVote('${q.id}', ${idx})">${opt}</button>`);
+                    html += `</div>`;
                 }
+                html += `</div>`;
             });
-            area.innerHTML = html + `</div></div>`;
+            html += `</div></div>`;
+
+            document.getElementById('quiz-render-area').innerHTML = html;
+            updateTerroirProgress();
         }
 
-        window.drop = (e, sid, tidx) => {
-            const order = chipsState[sid].order;
-            const moved = order.splice(dragState.idx, 1)[0];
-            order.splice(tidx, 0, moved);
-            renderChips(document.getElementById('quiz-render-area'));
+        window.handleVote = async (qId, choiceIdx) => {
+            if (answers[qId] !== undefined) return;
+            answers[qId] = choiceIdx;
+            localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
+            renderQuiz();
+            await saveTerroirScore();
+
+            const totalQ = SERIES_TERROIR.reduce((acc, s) => acc + s.questions.length, 0) + CHARCUTERIES.length;
+            if (Object.keys(answers).length === totalQ) showRewardModal();
         };
 
-        window.valChips = async (sid) => {
-            const state = chipsState[sid];
-            const correct = CHIPS_SERIES.find(s=>s.id===sid).correctOrder;
-            state.score = state.order.reduce((acc, val, i) => acc + (val === correct[i] ? 1 : 0), 0);
+        async function saveTerroirScore() {
+            let score = 0;
+            SERIES_TERROIR.forEach(serie => serie.questions.forEach(q => {
+                if (answers[q.id] === q.correct) score += (q.type === 'vin' ? 3 : 2);
+            }));
+            CHARCUTERIES.forEach(q => {
+                if (answers[q.id] === q.correct) score += 2;
+            });
+            await setDoc(doc(db, "scores", player.id), {
+                name: player.name, table: player.table, score, path: 'terroir',
+                done: Object.keys(answers).length, lastUpdate: Date.now()
+            }, { merge: true });
+        }
+
+        function updateTerroirProgress() {
+            const total = SERIES_TERROIR.reduce((acc,s)=>acc+s.questions.length,0) + CHARCUTERIES.length;
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-total-count').textContent = total;
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-main-fill').style.width = pct + "%";
+        }
+
+        function showRewardModal() {
+            let score = 0;
+            SERIES_TERROIR.forEach(serie => serie.questions.forEach(q => {
+                if (answers[q.id] === q.correct) score += q.type === 'vin' ? 3 : 2;
+            }));
+            CHARCUTERIES.forEach(q => { if (answers[q.id] === q.correct) score += 2; });
+
+            confetti({ particleCount: 180, spread: 80, origin: { y: 0.6 } });
+            document.getElementById('final-score-val').textContent = score;
+            document.getElementById('final-max-score').textContent = '38';
+            setTimeout(() => document.getElementById('result-modal').classList.add('active'), 500);
+        }
+
+        // CHIPS
+        function renderChipsQuiz() {
+            let html = `<div class="card"><div class="card-header">🥔 CHIPS BRET'S — Remets dans l'ordre !</div><div class="card-body">
+                <div class="chips-instructions"><strong>📋 Consigne :</strong> Tu as goûté les chips dans un certain ordre. Fais glisser les étiquettes pour les remettre dans l'ordre exact de dégustation, puis valide ta série !</div></div></div>`;
+
+            CHIPS_SERIES.forEach(serie => {
+                if (!chipsState[serie.id]) {
+                    const shuffled = [...serie.correctOrder].sort(() => Math.random() - 0.5);
+                    chipsState[serie.id] = { order: shuffled, validated: false, score: 0 };
+                }
+                const state = chipsState[serie.id];
+                html += `<div class="card"><div class="card-header">🥔 ${serie.label}</div><div class="card-body">`;
+                if (state.validated) {
+                    html += `<div class="chips-zone">`;
+                    state.order.forEach((item, idx) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${idx+1}</span><span>${item}</span></div>`);
+                    html += `</div><div class="chips-score-display"><div class="score-label">🎯 TON SCORE</div><div class="score-number">${state.score}</div><div class="score-max">sur 8</div></div>`;
+                } else {
+                    html += `<div class="chips-zone" id="zone-${serie.id}" ondragover="handleDragOver(event, '${serie.id}')" ondrop="handleDrop(event, '${serie.id}')" ondragleave="handleDragLeave(event, '${serie.id}')">`;
+                    state.order.forEach((item, idx) => {
+                        html += `<div class="chip-item" draggable="true" id="chip-${serie.id}-${idx}" data-serie="${serie.id}" data-idx="${idx}" ondragstart="handleDragStart(event, '${serie.id}', ${idx})" ondragend="handleDragEnd(event)">`;
+                        html += `<span class="drag-handle">☰</span><span class="chip-num">${idx+1}</span><span>${item}</span></div>`;
+                    });
+                    html += `</div><button class="chips-validate-btn" onclick="validateChipsSerie('${serie.id}')">✅ VALIDER MA SÉRIE</button>`;
+                }
+                html += `</div></div>`;
+            });
+            document.getElementById('quiz-render-area').innerHTML = html;
+            updateChipsProgress();
+        }
+
+        function updateChipsProgress() {
+            const done = Object.values(chipsState).filter(s => s.validated).length;
+            const pct = Math.round((done / 2) * 100);
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-main-fill').style.width = pct + "%";
+        }
+
+        window.handleDragStart = (e, serieId, idx) => { dragState = { serieId, draggedIdx: idx }; };
+        window.handleDragEnd = () => document.querySelectorAll('.chip-item,.chips-zone').forEach(el => el.classList.remove('dragging','drag-over'));
+        window.handleDragOver = (e, serieId) => { e.preventDefault(); document.getElementById('zone-'+serieId).classList.add('drag-over'); };
+        window.handleDragLeave = (e, serieId) => document.getElementById('zone-'+serieId).classList.remove('drag-over');
+        window.handleDrop = (e, serieId) => {
+            e.preventDefault();
+            document.getElementById('zone-'+serieId).classList.remove('drag-over');
+            const target = e.target.closest('.chip-item');
+            if (!target) return;
+            const toIdx = parseInt(target.dataset.idx);
+            const fromIdx = dragState.draggedIdx;
+            if (fromIdx === toIdx) return;
+            const order = chipsState[serieId].order;
+            const moved = order.splice(fromIdx, 1)[0];
+            order.splice(toIdx, 0, moved);
+            renderChipsQuiz();
+        };
+
+        window.validateChipsSerie = async (serieId) => {
+            const state = chipsState[serieId];
+            if (state.validated) return;
+            const serie = CHIPS_SERIES.find(s => s.id === serieId);
+            let score = 0;
+            state.order.forEach((item, idx) => { if (item === serie.correctOrder[idx]) score++; });
             state.validated = true;
-            const total = Object.values(chipsState).reduce((a,b)=>a+b.score, 0);
-            await setDoc(doc(db, "scores", player.id), { chipsScore: total }, { merge: true });
-            renderChips(document.getElementById('quiz-render-area'));
-            if(Object.values(chipsState).every(s=>s.validated)) finish(total, 16);
+            state.score = score;
+
+            const totalScore = Object.values(chipsState).reduce((acc, s) => acc + (s.score || 0), 0);
+            await setDoc(doc(db, "scores", player.id), { name: player.name, table: player.table, chipsScore: totalScore, path: 'chips', lastUpdate: Date.now() }, { merge: true });
+
+            renderChipsQuiz();
+            if (CHIPS_SERIES.every(s => chipsState[s.id]?.validated)) {
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+                document.getElementById('final-score-val').textContent = totalScore;
+                document.getElementById('final-max-score').textContent = '16';
+                setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
+            }
         };
 
-        function finish(s, m) {
-            document.getElementById('final-score-val').textContent = s;
-            document.getElementById('final-max-score').textContent = m;
-            document.getElementById('result-modal').classList.add('active');
-            confetti({ particleCount: 150, spread: 70 });
+        function renderLeaderboards() {
+            const allPlayers = Object.values(liveScores);
+            let htmlGeneral = `<table class="lb-table">`;
+            allPlayers.filter(p => p.path === 'terroir').sort((a,b) => (b.score||0) - (a.score||0)).forEach((p,i) => {
+                const rank = i+1;
+                htmlGeneral += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${rank}</span></td>
+                    <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.76rem;">${p.table||''}</div></td>
+                    <td align="right"><span style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.score||0}/38</span></td></tr>`;
+            });
+            document.getElementById('lb-general').innerHTML = htmlGeneral + `</table>`;
+
+            let htmlChips = `<table class="lb-table">`;
+            allPlayers.filter(p => p.path === 'chips').sort((a,b) => (b.chipsScore||0) - (a.chipsScore||0)).forEach((p,i) => {
+                const rank = i+1;
+                htmlChips += `<tr><td width="50"><span class="rank-pill ${rank===1?'top1':''}">${rank}</span></td>
+                    <td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.76rem;">${p.table||''}</div></td>
+                    <td align="right"><span style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.chipsScore||0}/16</span></td></tr>`;
+            });
+            document.getElementById('lb-chips').innerHTML = htmlChips + `</table>`;
         }
 
         window.closeResultModal = () => {
@@ -435,14 +640,10 @@
             showPanel('leaderboard');
         };
 
-        // REALTIME LEADERBOARD
-        onSnapshot(collection(db, "scores"), (snap) => {
-            const data = snap.docs.map(d => d.data());
-            const terroir = data.filter(p => p.path === 'terroir').sort((a,b) => b.score - a.score);
-            document.getElementById('lb-general').innerHTML = terroir.map((p,i) => `<tr><td><span class="rank-circle">${i+1}</span></td><td>${p.name}</td><td align="right"><b>${p.score}</b></td></tr>`).join('');
-            
-            const chips = data.filter(p => p.path === 'chips').sort((a,b) => b.chipsScore - a.chipsScore);
-            document.getElementById('lb-chips').innerHTML = chips.map((p,i) => `<tr><td><span class="rank-circle">${i+1}</span></td><td>${p.name}</td><td align="right"><b>${p.chipsScore}</b></td></tr>`).join('');
+        onSnapshot(collection(db, "scores"), (snapshot) => {
+            liveScores = {};
+            snapshot.forEach(doc => liveScores[doc.id] = doc.data());
+            if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
         });
 
         window.onload = () => showPanel('register');
