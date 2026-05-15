@@ -52,7 +52,7 @@
             text-shadow: 3px 3px 0 var(--brown), 6px 6px 12px rgba(0,0,0,0.7);
             margin-bottom: 6px;
             letter-spacing: 2.5px;
-            padding-right: 85px;           /* espace pour le badge */
+            padding-right: 85px;
         }
 
         .header p {
@@ -87,21 +87,10 @@
         .age-badge span { font-size: 1.75rem; font-weight: bold; }
         .age-badge small { font-size: 0.73rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Adaptation spécifique pour mobile */
         @media (max-width: 500px) {
-            .header {
-                padding: 2rem 1rem 1.6rem;
-            }
-            .header h1 {
-                padding-right: 78px;
-                font-size: clamp(1.85rem, 8.8vw, 3.4rem);
-            }
-            .age-badge {
-                width: 68px;
-                height: 68px;
-                top: 16px;
-                right: 16px;
-            }
+            .header { padding: 2rem 1rem 1.6rem; }
+            .header h1 { padding-right: 78px; font-size: clamp(1.85rem, 8.8vw, 3.4rem); }
+            .age-badge { width: 68px; height: 68px; top: 16px; right: 16px; }
             .age-badge span { font-size: 1.65rem; }
         }
 
@@ -181,8 +170,106 @@
         .opt-btn {
             background: #fffaf0; border: 2.5px solid var(--cream-dark); border-radius: 10px;
             padding: 13px; cursor: pointer; font-weight: 700; font-size: 0.93rem; transition: all 0.2s;
+            text-align: left;
         }
+        .opt-btn:not(.locked):hover { border-color: var(--gold); background: #fff8e1; }
         .opt-btn.selected { background: var(--brown) !important; color: white !important; border-color: var(--text-dark); }
+        .opt-btn.correct { background: #2d6a2d !important; color: white !important; border-color: #1a4a1a !important; }
+        .opt-btn.wrong { background: var(--red) !important; color: white !important; border-color: #6a1a1a !important; }
+        .opt-btn.locked { cursor: default; }
+
+        /* === SÉRIE BADGES === */
+        .serie-badge {
+            display: inline-block;
+            background: var(--red);
+            color: var(--gold-light);
+            font-family: 'Rye', serif;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+        }
+
+        /* === DRAG & DROP CHIPS === */
+        .chips-instructions {
+            background: #fffaf0;
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 18px;
+            font-size: 0.88rem;
+            color: var(--brown);
+            line-height: 1.5;
+        }
+
+        .chips-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 40px;
+            padding: 8px;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+        .chips-zone.drag-over {
+            background: rgba(212,160,23,0.15);
+            border: 2px dashed var(--gold);
+        }
+
+        .chip-item {
+            background: linear-gradient(135deg, #fffaf0, #fff3d6);
+            border: 2.5px solid var(--cream-dark);
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: grab;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--brown);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            user-select: none;
+            touch-action: none;
+        }
+        .chip-item:hover { border-color: var(--gold); transform: translateX(4px); box-shadow: 2px 4px 12px rgba(0,0,0,0.12); }
+        .chip-item.dragging { opacity: 0.4; cursor: grabbing; }
+        .chip-item .drag-handle { color: var(--gold); font-size: 1.1rem; flex-shrink: 0; }
+        .chip-item .chip-num { 
+            background: var(--brown); color: var(--gold-light); 
+            font-family: 'Rye', serif; font-size: 0.8rem;
+            width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chips-validate-btn {
+            background: linear-gradient(135deg, var(--red) 0%, #c0392b 100%);
+            color: var(--gold-light); border: none; border-radius: 10px;
+            font-family: 'Rye', serif; padding: 1rem; width: 100%;
+            cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 0 #5c1a1a;
+            transition: all 0.12s; text-transform: uppercase; letter-spacing: 1px;
+            margin-top: 14px;
+        }
+        .chips-validate-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #5c1a1a; }
+        .chips-validate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .chips-result {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 900;
+            font-family: 'Rye', serif;
+            font-size: 1.2rem;
+        }
+        .chips-result.success { background: #e8f5e9; color: #2d6a2d; border: 2px solid #2d6a2d; }
+        .chips-result.partial { background: #fff8e1; color: #b8860b; border: 2px solid var(--gold); }
+
+        /* Réponses correctes chips */
+        .chip-correct { border-color: #2d6a2d !important; background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important; }
+        .chip-wrong { border-color: var(--red) !important; background: linear-gradient(135deg, #fce8e8, #f8c8c8) !important; }
 
         .lb-scroll {
             max-height: 520px; overflow-y: auto; padding-right: 12px; margin: 12px 0;
@@ -227,6 +314,8 @@
         .pg-bar { background: var(--cream-dark); border-radius: 20px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); }
         .pg-fill { height: 100%; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%); transition: width 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
 
+        .q-block { margin-bottom: 22px; }
+
         .footer { text-align: center; padding: 25px; color: rgba(255,255,255,0.35); font-size: 0.73rem; letter-spacing: 2.5px; text-transform: uppercase; }
     </style>
 </head>
@@ -267,12 +356,13 @@
             <div class="card">
                 <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
                 <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
-                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse (12 pts)</p>
-                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse (16 pts)</p>
-                    <p>🥩 <strong>5 CHARCUTERIES :</strong> 2 points par réponse (10 pts)</p>
-                    <p>🥔 <strong>10 CHIPS BRET'S :</strong> parcours indépendant enfants (10 pts)</p>
+                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse correcte (12 pts max)</p>
+                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse correcte (16 pts max)</p>
+                    <p>🥔 <strong>CHIPS BRET'S :</strong> parcours indépendant enfants — 2 séries de 8 à remettre dans l'ordre</p>
                     <hr style="margin:10px 0; opacity:0.2;">
-                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Un clic est définitif, une fois la réponse validée vous ne pouvez plus changer !</p>
+                    <p><em>Les dégustations sont organisées en 4 séries : 2 fromages + 1 vin à chaque fois.</em></p>
+                    <hr style="margin:10px 0; opacity:0.2;">
+                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Une fois validée, votre réponse est définitive !</p>
                 </div>
             </div>
         </div>
@@ -284,14 +374,14 @@
                 <div class="card-body">
                     <div class="choice-container">
                         <div class="choice-box" onclick="setPath('terroir')">
-                            <i>🍷🥩🧀</i>
-                            <h3>TERROIR ADULTES</h3>
-                            <p>Vins • Fromages • Charcuterie<br><strong>38 pts max</strong></p>
+                            <div style="font-size:2rem;">🍷🧀</div>
+                            <h3 style="font-family:'Rye'; margin: 10px 0 6px;">TERROIR</h3>
+                            <p>Fromages • Vins<br><small>4 séries • 28 pts max</small></p>
                         </div>
                         <div class="choice-box" onclick="setPath('chips')">
-                            <i>🥔</i>
-                            <h3>CHIPS BRET'S</h3>
-                            <p>Parcours enfants<br><strong>10 pts max</strong></p>
+                            <div style="font-size:2rem;">🥔</div>
+                            <h3 style="font-family:'Rye'; margin: 10px 0 6px;">CHIPS BRET'S</h3>
+                            <p>Parcours enfants<br><small>2 séries de 8</small></p>
                         </div>
                     </div>
                 </div>
@@ -308,7 +398,7 @@
                         <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
                     </div>
                     <p style="text-align:right; font-size:0.82rem; font-weight:900; color:var(--brown-light);">
-                        <span id="q-done-count">0</span> / <span id="q-total-count">27</span> questions
+                        <span id="q-done-count">0</span> / <span id="q-total-count">12</span> questions
                     </p>
                 </div>
             </div>
@@ -327,7 +417,7 @@
             </div>
 
             <div class="card">
-                <div class="card-header">🥔 CLASSEMENT INDÉPENDANT - CHIPS BRET'S (Enfants)</div>
+                <div class="card-header">🥔 CLASSEMENT - CHIPS BRET'S (Enfants)</div>
                 <div class="card-body">
                     <div class="lb-scroll">
                         <table class="lb-table" id="lb-chips"></table>
@@ -349,12 +439,12 @@
             <h2>REWARD</h2>
             <p style="margin:15px 0 5px;">VOTRE SCORE FINAL EST DE :</p>
             <div class="score-big" id="final-score-val">0</div>
-            <p>POINTS SUR <span id="final-max-score">38</span></p>
+            <p>POINTS SUR <span id="final-max-score">28</span></p>
             <button class="btn-gold" onclick="closeResultModal()" style="margin-top:20px;">VOIR LE CLASSEMENT DU SALOON</button>
         </div>
     </div>
 
-    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre - 23/05/2026 🎉</div>
+    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre — 23/05/2026 🎉</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -372,116 +462,169 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let QUESTIONS_DB = {
-            vins: [
-                { id: 'v1', label: 'Vin Blanc n°1', options: ['Sauvignon', 'Chardonnay', 'Viognier', 'Chenin'], correct: 1 },
-                { id: 'v2', label: 'Vin Blanc n°2', options: ['Chablis', 'Sancerre', 'Meursault', 'Riesling'], correct: 2 },
-                { id: 'v3', label: 'Vin Rouge n°1', options: ['Pinot Noir', 'Syrah', 'Merlot', 'Gamay'], correct: 0 },
-                { id: 'v4', label: 'Vin Rouge n°2', options: ['Bordeaux', 'Côte du Rhône', 'Beaujolais', 'Chinon'], correct: 3 }
-            ],
-fromages: [
-    { 
-        id: 'f1', 
-        label: 'Fromage 1', 
-        options: ['Salers', 'Laguiole', 'Cantal', 'Fourme d\'Ambert'], 
-        correct: 2 
-    },
-    { 
-        id: 'f2', 
-        label: 'Fromage 2', 
-        options: ['Ossau-Iraty', 'Tome de brebis', 'Tomme de Savoie', 'Manchego'], 
-        correct: 1 
-    },
-    { 
-        id: 'f3', 
-        label: 'Fromage 3', 
-        options: ['Crottin de Chavignol', 'Briquette du Forez', 'Brique de vache', 'Briquette de Saint-Nizier'], 
-        correct: 3 
-    },
-    { 
-        id: 'f4', 
-        label: 'Fromage 4', 
-        options: ['Reblochon', 'Saint-Marcellin', 'Saint-Félicien', 'Saint-Nectaire'], 
-        correct: 3 
-    },
-    { 
-        id: 'f5', 
-        label: 'Fromage 5', 
-        options: ['Camembert', 'Comté', 'Comtesse de Vichy', 'Coulommiers'], 
-        correct: 2 
-    },
-    { 
-        id: 'f6', 
-        label: 'Fromage 6', 
-        options: ['Comté 24 mois', 'Comté 18 mois', 'Beaufort', 'Abondance'], 
-        correct: 1 
-    },
-    { 
-        id: 'f7', 
-        label: 'Fromage 7', 
-        options: ['Comté', 'Abondance', 'Beaufort', 'Gruyère'], 
-        correct: 2 
-    },
-    { 
-        id: 'f8', 
-        label: 'Fromage 8', 
-        options: ['Fourme d\'Ambert', 'Bleu d\'Auvergne', 'Fourme de Montbrison', 'Roquefort'], 
-        correct: 2 
-    }
-],
+        // ============================================================
+        // BASE DE DONNÉES DES QUESTIONS
+        // ============================================================
 
-charcuteries: [
-    { 
-        id: 'c1', 
-        label: 'Charcuterie 1', 
-        options: ['Rosette de Lyon', 'Jésus de Lyon', 'Saucisson sec', 'Saucisson à l\'ail'], 
-        correct: 2 
-    },
-    { 
-        id: 'c2', 
-        label: 'Charcuterie 2', 
-        options: ['Rosette', 'Saucisson de Lyon', 'Rosette de Lyon', 'Cervelas'], 
-        correct: 0 
-    },
-    { 
-        id: 'c3', 
-        label: 'Charcuterie 3', 
-        options: ['Jambon de Parme', 'Jambon de Bayonne', 'Jambon Serrano', 'Jambon cru'], 
-        correct: 1 
-    },
-    { 
-        id: 'c4', 
-        label: 'Charcuterie 4', 
-        options: ['Andouillette', 'Jambonnette', 'Jambon cru roulé', 'Jambonette Forézienne'], 
-        correct: 3 
-    },
-    { 
-        id: 'c5', 
-        label: 'Charcuterie 5', 
-        options: ['Terrine de campagne', 'Pâte de campagne', 'Pâté de foie', 'Rillettes'], 
-        correct: 1 
-    }
-],
-            chips: [
-                { id: 'ch1', label: 'Bret\'s n°1', options: ['Nature', 'Sel de Guérande', 'Barbecue', 'Poulet Rôti'], correct: 1 },
-                { id: 'ch2', label: 'Bret\'s n°2', options: ['Oignon Grillé', 'Fromage du Jura', 'Camembert', 'Chèvre Piment'], correct: 1 },
-                { id: 'ch3', label: 'Bret\'s n°3', options: ['Aioli', 'Pesto Mozza', 'Tartiflette', 'Cheddar Oignon'], correct: 0 },
-                { id: 'ch4', label: 'Bret\'s n°4', options: ['Vinaigre', 'Moutarde Miel', 'Pickles', 'Ketchup'], correct: 0 },
-                { id: 'ch5', label: 'Bret\'s n°5', options: ['Piment d\'Espelette', 'Chèvre Piment d\'Espelette', 'Chili', 'Curry'], correct: 1 },
-                { id: 'ch6', label: 'Bret\'s n°6', options: ['Truffe', 'Cèpes', 'Morilles', 'Champignons'], correct: 0 },
-                { id: 'ch7', label: 'Bret\'s n°7', options: ['Miel Moutarde', 'Barbecue', 'Poulet Braisé', 'Tajine'], correct: 0 },
-                { id: 'ch8', label: 'Bret\'s n°8', options: ['Pesto Mozza', 'Fromage Frais Herbes', 'Tartiflette', 'Bleu Pancetta'], correct: 0 },
-                { id: 'ch9', label: 'Bret\'s n°9', options: ['Cheddar Oignon Roscoff', 'Oignon Grillé', 'Fromage du Jura', 'Camembert'], correct: 0 },
-                { id: 'ch10', label: 'Bret\'s n°10', options: ['Barbecue', 'Poulet Rôti', 'Côte de Bœuf Grillé', 'Bleu Pancetta'], correct: 2 }
-            ]
-        };
+        // 4 séries de dégustation terroir : chaque série = [fromage1, fromage2, vin]
+        // Ordre dans le quiz : fromage1 → fromage2 → vin
+        const SERIES_TERROIR = [
+            {
+                id: 's1',
+                label: 'SÉRIE 1',
+                questions: [
+                    {
+                        id: 'f1', type: 'fromage', label: 'Fromage 1',
+                        // Les 4 options incluent le bon + 3 inventés proches
+                        options: ['Salers', 'Laguiole', 'Cantal', 'Fourme d\'Ambert'],
+                        correct: 2  // Cantal
+                    },
+                    {
+                        id: 'f2', type: 'fromage', label: 'Fromage 2',
+                        options: ['Ossau-Iraty', 'Tome de brebis', 'Tomme de Savoie', 'Pecorino'],
+                        correct: 1  // Tome de brebis
+                    },
+                    {
+                        id: 'v1', type: 'vin', label: 'Vin de la Série 1',
+                        // Uniquement les 4 vrais vins dégustés
+                        options: [
+                            '1885 Pineau Noir d\'Auvergne',
+                            'Côte du Forez Senelles',
+                            'Croze Hermitage L\'Esquisse',
+                            'Bourgogne Saint-Véran'
+                        ],
+                        correct: 0  // 1885 Pineau Noir d'Auvergne
+                    }
+                ]
+            },
+            {
+                id: 's2',
+                label: 'SÉRIE 2',
+                questions: [
+                    {
+                        id: 'f3', type: 'fromage', label: 'Fromage 3',
+                        options: ['Crottin de Chavignol', 'Briquette du Forez', 'Briquette de Saint-Nizier', 'Picodon'],
+                        correct: 2  // Briquette de Saint-Nizier
+                    },
+                    {
+                        id: 'f4', type: 'fromage', label: 'Fromage 4',
+                        options: ['Camembert de Normandie', 'Chabichou du Poitou', 'Comté 12 mois', 'Comtesse de Vichy'],
+                        correct: 3  // Comtesse de Vichy
+                    },
+                    {
+                        id: 'v2', type: 'vin', label: 'Vin de la Série 2',
+                        options: [
+                            '1885 Pineau Noir d\'Auvergne',
+                            'Côte du Forez Senelles',
+                            'Croze Hermitage L\'Esquisse',
+                            'Bourgogne Saint-Véran'
+                        ],
+                        correct: 1  // Côte du Forez Senelles
+                    }
+                ]
+            },
+            {
+                id: 's3',
+                label: 'SÉRIE 3',
+                questions: [
+                    {
+                        id: 'f5', type: 'fromage', label: 'Fromage 5',
+                        options: ['Murol', 'Reblochon', 'Saint-Félicien', 'Saint-Nectaire'],
+                        correct: 3  // Saint-Nectaire
+                    },
+                    {
+                        id: 'f6', type: 'fromage', label: 'Fromage 6',
+                        options: ['Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Fourme de Montbrison', 'Roquefort'],
+                        correct: 2  // Fourme de Montbrison
+                    },
+                    {
+                        id: 'v3', type: 'vin', label: 'Vin de la Série 3',
+                        options: [
+                            '1885 Pineau Noir d\'Auvergne',
+                            'Côte du Forez Senelles',
+                            'Croze Hermitage L\'Esquisse',
+                            'Bourgogne Saint-Véran'
+                        ],
+                        correct: 2  // Croze Hermitage L'Esquisse
+                    }
+                ]
+            },
+            {
+                id: 's4',
+                label: 'SÉRIE 4',
+                questions: [
+                    {
+                        id: 'f7', type: 'fromage', label: 'Fromage 7',
+                        options: ['Abondance', 'Beaufort', 'Comté 18 mois', 'Gruyère de Savoie'],
+                        correct: 2  // Comté 18 mois
+                    },
+                    {
+                        id: 'f8', type: 'fromage', label: 'Fromage 8',
+                        options: ['Beaufort', 'Abondance', 'Emmental de Savoie', 'Tomme de Chartreuse'],
+                        correct: 0  // Beaufort
+                    },
+                    {
+                        id: 'v4', type: 'vin', label: 'Vin de la Série 4',
+                        options: [
+                            '1885 Pineau Noir d\'Auvergne',
+                            'Côte du Forez Senelles',
+                            'Croze Hermitage L\'Esquisse',
+                            'Bourgogne Saint-Véran'
+                        ],
+                        correct: 3  // Bourgogne Saint-Véran
+                    }
+                ]
+            }
+        ];
 
-        const BAREME = { vins: 3, fromages: 2, charcuteries: 2, chips: 1 };
+        // CHIPS : 2 séries de 8, ordre correct = ordre de dégustation
+        const CHIPS_SERIES = [
+            {
+                id: 'chips1',
+                label: 'SÉRIE 1 (chips 1 à 8)',
+                // L'ordre correct — les joueurs doivent retrouver cet ordre
+                correctOrder: [
+                    'Cheddar Oignon de Roscoff',
+                    'Barbecue',
+                    'Camembert et Truffes',
+                    'Aïoli',
+                    'Fromage du Jura',
+                    'BBQ Flambé au Whisky',
+                    'Beurre Persillé',
+                    'Chèvre Piment d\'Espelette'
+                ]
+            },
+            {
+                id: 'chips2',
+                label: 'SÉRIE 2 (chips 9 à 16)',
+                correctOrder: [
+                    'Cheddar Jalapeño',
+                    'Bleu d\'Auvergne',
+                    'Tajine',
+                    'Tartiflette',
+                    'Falafel',
+                    'Kebab',
+                    'Côte de Bœuf Grillé',
+                    'Cheddar Bière'
+                ]
+            }
+        ];
 
+        const POINTS_FROMAGE = 2;
+        const POINTS_VIN = 3;
+
+        // ============================================================
+        // ÉTAT
+        // ============================================================
         let player = null;
-        let answers = {};
+        let answers = {};            // { qId: choiceIdx } pour terroir
+        let chipsState = {};         // { serieId: { order: [...], validated: bool, score: int } }
         let liveScores = {};
+        let dragState = { serieId: null, draggedIdx: null };
 
+        // ============================================================
+        // NAVIGATION
+        // ============================================================
         window.showPanel = (panelId) => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('panel-' + panelId).classList.add('active');
@@ -496,6 +639,9 @@ charcuteries: [
             else showPanel('quiz');
         };
 
+        // ============================================================
+        // INSCRIPTION
+        // ============================================================
         window.registerPlayer = function() {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
@@ -504,105 +650,370 @@ charcuteries: [
             player = { id, name, table, path: null };
             localStorage.setItem('alex_50_p', JSON.stringify(player));
             answers = {};
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi !</b>";
+            chipsState = {};
+            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi ! 🤠</b>";
             setTimeout(() => showPanel('choice'), 800);
         };
 
         window.setPath = async (p) => {
             player.path = p;
             localStorage.setItem('alex_50_p', JSON.stringify(player));
-            await setDoc(doc(db, "scores", player.id), { 
-                name: player.name, table: player.table, path: p, score: 0 
+            await setDoc(doc(db, "scores", player.id), {
+                name: player.name, table: player.table, path: p, score: 0
             }, { merge: true });
             showPanel('quiz');
         };
 
+        // ============================================================
+        // RENDER QUIZ TERROIR
+        // ============================================================
         function renderQuiz() {
             if (!player || !player.path) return;
-            document.getElementById('q-player-name').textContent = `🤠 Équipe : ${player.name} (${player.path.toUpperCase()})`;
+            document.getElementById('q-player-name').textContent = `🤠 Équipe : ${player.name}`;
 
-            let html = "";
-            const catTitles = { vins: '🍷 LES VINS (3 pts)', fromages: '🧀 LES FROMAGES (2 pts)', charcuteries: '🥩 LA CHARCUTERIE (2 pts)', chips: '🥔 CHIPS BRET\'S (1 pt)' };
-            const activeCats = player.path === 'terroir' ? ['vins', 'fromages', 'charcuteries'] : ['chips'];
-
-            activeCats.forEach(cat => {
-                html += `<div class="card"><div class="card-header">${catTitles[cat]}</div><div class="card-body">`;
-                QUESTIONS_DB[cat].forEach(q => {
-                    const userAns = answers[q.id];
-                    const isLocked = userAns !== undefined;
-                    html += `<div class="q-block"><div class="q-title">${q.label}</div><div class="opt-grid">`;
-                    q.options.forEach((opt, idx) => {
-                        let btnClass = "opt-btn";
-                        if (isLocked) { btnClass += " locked"; if (idx === userAns) btnClass += " selected"; }
-                        html += `<button class="${btnClass}" onclick="handleVote('${q.id}', '${cat}', ${idx})">${opt}</button>`;
-                    });
-                    html += `</div></div>`;
-                });
-                html += `</div></div>`;
-            });
-            document.getElementById('quiz-render-area').innerHTML = html;
-            updateQuizProgress();
+            if (player.path === 'terroir') {
+                renderTerroirQuiz();
+            } else {
+                renderChipsQuiz();
+            }
         }
 
-        window.handleVote = async (qId, cat, choiceIdx) => {
+        function renderTerroirQuiz() {
+            let html = "";
+            const totalQ = SERIES_TERROIR.reduce((acc, s) => acc + s.questions.length, 0);
+            document.getElementById('q-total-count').textContent = totalQ;
+
+            SERIES_TERROIR.forEach(serie => {
+                const typeColors = { fromage: '#8B5A2B', vin: '#9C2A2A' };
+                const typeEmojis = { fromage: '🧀', vin: '🍷' };
+
+                html += `<div class="card">
+                    <div class="card-header">${typeEmojis['fromage']} ${serie.label} — Fromages &amp; Vin</div>
+                    <div class="card-body">`;
+
+                serie.questions.forEach(q => {
+                    const userAns = answers[q.id];
+                    const isLocked = userAns !== undefined;
+                    const emoji = typeEmojis[q.type];
+                    const pts = q.type === 'vin' ? POINTS_VIN : POINTS_FROMAGE;
+
+                    html += `<div class="q-block">
+                        <div style="margin-bottom:6px;">
+                            <span class="serie-badge">${emoji} ${q.type === 'fromage' ? 'FROMAGE' : 'VIN'} — ${pts} pts</span>
+                        </div>
+                        <div class="q-title">${q.label}</div>
+                        <div class="opt-grid">`;
+
+                    q.options.forEach((opt, idx) => {
+                        let cls = "opt-btn";
+                        if (isLocked) {
+                            cls += " locked";
+                            if (idx === q.correct) cls += " correct";
+                            else if (idx === userAns) cls += " wrong";
+                        }
+                        const onclickAttr = isLocked ? '' : `onclick="handleVote('${q.id}', '${q.type}', ${idx})"`;
+                        html += `<button class="${cls}" ${onclickAttr}>${opt}</button>`;
+                    });
+
+                    html += `</div></div>`;
+                });
+
+                html += `</div></div>`;
+            });
+
+            document.getElementById('quiz-render-area').innerHTML = html;
+            updateTerroirProgress();
+        }
+
+        window.handleVote = async (qId, type, choiceIdx) => {
             if (answers[qId] !== undefined) return;
             answers[qId] = choiceIdx;
             localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
-            renderQuiz();
+            renderTerroirQuiz();
+            await saveTerroirScore();
 
+            // Vérif fin
+            const totalQ = SERIES_TERROIR.reduce((acc, s) => acc + s.questions.length, 0);
+            if (Object.keys(answers).length === totalQ) {
+                showRewardModal('terroir');
+            }
+        };
+
+        async function saveTerroirScore() {
             let score = 0;
-            let byCat = { vins: 0, fromages: 0, charcuteries: 0, chips: 0 };
-            let totalPossible = 0;
-            let questionsCount = 0;
-
-            const activeCats = player.path === 'terroir' ? ['vins', 'fromages', 'charcuteries'] : ['chips'];
-
-            activeCats.forEach(c => {
-                QUESTIONS_DB[c].forEach(q => {
-                    questionsCount++;
-                    totalPossible += BAREME[c];
+            let byCat = { fromages: 0, vins: 0 };
+            SERIES_TERROIR.forEach(serie => {
+                serie.questions.forEach(q => {
                     if (answers[q.id] === q.correct) {
-                        score += BAREME[c];
-                        byCat[c] += BAREME[c];
+                        const pts = q.type === 'vin' ? POINTS_VIN : POINTS_FROMAGE;
+                        score += pts;
+                        if (q.type === 'fromage') byCat.fromages += pts;
+                        else byCat.vins += pts;
                     }
                 });
             });
-
             await setDoc(doc(db, "scores", player.id), {
-                name: player.name, table: player.table, score: score, byCat: byCat,
+                name: player.name, table: player.table, score, byCat,
                 done: Object.keys(answers).length, lastUpdate: Date.now(), path: player.path
             }, { merge: true });
+        }
 
-            if (Object.keys(answers).length === questionsCount) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4A017', '#9C2A2A', '#F5E8C7'] });
-                document.getElementById('final-score-val').textContent = score;
-                document.getElementById('final-max-score').textContent = totalPossible;
-                document.getElementById('result-modal').classList.add('active');
+        function updateTerroirProgress() {
+            const totalQ = SERIES_TERROIR.reduce((acc, s) => acc + s.questions.length, 0);
+            const done = Object.keys(answers).length;
+            const pct = Math.round((done / totalQ) * 100);
+            document.getElementById('q-total-count').textContent = totalQ;
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-main-fill').style.width = pct + "%";
+        }
+
+        // ============================================================
+        // RENDER QUIZ CHIPS (DRAG & DROP)
+        // ============================================================
+        function renderChipsQuiz() {
+            document.getElementById('q-total-count').textContent = '2 séries';
+            document.getElementById('q-done-count').textContent = Object.values(chipsState).filter(s => s.validated).length;
+
+            let html = `<div class="card">
+                <div class="card-header">🥔 CHIPS BRET'S — Remets dans l'ordre !</div>
+                <div class="card-body">
+                <div class="chips-instructions">
+                    <strong>📋 Consigne :</strong> Tu as goûté les chips dans un certain ordre. Fais glisser les étiquettes pour les remettre dans l'ordre exact de dégustation, puis valide ta série !
+                </div>
+                </div>
+            </div>`;
+
+            CHIPS_SERIES.forEach(serie => {
+                // Init l'état si pas encore fait
+                if (!chipsState[serie.id]) {
+                    // Mélanger aléatoirement
+                    const shuffled = [...serie.correctOrder].sort(() => Math.random() - 0.5);
+                    chipsState[serie.id] = { order: shuffled, validated: false, score: 0 };
+                }
+                const state = chipsState[serie.id];
+                const isValidated = state.validated;
+
+                html += `<div class="card">
+                    <div class="card-header">🥔 ${serie.label}</div>
+                    <div class="card-body">`;
+
+                if (isValidated) {
+                    // Afficher le résultat avec les couleurs
+                    html += `<div class="chips-zone" id="zone-${serie.id}">`;
+                    state.order.forEach((item, idx) => {
+                        const isCorrect = item === serie.correctOrder[idx];
+                        html += `<div class="chip-item ${isCorrect ? 'chip-correct' : 'chip-wrong'}">
+                            <span class="chip-num">${idx + 1}</span>
+                            <span>${item}</span>
+                            <span style="margin-left:auto;">${isCorrect ? '✅' : '❌'}</span>
+                        </div>`;
+                    });
+                    html += `</div>
+                    <div class="chips-result ${state.score === serie.correctOrder.length ? 'success' : 'partial'}">
+                        🎯 ${state.score} / ${serie.correctOrder.length} dans le bon ordre !
+                    </div>`;
+                } else {
+                    html += `<div class="chips-zone" id="zone-${serie.id}" 
+                        ondragover="handleDragOver(event, '${serie.id}')" 
+                        ondrop="handleDrop(event, '${serie.id}')"
+                        ondragleave="handleDragLeave(event, '${serie.id}')">`;
+                    state.order.forEach((item, idx) => {
+                        html += `<div class="chip-item" 
+                            draggable="true"
+                            id="chip-${serie.id}-${idx}"
+                            data-serie="${serie.id}"
+                            data-idx="${idx}"
+                            ondragstart="handleDragStart(event, '${serie.id}', ${idx})"
+                            ondragend="handleDragEnd(event)"
+                            ontouchstart="handleTouchStart(event, '${serie.id}', ${idx})"
+                            ontouchmove="handleTouchMove(event)"
+                            ontouchend="handleTouchEnd(event, '${serie.id}')">
+                            <span class="drag-handle">☰</span>
+                            <span class="chip-num">${idx + 1}</span>
+                            <span>${item}</span>
+                        </div>`;
+                    });
+                    html += `</div>
+                    <button class="chips-validate-btn" onclick="validateChipsSerie('${serie.id}')">
+                        ✅ VALIDER MA SÉRIE
+                    </button>`;
+                }
+
+                html += `</div></div>`;
+            });
+
+            document.getElementById('quiz-render-area').innerHTML = html;
+            updateChipsProgress();
+        }
+
+        function updateChipsProgress() {
+            const done = Object.values(chipsState).filter(s => s.validated).length;
+            const total = CHIPS_SERIES.length;
+            const pct = Math.round((done / total) * 100);
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-total-count').textContent = total;
+            document.getElementById('q-percent').textContent = pct + "%";
+            document.getElementById('q-main-fill').style.width = pct + "%";
+        }
+
+        // Drag & Drop Desktop
+        window.handleDragStart = (e, serieId, idx) => {
+            dragState = { serieId, draggedIdx: idx };
+            e.dataTransfer.effectAllowed = 'move';
+            setTimeout(() => {
+                const el = document.getElementById(`chip-${serieId}-${idx}`);
+                if (el) el.classList.add('dragging');
+            }, 0);
+        };
+
+        window.handleDragEnd = (e) => {
+            document.querySelectorAll('.chip-item').forEach(el => el.classList.remove('dragging'));
+            document.querySelectorAll('.chips-zone').forEach(el => el.classList.remove('drag-over'));
+        };
+
+        window.handleDragOver = (e, serieId) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            document.getElementById('zone-' + serieId).classList.add('drag-over');
+        };
+
+        window.handleDragLeave = (e, serieId) => {
+            document.getElementById('zone-' + serieId).classList.remove('drag-over');
+        };
+
+        window.handleDrop = (e, serieId) => {
+            e.preventDefault();
+            document.getElementById('zone-' + serieId).classList.remove('drag-over');
+
+            // Trouver la cible
+            const target = e.target.closest('.chip-item');
+            if (!target || dragState.serieId !== serieId) return;
+
+            const toIdx = parseInt(target.dataset.idx);
+            const fromIdx = dragState.draggedIdx;
+            if (fromIdx === toIdx) return;
+
+            // Réordonner
+            const order = chipsState[serieId].order;
+            const moved = order.splice(fromIdx, 1)[0];
+            order.splice(toIdx, 0, moved);
+
+            renderChipsQuiz();
+        };
+
+        // Touch support
+        let touchDragEl = null;
+        let touchClone = null;
+        let touchSerieId = null;
+        let touchFromIdx = null;
+
+        window.handleTouchStart = (e, serieId, idx) => {
+            touchSerieId = serieId;
+            touchFromIdx = idx;
+            touchDragEl = e.currentTarget;
+            touchDragEl.classList.add('dragging');
+
+            // Créer un clone visuel
+            touchClone = touchDragEl.cloneNode(true);
+            touchClone.style.cssText = `position:fixed; pointer-events:none; z-index:9999; opacity:0.85; width:${touchDragEl.offsetWidth}px;`;
+            document.body.appendChild(touchClone);
+        };
+
+        window.handleTouchMove = (e) => {
+            e.preventDefault();
+            const t = e.touches[0];
+            if (touchClone) {
+                touchClone.style.left = (t.clientX - 20) + 'px';
+                touchClone.style.top = (t.clientY - 20) + 'px';
             }
         };
+
+        window.handleTouchEnd = (e, serieId) => {
+            if (touchClone) { touchClone.remove(); touchClone = null; }
+            if (touchDragEl) { touchDragEl.classList.remove('dragging'); touchDragEl = null; }
+
+            // Trouver l'élément sous le doigt
+            const t = e.changedTouches[0];
+            const el = document.elementFromPoint(t.clientX, t.clientY);
+            const target = el ? el.closest('.chip-item') : null;
+
+            if (target && touchSerieId === serieId) {
+                const toIdx = parseInt(target.dataset.idx);
+                if (touchFromIdx !== null && touchFromIdx !== toIdx) {
+                    const order = chipsState[serieId].order;
+                    const moved = order.splice(touchFromIdx, 1)[0];
+                    order.splice(toIdx, 0, moved);
+                }
+            }
+            touchFromIdx = null;
+            touchSerieId = null;
+            renderChipsQuiz();
+        };
+
+        window.validateChipsSerie = async (serieId) => {
+            const state = chipsState[serieId];
+            if (state.validated) return;
+
+            const serie = CHIPS_SERIES.find(s => s.id === serieId);
+            let score = 0;
+            state.order.forEach((item, idx) => {
+                if (item === serie.correctOrder[idx]) score++;
+            });
+
+            state.validated = true;
+            state.score = score;
+
+            // Sauvegarder
+            const totalScore = Object.values(chipsState).reduce((acc, s) => acc + (s.score || 0), 0);
+            await setDoc(doc(db, "scores", player.id), {
+                name: player.name, table: player.table,
+                chipsScore: totalScore,
+                chipsDetail: chipsState,
+                lastUpdate: Date.now(), path: player.path
+            }, { merge: true });
+
+            renderChipsQuiz();
+
+            // Vérif fin des 2 séries
+            const allDone = CHIPS_SERIES.every(s => chipsState[s.id]?.validated);
+            if (allDone) {
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 }, colors: ['#D4A017', '#9C2A2A', '#F5E8C7'] });
+                document.getElementById('final-score-val').textContent = totalScore;
+                document.getElementById('final-max-score').textContent = '16';
+                setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
+            }
+        };
+
+        function showRewardModal(path) {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4A017', '#9C2A2A', '#F5E8C7'] });
+            let score = 0;
+            SERIES_TERROIR.forEach(serie => {
+                serie.questions.forEach(q => {
+                    if (answers[q.id] === q.correct) {
+                        score += q.type === 'vin' ? POINTS_VIN : POINTS_FROMAGE;
+                    }
+                });
+            });
+            document.getElementById('final-score-val').textContent = score;
+            document.getElementById('final-max-score').textContent = '28';
+            setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
+        }
 
         window.closeResultModal = () => {
             document.getElementById('result-modal').classList.remove('active');
             showPanel('leaderboard');
         };
 
-        function updateQuizProgress() {
-            const activeCats = player.path === 'terroir' ? ['vins', 'fromages', 'charcuteries'] : ['chips'];
-            let total = 0;
-            activeCats.forEach(c => total += QUESTIONS_DB[c].length);
-            const done = Object.keys(answers).length;
-            const pct = Math.round((done / total) * 100);
-            document.getElementById('q-total-count').textContent = total;
-            document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-percent').textContent = pct + "%";
-            document.getElementById('q-main-fill').style.width = pct + "%";
-        }
-
+        // ============================================================
+        // CLASSEMENTS
+        // ============================================================
         function renderLeaderboards() {
             const allPlayers = Object.values(liveScores);
 
+            // Terroir
             const terroirPlayers = allPlayers.filter(p => p.path === 'terroir')
-                .sort((a,b) => b.score - a.score || (b.lastUpdate || 0) - (a.lastUpdate || 0));
+                .sort((a,b) => b.score - a.score || (b.lastUpdate||0) - (a.lastUpdate||0));
 
             let htmlGeneral = `<table class="lb-table">`;
             terroirPlayers.forEach((p, i) => {
@@ -610,48 +1021,52 @@ charcuteries: [
                 const displayRank = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
                 htmlGeneral += `<tr>
                     <td width="50"><span class="rank-pill ${rank===1?'top1':''}">${displayRank}</span></td>
-                    <td><div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div>
-                        <div style="font-size:0.76rem;">${escapeHtml(p.table || '')}</div></td>
-                    <td align="right"><div style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.score}</div></td>
+                    <td>
+                        <div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div>
+                        <div style="font-size:0.76rem; color:#888;">${escapeHtml(p.table || '')}</div>
+                    </td>
+                    <td align="right"><div style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.score} / 28</div></td>
                 </tr>`;
             });
-            if (terroirPlayers.length === 0) htmlGeneral += `<tr><td align="center">Aucun score pour le moment...</td></tr>`;
+            if (terroirPlayers.length === 0) htmlGeneral += `<tr><td colspan="3" align="center">Aucun score pour le moment…</td></tr>`;
             document.getElementById('lb-general').innerHTML = htmlGeneral + `</table>`;
 
-            const chipsPlayers = allPlayers.filter(p => p.path === 'chips' && p.byCat && typeof p.byCat.chips === 'number')
-                .sort((a,b) => (b.byCat.chips || 0) - (a.byCat.chips || 0) || (b.lastUpdate || 0) - (a.lastUpdate || 0));
+            // Chips
+            const chipsPlayers = allPlayers.filter(p => p.path === 'chips' && p.chipsScore !== undefined)
+                .sort((a,b) => (b.chipsScore||0) - (a.chipsScore||0) || (b.lastUpdate||0) - (a.lastUpdate||0));
 
             let htmlChips = `<table class="lb-table">`;
             if (chipsPlayers.length === 0) {
-                htmlChips += `<tr><td align="center">Aucun score Chips pour le moment...</td></tr>`;
+                htmlChips += `<tr><td align="center">Aucun score Chips pour le moment…</td></tr>`;
             } else {
                 chipsPlayers.forEach((p, i) => {
                     const rank = i + 1;
                     const displayRank = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : rank;
                     htmlChips += `<tr>
                         <td width="50"><span class="rank-pill ${rank===1?'top1':''}">${displayRank}</span></td>
-                        <td><div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div>
-                            <div style="font-size:0.76rem;">${escapeHtml(p.table || '')}</div></td>
-                        <td align="right"><div style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.byCat.chips} / 10</div></td>
+                        <td>
+                            <div style="font-weight:900; color:var(--brown);">${escapeHtml(p.name)}</div>
+                            <div style="font-size:0.76rem; color:#888;">${escapeHtml(p.table || '')}</div>
+                        </td>
+                        <td align="right"><div style="font-family:'Rye'; font-size:1.45rem; color:var(--red);">${p.chipsScore} / 16</div></td>
                     </tr>`;
                 });
             }
             document.getElementById('lb-chips').innerHTML = htmlChips + `</table>`;
 
-            renderCategoryStats(allPlayers);
+            renderCategoryStats(terroirPlayers);
         }
 
         function renderCategoryStats(list) {
-            const cats = { vins: 12, fromages: 16, charcuteries: 10, chips: 10 };
-            const labels = { vins: '🍷 Vins', fromages: '🧀 Fromages', charcuteries: '🥩 Charcuterie', chips: '🥔 Chips' };
+            const cats = { fromages: { max: 16, label: '🧀 Fromages' }, vins: { max: 12, label: '🍷 Vins' } };
             let html = "";
             for (const c in cats) {
                 const filtered = list.filter(p => p.byCat && typeof p.byCat[c] === 'number');
                 if (filtered.length === 0) continue;
                 const avg = (filtered.reduce((acc, curr) => acc + (curr.byCat[c] || 0), 0) / filtered.length).toFixed(1);
                 html += `<div class="pg-container">
-                    <div class="pg-label"><span>${labels[c]}</span><span>Moy: ${avg}</span></div>
-                    <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c])*100}%"></div></div>
+                    <div class="pg-label"><span>${cats[c].label}</span><span>Moy: ${avg} / ${cats[c].max}</span></div>
+                    <div class="pg-bar"><div class="pg-fill" style="width:${(avg/cats[c].max)*100}%"></div></div>
                 </div>`;
             }
             document.getElementById('category-stats-area').innerHTML = html || "<p>Aucune donnée pour le moment.</p>";
@@ -664,7 +1079,7 @@ charcuteries: [
             return div.innerHTML;
         }
 
-        // Mise à jour en temps réel
+        // Temps réel Firestore
         onSnapshot(collection(db, "scores"), (snapshot) => {
             liveScores = {};
             snapshot.forEach(doc => { liveScores[doc.id] = doc.data(); });
@@ -673,7 +1088,7 @@ charcuteries: [
             }
         });
 
-        // Au chargement → on force l'écran d'inscription
+        // Init
         window.onload = () => {
             showPanel('register');
         };
