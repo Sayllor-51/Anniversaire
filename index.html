@@ -173,10 +173,33 @@
             text-align: left;
         }
         .opt-btn:not(.locked):hover { border-color: var(--gold); background: #fff8e1; }
-        .opt-btn.selected { background: var(--brown) !important; color: white !important; border-color: var(--text-dark); }
-        .opt-btn.correct { background: #2d6a2d !important; color: white !important; border-color: #1a4a1a !important; }
-        .opt-btn.wrong { background: var(--red) !important; color: white !important; border-color: #6a1a1a !important; }
+
+        /* === RÉPONSE SÉLECTIONNÉE : neutre, sans révéler si correct ou non === */
+        .opt-btn.selected {
+            background: var(--brown) !important;
+            color: white !important;
+            border-color: var(--text-dark);
+            cursor: default;
+        }
+        /* Les classes .correct et .wrong ne sont PLUS utilisées dans l'affichage joueur */
         .opt-btn.locked { cursor: default; }
+
+        /* Confirmation discrète après vote */
+        .vote-confirmed {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f0e8;
+            border: 2px solid #5a8a5a;
+            border-radius: 10px;
+            padding: 10px 16px;
+            margin-top: 10px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            color: #2d5a2d;
+            font-family: 'Rye', serif;
+            letter-spacing: 0.5px;
+        }
 
         /* === SÉRIE BADGES === */
         .serie-badge {
@@ -244,6 +267,14 @@
             flex-shrink: 0;
         }
 
+        /* === CHIPS VALIDÉES : neutre, on n'affiche que le score total, pas les ✅/❌ par item === */
+        .chip-item.validated-neutral {
+            border-color: var(--leather);
+            background: linear-gradient(135deg, #f5ecd6, #ede0c4);
+            cursor: default;
+            opacity: 0.85;
+        }
+
         .chips-validate-btn {
             background: linear-gradient(135deg, var(--red) 0%, #c0392b 100%);
             color: var(--gold-light); border: none; border-radius: 10px;
@@ -255,21 +286,44 @@
         .chips-validate-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #5c1a1a; }
         .chips-validate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .chips-result {
+        /* Score chips : neutre, sans révéler le détail */
+        .chips-score-display {
             margin-top: 14px;
-            padding: 14px;
-            border-radius: 10px;
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
-            font-weight: 900;
-            font-family: 'Rye', serif;
-            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--brown), var(--leather));
+            border: 3px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .chips-result.success { background: #e8f5e9; color: #2d6a2d; border: 2px solid #2d6a2d; }
-        .chips-result.partial { background: #fff8e1; color: #b8860b; border: 2px solid var(--gold); }
-
-        /* Réponses correctes chips */
-        .chip-correct { border-color: #2d6a2d !important; background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important; }
-        .chip-wrong { border-color: var(--red) !important; background: linear-gradient(135deg, #fce8e8, #f8c8c8) !important; }
+        .chips-score-display .score-label {
+            font-family: 'Rye', serif;
+            color: var(--gold-light);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .chips-score-display .score-number {
+            font-family: 'Rye', serif;
+            color: var(--gold-light);
+            font-size: 2.8rem;
+            line-height: 1;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+        }
+        .chips-score-display .score-max {
+            font-family: 'Lato', sans-serif;
+            color: rgba(244,201,93,0.75);
+            font-size: 0.85rem;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+        .chips-score-display .score-locked-msg {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: rgba(244,201,93,0.6);
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
 
         .lb-scroll {
             max-height: 520px; overflow-y: auto; padding-right: 12px; margin: 12px 0;
@@ -308,6 +362,14 @@
         .wanted-card h2 { font-family: 'Rye', serif; font-size: 2.7rem; color: #2C1810; margin-bottom: 8px; text-transform: uppercase; border-bottom: 3px solid #2C1810; letter-spacing: 3px; }
         .wanted-card .score-big { font-family: 'Rye', serif; font-size: 5.8rem; color: var(--red); margin: 15px 0; text-shadow: 3px 3px 0 white, -2px -2px 0 white; line-height: 1; }
         .wanted-card p { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.22rem; color: #2C1810; margin-bottom: 20px; }
+        .wanted-card .mystery-note {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.82rem;
+            color: #5C3A1E;
+            font-style: italic;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
 
         .pg-container { margin-bottom: 16px; }
         .pg-label { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
@@ -363,6 +425,7 @@
                     <p><em>Les dégustations sont organisées en 4 séries : 2 fromages + 1 vin à chaque fois.</em></p>
                     <hr style="margin:10px 0; opacity:0.2;">
                     <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Une fois validée, votre réponse est définitive !</p>
+                    <p style="color:var(--brown); font-weight:bold; text-align:center; margin-top:8px;">🤫 Les bonnes réponses seront révélées à l'oral par l'animateur !</p>
                 </div>
             </div>
         </div>
@@ -440,6 +503,7 @@
             <p style="margin:15px 0 5px;">VOTRE SCORE FINAL EST DE :</p>
             <div class="score-big" id="final-score-val">0</div>
             <p>POINTS SUR <span id="final-max-score">28</span></p>
+            <p class="mystery-note">🤫 Les bonnes réponses seront révélées à l'oral par l'animateur !</p>
             <button class="btn-gold" onclick="closeResultModal()" style="margin-top:20px;">VOIR LE CLASSEMENT DU SALOON</button>
         </div>
     </div>
@@ -464,10 +528,10 @@
 
         // ============================================================
         // BASE DE DONNÉES DES QUESTIONS
+        // Les indices `correct` sont nécessaires pour calculer les scores
+        // mais ne sont JAMAIS affichés visuellement au joueur.
         // ============================================================
 
-        // 4 séries de dégustation terroir : chaque série = [fromage1, fromage2, vin]
-        // Ordre dans le quiz : fromage1 → fromage2 → vin
         const SERIES_TERROIR = [
             {
                 id: 's1',
@@ -475,25 +539,23 @@
                 questions: [
                     {
                         id: 'f1', type: 'fromage', label: 'Fromage 1',
-                        // Les 4 options incluent le bon + 3 inventés proches
                         options: ['Salers', 'Laguiole', 'Cantal', 'Fourme d\'Ambert'],
-                        correct: 2  // Cantal
+                        correct: 2  // Cantal — jamais affiché au joueur
                     },
                     {
                         id: 'f2', type: 'fromage', label: 'Fromage 2',
                         options: ['Ossau-Iraty', 'Tome de brebis', 'Tomme de Savoie', 'Pecorino'],
-                        correct: 1  // Tome de brebis
+                        correct: 1  // Tome de brebis — jamais affiché au joueur
                     },
                     {
                         id: 'v1', type: 'vin', label: 'Vin de la Série 1',
-                        // Uniquement les 4 vrais vins dégustés
                         options: [
                             '1885 Pineau Noir d\'Auvergne',
                             'Côte du Forez Senelles',
                             'Croze Hermitage L\'Esquisse',
                             'Bourgogne Saint-Véran'
                         ],
-                        correct: 0  // 1885 Pineau Noir d'Auvergne
+                        correct: 0  // 1885 Pineau Noir d'Auvergne — jamais affiché au joueur
                     }
                 ]
             },
@@ -582,7 +644,6 @@
             {
                 id: 'chips1',
                 label: 'SÉRIE 1 (chips 1 à 8)',
-                // L'ordre correct — les joueurs doivent retrouver cet ordre
                 correctOrder: [
                     'Cheddar Oignon de Roscoff',
                     'Barbecue',
@@ -683,17 +744,16 @@
             const totalQ = SERIES_TERROIR.reduce((acc, s) => acc + s.questions.length, 0);
             document.getElementById('q-total-count').textContent = totalQ;
 
-            SERIES_TERROIR.forEach(serie => {
-                const typeColors = { fromage: '#8B5A2B', vin: '#9C2A2A' };
-                const typeEmojis = { fromage: '🧀', vin: '🍷' };
+            const typeEmojis = { fromage: '🧀', vin: '🍷' };
 
+            SERIES_TERROIR.forEach(serie => {
                 html += `<div class="card">
-                    <div class="card-header">${typeEmojis['fromage']} ${serie.label} — Fromages &amp; Vin</div>
+                    <div class="card-header">🍽️ ${serie.label} — Fromages &amp; Vin</div>
                     <div class="card-body">`;
 
                 serie.questions.forEach(q => {
                     const userAns = answers[q.id];
-                    const isLocked = userAns !== undefined;
+                    const isAnswered = userAns !== undefined;
                     const emoji = typeEmojis[q.type];
                     const pts = q.type === 'vin' ? POINTS_VIN : POINTS_FROMAGE;
 
@@ -701,21 +761,29 @@
                         <div style="margin-bottom:6px;">
                             <span class="serie-badge">${emoji} ${q.type === 'fromage' ? 'FROMAGE' : 'VIN'} — ${pts} pts</span>
                         </div>
-                        <div class="q-title">${q.label}</div>
-                        <div class="opt-grid">`;
+                        <div class="q-title">${q.label}</div>`;
 
-                    q.options.forEach((opt, idx) => {
-                        let cls = "opt-btn";
-                        if (isLocked) {
-                            cls += " locked";
-                            if (idx === q.correct) cls += " correct";
-                            else if (idx === userAns) cls += " wrong";
-                        }
-                        const onclickAttr = isLocked ? '' : `onclick="handleVote('${q.id}', '${q.type}', ${idx})"`;
-                        html += `<button class="${cls}" ${onclickAttr}>${opt}</button>`;
-                    });
+                    if (isAnswered) {
+                        // Afficher uniquement le choix fait, sans révéler si correct ou non
+                        html += `<div class="opt-grid">`;
+                        q.options.forEach((opt, idx) => {
+                            const isSelected = idx === userAns;
+                            // Classe "selected" (fond sombre) pour le choix, rien pour les autres — pas de correct/wrong
+                            const cls = `opt-btn locked${isSelected ? ' selected' : ''}`;
+                            html += `<button class="${cls}">${opt}</button>`;
+                        });
+                        html += `</div>`;
+                        // Message de confirmation discret
+                        html += `<div class="vote-confirmed">✓ Réponse enregistrée</div>`;
+                    } else {
+                        html += `<div class="opt-grid">`;
+                        q.options.forEach((opt, idx) => {
+                            html += `<button class="opt-btn" onclick="handleVote('${q.id}', '${q.type}', ${idx})">${opt}</button>`;
+                        });
+                        html += `</div>`;
+                    }
 
-                    html += `</div></div>`;
+                    html += `</div>`;
                 });
 
                 html += `</div></div>`;
@@ -787,7 +855,6 @@
             CHIPS_SERIES.forEach(serie => {
                 // Init l'état si pas encore fait
                 if (!chipsState[serie.id]) {
-                    // Mélanger aléatoirement
                     const shuffled = [...serie.correctOrder].sort(() => Math.random() - 0.5);
                     chipsState[serie.id] = { order: shuffled, validated: false, score: 0 };
                 }
@@ -799,19 +866,21 @@
                     <div class="card-body">`;
 
                 if (isValidated) {
-                    // Afficher le résultat avec les couleurs
-                    html += `<div class="chips-zone" id="zone-${serie.id}">`;
+                    // Afficher les chips dans l'ordre choisi, style neutre (pas de ✅/❌ par item)
+                    html += `<div class="chips-zone">`;
                     state.order.forEach((item, idx) => {
-                        const isCorrect = item === serie.correctOrder[idx];
-                        html += `<div class="chip-item ${isCorrect ? 'chip-correct' : 'chip-wrong'}">
+                        html += `<div class="chip-item validated-neutral">
                             <span class="chip-num">${idx + 1}</span>
                             <span>${item}</span>
-                            <span style="margin-left:auto;">${isCorrect ? '✅' : '❌'}</span>
                         </div>`;
                     });
-                    html += `</div>
-                    <div class="chips-result ${state.score === serie.correctOrder.length ? 'success' : 'partial'}">
-                        🎯 ${state.score} / ${serie.correctOrder.length} dans le bon ordre !
+                    html += `</div>`;
+                    // Score global uniquement, sans détail par item
+                    html += `<div class="chips-score-display">
+                        <div class="score-label">🎯 TON SCORE</div>
+                        <div class="score-number">${state.score}</div>
+                        <div class="score-max">sur ${serie.correctOrder.length} chips dans le bon ordre</div>
+                        <div class="score-locked-msg">🤫 Les bonnes réponses seront révélées à l'oral !</div>
                     </div>`;
                 } else {
                     html += `<div class="chips-zone" id="zone-${serie.id}" 
@@ -886,7 +955,6 @@
             e.preventDefault();
             document.getElementById('zone-' + serieId).classList.remove('drag-over');
 
-            // Trouver la cible
             const target = e.target.closest('.chip-item');
             if (!target || dragState.serieId !== serieId) return;
 
@@ -894,7 +962,6 @@
             const fromIdx = dragState.draggedIdx;
             if (fromIdx === toIdx) return;
 
-            // Réordonner
             const order = chipsState[serieId].order;
             const moved = order.splice(fromIdx, 1)[0];
             order.splice(toIdx, 0, moved);
@@ -914,7 +981,6 @@
             touchDragEl = e.currentTarget;
             touchDragEl.classList.add('dragging');
 
-            // Créer un clone visuel
             touchClone = touchDragEl.cloneNode(true);
             touchClone.style.cssText = `position:fixed; pointer-events:none; z-index:9999; opacity:0.85; width:${touchDragEl.offsetWidth}px;`;
             document.body.appendChild(touchClone);
@@ -933,7 +999,6 @@
             if (touchClone) { touchClone.remove(); touchClone = null; }
             if (touchDragEl) { touchDragEl.classList.remove('dragging'); touchDragEl = null; }
 
-            // Trouver l'élément sous le doigt
             const t = e.changedTouches[0];
             const el = document.elementFromPoint(t.clientX, t.clientY);
             const target = el ? el.closest('.chip-item') : null;
@@ -964,12 +1029,11 @@
             state.validated = true;
             state.score = score;
 
-            // Sauvegarder
+            // Sauvegarder — uniquement le score global, pas le détail item par item
             const totalScore = Object.values(chipsState).reduce((acc, s) => acc + (s.score || 0), 0);
             await setDoc(doc(db, "scores", player.id), {
                 name: player.name, table: player.table,
                 chipsScore: totalScore,
-                chipsDetail: chipsState,
                 lastUpdate: Date.now(), path: player.path
             }, { merge: true });
 
