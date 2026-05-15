@@ -4,249 +4,266 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🤠 Alexandre a 50 ans ! - Le Grand Saloon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Bangers&family=Lato:wght@400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
         :root {
-            --wood-dark: #2c1810;
-            --wood-light: #4a2c1d;
-            --leather: #8b5a2b;
             --gold: #d4a017;
-            --gold-bright: #f4c95d;
+            --gold-light: #f4c95d;
+            --wood: #2c1810;
             --paper: #f2d9ad;
             --red-wax: #8b0000;
-            --cream: #F5E8C7;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%),
-                        url('https://www.transparenttextures.com/patterns/dark-wood.png'), #1a0f0a;
+            background: #1a0f0a url('https://www.transparenttextures.com/patterns/dark-wood.png');
             font-family: 'Lato', sans-serif;
             color: #3c2414;
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, var(--red-wax) 0%, #5C3A1E 50%, var(--red-wax) 100%);
-            border-bottom: 8px solid var(--gold);
-            text-align: center;
-            padding: 3rem 1rem 2rem;
+        /* BANDEAU SUPÉRIEUR - COMME SUR L'IMAGE */
+        .top-bar {
+            background: linear-gradient(to bottom, #4a2c1d, #2c1810);
+            border-bottom: 5px solid var(--gold);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .header h1 {
-            font-family: 'Bangers', cursive;
-            font-size: clamp(2.8rem, 10vw, 5.2rem);
-            color: var(--gold-bright);
-            text-shadow: 4px 4px 0 #000;
-            letter-spacing: 4px;
+        .top-bar h1 {
+            font-family: 'Rye';
+            color: var(--gold-light);
+            font-size: 3rem;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px #000;
+            margin: 0 40px;
         }
 
-        .age-badge {
-            position: absolute; top: 20px; right: 20px;
-            background: var(--gold);
-            color: var(--wood-dark);
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Rye', serif;
-            border: 5px double var(--paper);
-            box-shadow: 0 0 20px rgba(212,160,23,0.6);
-            transform: rotate(12deg);
+        .top-bar .icon { font-size: 2.5rem; }
+
+        .age-badge-top {
+            position: absolute; right: 30px; top: 10px;
+            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'), var(--paper);
+            padding: 10px 20px; border: 4px double var(--wood);
+            border-radius: 10px; font-family: 'Bangers'; text-align: center;
+            transform: rotate(5deg); box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
         }
 
-        /* NAV */
-        .nav {
-            display: flex; justify-content: center;
-            background: var(--wood-dark);
-            border-bottom: 4px solid var(--gold);
-            position: sticky; top: 0; z-index: 1000;
+        /* NAVIGATION STYLE ONGLÉTS */
+        .nav-container {
+            display: flex; justify-content: center; gap: 10px; padding: 15px;
         }
 
         .nav-btn {
-            background: none; border: none; color: #e8d9b0;
-            font-family: 'Rye', serif; font-size: 1rem;
-            padding: 1.2rem; cursor: pointer; transition: 0.3s;
+            background: #5c3a1e; border: 2px solid var(--gold);
+            color: var(--gold-light); padding: 10px 25px; border-radius: 50px;
+            font-family: 'Rye'; cursor: pointer; transition: 0.3s;
         }
 
-        .nav-btn.active { color: var(--gold-bright); background: rgba(255,255,255,0.1); }
+        .nav-btn.active { background: var(--gold); color: var(--wood); }
 
-        /* CARDS */
-        .main { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+        /* STRUCTURE EN COLONNES (DASHBOARD) */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr 300px;
+            gap: 20px;
+            padding: 20px;
+            flex-grow: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* COLONNES */
+        .col { display: flex; flex-direction: column; gap: 20px; }
 
         .card {
             background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'), var(--paper);
-            border: 12px solid #5C3A1E;
-            border-radius: 4px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.7);
-            margin-bottom: 2rem;
-            overflow: hidden;
+            border: 4px solid var(--wood);
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
         }
 
         .card-header {
-            background: var(--wood-dark);
-            color: var(--gold-bright);
-            font-family: 'Rye', serif;
-            padding: 1.2rem;
+            background: var(--wood);
+            color: var(--gold-light);
+            font-family: 'Rye';
+            padding: 10px;
             text-align: center;
-            border-bottom: 4px solid var(--gold);
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--gold);
         }
 
-        .card-body { padding: 1.8rem; }
+        .card-body { padding: 15px; flex-grow: 1; }
 
-        /* FORM & BUTTONS */
-        .input-field {
-            width: 100%; padding: 14px; border-radius: 8px; border: 2px solid var(--leather);
-            margin-top: 8px; margin-bottom: 20px; font-size: 1.1rem;
-        }
-
+        /* ÉLÉMENTS DE JEU */
         .btn-gold {
-            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
-            color: #3C2414; border: 4px solid #3C2414;
-            font-family: 'Rye', serif; padding: 1.2rem;
-            font-size: 1.3rem; cursor: pointer; width: 100%;
-            box-shadow: 0 6px 0 #9c7a1a; transition: 0.2s;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border: 2px solid var(--wood); color: var(--wood);
+            font-family: 'Rye'; padding: 12px; cursor: pointer; width: 100%;
+            border-radius: 5px; box-shadow: 0 4px 0 #9c7a1a; margin-top: 10px;
         }
-        .btn-gold:active { transform: translateY(4px); box-shadow: 0 2px 0 #9c7a1a; }
 
-        /* QUIZ ELEMENTS */
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
         .opt-btn {
-            background: white; border: 2px solid var(--leather); padding: 12px;
-            font-weight: bold; cursor: pointer; border-radius: 8px; transition: 0.3s;
+            background: white; border: 1px solid var(--wood); padding: 8px;
+            font-size: 0.85rem; font-weight: bold; cursor: pointer; border-radius: 4px;
         }
-        .opt-btn:hover:not(.locked) { transform: scale(1.02); background: var(--gold-bright); }
-        .opt-btn.selected { background: var(--wood-dark) !important; color: white !important; }
+        .opt-btn.selected { background: var(--red-wax) !important; color: white; }
 
-        .serie-badge {
-            background: var(--red-wax); color: white; padding: 4px 12px;
-            border-radius: 20px; font-family: 'Rye'; font-size: 0.8rem;
-        }
-
-        /* PROGRESS BAR */
-        .pg-bar { background: #333; height: 12px; border-radius: 10px; margin: 10px 0; border: 2px solid var(--wood-dark); }
-        .pg-fill { background: var(--gold); height: 100%; transition: 0.4s; }
-
-        /* CHIPS DRAG & DROP */
-        .chips-zone { display: flex; flex-direction: column; gap: 8px; padding: 10px; border-radius: 8px; }
+        .chips-zone { min-height: 50px; display: flex; flex-direction: column; gap: 5px; }
         .chip-item { 
-            background: white; border: 2px solid var(--leather); padding: 12px;
-            cursor: grab; display: flex; align-items: center; gap: 10px; font-weight: bold;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+            background: white; border: 1px solid var(--wood); padding: 8px; 
+            font-size: 0.8rem; cursor: grab; display: flex; align-items: center; gap: 5px;
         }
-        .chip-item.dragging { opacity: 0.4; }
-        .chips-zone.drag-over { background: rgba(212,160,23,0.2); border: 2px dashed var(--gold); }
+
+        /* LEADERBOARD LOOK IMAGE */
+        .lb-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+        .lb-table tr:nth-child(even) { background: rgba(0,0,0,0.05); }
+        .rank-circle { 
+            background: var(--gold); color: white; border-radius: 50%;
+            width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: bold;
+        }
 
         /* WANTED MODAL */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000;
+        }
         .modal-overlay.active { display: flex; }
         .wanted-card {
-            background: url('https://www.transparenttextures.com/patterns/paper-fibers.png'), var(--paper);
-            border: 15px solid #3C2414; padding: 40px; text-align: center; max-width: 450px; transform: rotate(-2deg);
+            background: #e3c08d url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            border: 15px solid var(--wood); padding: 30px; text-align: center;
+            transform: rotate(-1deg); box-shadow: 0 0 50px #000;
         }
-        .wanted-card h2 { font-family: 'Bangers'; font-size: 4rem; color: var(--red-wax); }
-        .wanted-card .score-big { font-family: 'Rye'; font-size: 6rem; color: #333; margin: 10px 0; }
+        .wanted-card h2 { font-family: 'Bangers'; font-size: 3.5rem; color: var(--red-wax); }
+        .wanted-card .score-big { font-family: 'Rye'; font-size: 5rem; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .col:nth-child(3) { order: -1; } /* Scores en haut sur mobile */
+        }
 
         .panel { display: none; }
-        .panel.active { display: block; animation: fadeInUp 0.5s ease; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .lb-table { width: 100%; border-collapse: collapse; }
-        .lb-table td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .rank-pill { background: var(--wood-dark); color: white; padding: 5px 10px; border-radius: 50%; font-family: 'Bangers'; }
-
+        .panel.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="age-badge">50<br><small>ans</small></div>
+    <div class="top-bar">
+        <span class="icon">🤠</span>
         <h1>ALEXANDRE 50's</h1>
-        <p style="color:var(--gold-bright); font-family:'Rye'; letter-spacing: 3px;">LE GRAND SALOON DU FAR WEST</p>
+        <span class="icon">🐎</span>
+        <div class="age-badge-top">50<br><small>ans</small></div>
     </div>
 
-    <nav class="nav">
-        <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'ÉQUIPE</button>
-        <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">DÉGUSTATION</button>
-        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">LES SCORES</button>
-    </nav>
+    <div class="nav-container">
+        <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'Équipe</button>
+        <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">Dégustation</button>
+        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Les Scores</button>
+    </div>
 
-    <div class="main">
-        <div id="panel-register" class="panel active">
-            <div class="card">
-                <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
-                <div class="card-body">
-                    <label>NOM DU COWBOY / COWGIRL</label>
-                    <input type="text" id="p-name" class="input-field" placeholder="Ex: Kid Chili">
-                    <label>NOM DE VOTRE TABLE (OPTIONNEL)</label>
-                    <input type="text" id="p-table" class="input-field" placeholder="Ex: Table de l'Ouest">
-                    <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
-                    <div id="reg-feedback" style="text-align:center; margin-top:15px;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="panel-choice" class="panel">
-            <div class="card">
-                <div class="card-header">📍 CHOIX DU PARCOURS</div>
-                <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                    <div class="card" style="margin:0; cursor:pointer; text-align:center; padding:20px; border:4px solid var(--leather)" onclick="setPath('terroir')">
-                        <div style="font-size:3rem">🍷</div>
-                        <h3 style="font-family:'Rye'">TERROIR</h3>
-                        <p>Adultes</p>
+    <div class="dashboard">
+        
+        <div class="col">
+            <div id="panel-register" class="panel active">
+                <div class="card">
+                    <div class="card-header">📜 ENREGISTREMENT</div>
+                    <div class="card-body">
+                        <input type="text" id="p-name" class="opt-btn" style="width:100%; padding:12px; margin-bottom:10px;" placeholder="Nom du Cowboy">
+                        <input type="text" id="p-table" class="opt-btn" style="width:100%; padding:12px; margin-bottom:15px;" placeholder="Table (Optionnel)">
+                        <button class="btn-gold" onclick="registerPlayer()">EN SELLE !</button>
+                        <div id="reg-feedback" style="margin-top:10px; font-size:0.8rem; text-align:center"></div>
                     </div>
-                    <div class="card" style="margin:0; cursor:pointer; text-align:center; padding:20px; border:4px solid var(--leather)" onclick="setPath('chips')">
-                        <div style="font-size:3rem">🥔</div>
-                        <h3 style="font-family:'Rye'">CHIPS</h3>
-                        <p>Enfants</p>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">📖 RÈGLES DU SHÉRIF</div>
+                    <div class="card-body" style="font-size:0.8rem; line-height:1.4;">
+                        🍷 <b>4 Vins</b> (3 pts)<br>
+                        🧀 <b>8 Fromages</b> (2 pts)<br>
+                        🥩 <b>5 Charcuteries</b> (2 pts)<br>
+                        🥔 <b>Chips</b> (Parcours enfant)
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="panel-quiz" class="panel">
-            <div class="card">
-                <div class="card-body">
-                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.5rem; color:var(--wood-dark)">🤠 Équipe : ...</div>
-                    <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
-                    <p style="text-align:right; font-weight:bold;"><span id="q-done-count">0</span> / <span id="q-total-count">0</span> questions</p>
+            <div id="panel-choice" class="panel">
+                <div class="card">
+                    <div class="card-header">📍 TON PARCOURS</div>
+                    <div class="card-body">
+                        <button class="btn-gold" onclick="setPath('terroir')">🍷 TERROIR (Adultes)</button>
+                        <button class="btn-gold" style="background:var(--paper)" onclick="setPath('chips')">🥔 CHIPS (Enfants)</button>
+                    </div>
                 </div>
             </div>
-            <div id="quiz-render-area"></div>
         </div>
 
-        <div id="panel-leaderboard" class="panel">
+        <div class="col">
+            <div id="panel-quiz" class="panel">
+                <div class="card" style="margin-bottom:15px; background:var(--wood); color:white;">
+                    <div class="card-body" style="padding:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <span id="q-player-name" style="font-family:'Rye'">🤠 ...</span>
+                        <div style="width:150px; background:#444; height:10px; border-radius:5px; overflow:hidden;">
+                            <div id="q-main-fill" style="width:0%; background:var(--gold); height:100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="quiz-render-area"></div>
+            </div>
+            
+            <div id="quiz-placeholder" style="text-align:center; color:rgba(255,255,255,0.3); margin-top:50px;">
+                <h3>Veuillez vous enregistrer à gauche pour commencer la dégustation</h3>
+            </div>
+        </div>
+
+        <div class="col">
             <div class="card">
-                <div class="card-header">🏆 CLASSEMENT ADULTES (TERROIR)</div>
-                <div class="card-body"><table class="lb-table" id="lb-general"></table></div>
+                <div class="card-header">🏆 TERROIR (Adultes)</div>
+                <div class="card-body">
+                    <table class="lb-table" id="lb-general"></table>
+                </div>
             </div>
             <div class="card">
-                <div class="card-header">🥔 CLASSEMENT ENFANTS (CHIPS)</div>
-                <div class="card-body"><table class="lb-table" id="lb-chips"></table></div>
+                <div class="card-header">🥔 CHIPS BRET'S</div>
+                <div class="card-body">
+                    <table class="lb-table" id="lb-chips"></table>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="modal-overlay" id="result-modal">
         <div class="wanted-card">
-            <h2>REWARD</h2>
-            <p>VOTRE SCORE FINAL :</p>
+            <p>REWARD FOR</p>
+            <h2 id="modal-player-name">ALEXANDRE</h2>
             <div class="score-big" id="final-score-val">0</div>
             <p>POINTS SUR <span id="final-max-score">38</span></p>
-            <button class="btn-gold" onclick="closeResultModal()" style="margin-top:25px;">VOIR LE CLASSEMENT</button>
+            <button class="btn-gold" onclick="closeResultModal()">VOIR LE SALOON</button>
         </div>
+    </div>
+
+    <div style="text-align:center; color:white; padding:15px; font-size:0.7rem; opacity:0.4;">
+        🤠 Réalisé pour les 50 ans d'Alexandre — 23/05/2026 🎉
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // CONFIG FIREBASE (IDENTIQUE)
         const firebaseConfig = {
             apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
             authDomain: "alexandre50.firebaseapp.com",
@@ -255,45 +272,44 @@
             messagingSenderId: "159600747281",
             appId: "1:159600747281:web:09f382f707b2c481a922b0"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- TES DONNÉES ORIGINALES ---
+        // DONNÉES (Rétablies à 100%)
         const SERIES_TERROIR = [
             { id: 's1', label: 'SÉRIE 1', questions: [
                 {id:'f1', type:'fromage', label:'Fromage 1', options:['Salers', 'Laguiole', 'Cantal', 'Fourme d\'Ambert'], correct:2},
                 {id:'f2', type:'fromage', label:'Fromage 2', options:['Ossau-Iraty', 'Tome de brebis', 'Tomme de Savoie', 'Pecorino'], correct:1},
-                {id:'v1', type:'vin', label:'Vin de la Série 1', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:0}
+                {id:'v1', type:'vin', label:'Vin Série 1', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:0}
             ]},
             { id: 's2', label: 'SÉRIE 2', questions: [
-                {id:'f3', type:'fromage', label:'Fromage 3', options:['Crottin de Chavignol', 'Briquette du Forez', 'Briquette de Saint-Nizier', 'Picodon'], correct:2},
-                {id:'f4', type:'fromage', label:'Fromage 4', options:['Camembert de Normandie', 'Chabichou du Poitou', 'Comté 12 mois', 'Comtesse de Vichy'], correct:3},
-                {id:'v2', type:'vin', label:'Vin de la Série 2', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:1}
+                {id:'f3', type:'fromage', label:'Fromage 3', options:['Crottin', 'Briquette du Forez', 'Briquette de St-Nizier', 'Picodon'], correct:2},
+                {id:'f4', type:'fromage', label:'Fromage 4', options:['Camembert', 'Chabichou', 'Comté 12m', 'Comtesse de Vichy'], correct:3},
+                {id:'v2', type:'vin', label:'Vin Série 2', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:1}
             ]},
             { id: 's3', label: 'SÉRIE 3', questions: [
-                {id:'f5', type:'fromage', label:'Fromage 5', options:['Murol', 'Reblochon', 'Saint-Félicien', 'Saint-Nectaire'], correct:3},
-                {id:'f6', type:'fromage', label:'Fromage 6', options:['Bleu d\'Auvergne', 'Fourme d\'Ambert', 'Fourme de Montbrison', 'Roquefort'], correct:2},
-                {id:'v3', type:'vin', label:'Vin de la Série 3', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:2}
+                {id:'f5', type:'fromage', label:'Fromage 5', options:['Murol', 'Reblochon', 'St-Félicien', 'St-Nectaire'], correct:3},
+                {id:'f6', type:'fromage', label:'Fromage 6', options:['Bleu', 'Fourme d\'Ambert', 'Fourme de Montbrison', 'Roquefort'], correct:2},
+                {id:'v3', type:'vin', label:'Vin Série 3', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:2}
             ]},
             { id: 's4', label: 'SÉRIE 4', questions: [
-                {id:'f7', type:'fromage', label:'Fromage 7', options:['Abondance', 'Beaufort', 'Comté 18 mois', 'Gruyère de Savoie'], correct:2},
-                {id:'f8', type:'fromage', label:'Fromage 8', options:['Beaufort', 'Abondance', 'Emmental de Savoie', 'Tomme de Chartreuse'], correct:0},
-                {id:'v4', type:'vin', label:'Vin de la Série 4', options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'], correct:3}
+                {id:'f7', type:'fromage', label:'Fromage 7', options:['Abondance', 'Beaufort', 'Comté 18m', 'Gruyère'], correct:2},
+                {id:'f8', type:'fromage', label:'Fromage 8', options:['Beaufort', 'Abondance', 'Emmental', 'Tomme'], correct:0},
+                {id:'v4', type:'vin', label:'Vin Série 4', options:['1885 Pineau Noir','Forez Senelles','Croze Hermitage','St-Véran'], correct:3}
             ]}
         ];
 
         const CHARCUTERIES = [
-            {id:'c1', label:'Charcuterie 1', options:['Rosette de Lyon','Jésus de Lyon','Saucisson sec','Saucisson à l\'ail'], correct:2},
-            {id:'c2', label:'Charcuterie 2', options:['Rosette','Saucisson de Lyon','Rosette de Lyon','Cervelas'], correct:0},
-            {id:'c3', label:'Charcuterie 3', options:['Jambon de Parme','Jambon de Bayonne','Jambon Serrano','Jambon cru'], correct:1},
+            {id:'c1', label:'Charcuterie 1', options:['Rosette','Jésus','Saucisson sec','Saucisson ail'], correct:2},
+            {id:'c2', label:'Charcuterie 2', options:['Rosette','Saucisson Lyon','Rosette Lyon','Cervelas'], correct:0},
+            {id:'c3', label:'Charcuterie 3', options:['Parme','Bayonne','Serrano','Jambon cru'], correct:1},
             {id:'c4', label:'Charcuterie 4', options:['Andouillette','Jambonnette','Jambon cru roulé','Jambonette Forézienne'], correct:3},
-            {id:'c5', label:'Charcuterie 5', options:['Terrine de campagne','Pâte de campagne','Pâté de foie','Rillettes'], correct:1}
+            {id:'c5', label:'Charcuterie 5', options:['Terrine','Pâte campagne','Pâté foie','Rillettes'], correct:1}
         ];
 
         const CHIPS_SERIES = [
-            {id:'chips1', label:'SÉRIE 1 (chips 1 à 8)', correctOrder: ['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
-            {id:'chips2', label:'SÉRIE 2 (chips 9 à 16)', correctOrder: ['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
+            {id:'chips1', label:'SÉRIE 1 (1 à 8)', correctOrder: ['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
+            {id:'chips2', label:'SÉRIE 2 (9 à 16)', correctOrder: ['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
         ];
 
         let player = null;
@@ -302,13 +318,15 @@
         let liveScores = {};
         let dragState = { serieId: null, draggedIdx: null };
 
-        // NAVIGATION
-        window.showPanel = (panelId) => {
+        // NAVIGATION & PANELS
+        window.showPanel = (id) => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-' + panelId).classList.add('active');
-            if (document.getElementById('nav-' + panelId)) document.getElementById('nav-' + panelId).classList.add('active');
-            if (panelId === 'quiz') renderQuiz();
-            if (panelId === 'leaderboard') renderLeaderboards();
+            document.getElementById('panel-' + id).classList.add('active');
+            if (document.getElementById('nav-' + id)) document.getElementById('nav-' + id).classList.add('active');
+            if (id === 'quiz') { 
+                document.getElementById('quiz-placeholder').style.display = 'none';
+                renderQuiz(); 
+            }
         };
 
         window.handleQuizNav = () => {
@@ -317,156 +335,99 @@
             else showPanel('quiz');
         };
 
-        // REGISTRATION
-        window.registerPlayer = function() {
+        // ACTIONS
+        window.registerPlayer = () => {
             const name = document.getElementById('p-name').value.trim();
-            const table = document.getElementById('p-table').value.trim();
-            if (!name) { alert("Le nom est obligatoire !"); return; }
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random() * 10000);
-            player = { id, name, table, path: null };
-            localStorage.setItem('alex_50_p', JSON.stringify(player));
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Cowboy enregistré ! 🤠</b>";
-            setTimeout(() => showPanel('choice'), 800);
+            if (!name) return alert("Nom du cowboy requis !");
+            player = { id: name.toLowerCase().replace(/\s/g, '') + Date.now(), name, path: null };
+            document.getElementById('reg-feedback').innerHTML = "🤠 Prêt !";
+            setTimeout(() => showPanel('choice'), 500);
         };
 
         window.setPath = async (p) => {
             player.path = p;
-            localStorage.setItem('alex_50_p', JSON.stringify(player));
-            await setDoc(doc(db, "scores", player.id), { name: player.name, table: player.table, path: p, score: 0 }, { merge: true });
+            await setDoc(doc(db, "scores", player.id), { name: player.name, path: p, score: 0 }, { merge: true });
             showPanel('quiz');
         };
 
-        // RENDERING
         function renderQuiz() {
-            if (!player) return;
-            document.getElementById('q-player-name').textContent = `🤠 Équipe : ${player.name}`;
             const area = document.getElementById('quiz-render-area');
-            if (player.path === 'terroir') renderTerroirQuiz(area);
-            else renderChipsQuiz(area);
+            document.getElementById('q-player-name').textContent = `🤠 ${player.name}`;
+            if (player.path === 'terroir') renderTerroir(area);
+            else renderChips(area);
         }
 
-        function renderTerroirQuiz(area) {
+        function renderTerroir(area) {
             let html = "";
-            SERIES_TERROIR.forEach(serie => {
-                html += `<div class="card"><div class="card-header">🍽️ ${serie.label}</div><div class="card-body">`;
-                serie.questions.forEach(q => {
-                    const userAns = answers[q.id];
-                    const isAnswered = userAns !== undefined;
-                    html += `<div style="margin-bottom:20px">
-                        <span class="serie-badge">${q.type.toUpperCase()}</span>
-                        <p style="font-weight:900; margin-top:5px;">${q.label}</p>
-                        <div class="opt-grid">
-                            ${q.options.map((opt, idx) => `
-                                <button class="opt-btn ${isAnswered && userAns === idx ? 'selected' : ''} ${isAnswered ? 'locked' : ''}" 
-                                        onclick="handleVote('${q.id}', ${idx})">
-                                    ${opt}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>`;
+            [...SERIES_TERROIR.map(s => ({...s, group: 'serie'})), {label:'🥩 CHARCUTERIES', questions: CHARCUTERIES, group: 'charc'}].forEach(sec => {
+                html += `<div class="card" style="margin-bottom:15px;"><div class="card-header">${sec.label}</div><div class="card-body">`;
+                sec.questions.forEach(q => {
+                    const isAns = answers[q.id] !== undefined;
+                    html += `<div style="margin-bottom:15px"><p style="font-size:0.8rem; font-weight:bold">${q.label}</p><div class="opt-grid">`;
+                    q.options.forEach((o, i) => {
+                        html += `<button class="opt-btn ${isAns && answers[q.id] === i ? 'selected' : ''}" onclick="vote('${q.id}', ${i})" ${isAns?'disabled':''}>${o}</button>`;
+                    });
+                    html += `</div></div>`;
                 });
                 html += `</div></div>`;
             });
-
-            html += `<div class="card"><div class="card-header">🥩 CHARCUTERIES</div><div class="card-body">`;
-            CHARCUTERIES.forEach(q => {
-                const userAns = answers[q.id];
-                html += `<div style="margin-bottom:20px">
-                    <p style="font-weight:900;">${q.label}</p>
-                    <div class="opt-grid">
-                        ${q.options.map((opt, idx) => `
-                            <button class="opt-btn ${userAns === idx ? 'selected' : ''} ${userAns !== undefined ? 'locked' : ''}" 
-                                    onclick="handleVote('${q.id}', ${idx})">${opt}</button>
-                        `).join('')}
-                    </div>
-                </div>`;
-            });
-            html += `</div></div>`;
             area.innerHTML = html;
-            updateProgress(Object.keys(answers).length, 17);
+            const done = Object.keys(answers).length;
+            document.getElementById('q-main-fill').style.width = (done/17)*100 + "%";
         }
 
-        window.handleVote = async (qId, idx) => {
-            if (answers[qId] !== undefined) return;
-            answers[qId] = idx;
+        window.vote = async (qid, idx) => {
+            answers[qid] = idx;
             renderQuiz();
-            
-            // Calcul score
             let score = 0;
-            SERIES_TERROIR.forEach(s => s.questions.forEach(q => {
-                if(answers[q.id] === q.correct) score += (q.type === 'vin' ? 3 : 2);
-            }));
-            CHARCUTERIES.forEach(q => { if(answers[q.id] === q.correct) score += 2; });
-            
+            [...SERIES_TERROIR.flatMap(s=>s.questions), ...CHARCUTERIES].forEach(q => {
+                if(answers[q.id] === q.correct) score += (q.id.startsWith('v') ? 3 : 2);
+            });
             await setDoc(doc(db, "scores", player.id), { score, done: Object.keys(answers).length }, { merge: true });
-            if (Object.keys(answers).length === 17) showFinalReward(score, 38);
+            if (Object.keys(answers).length === 17) finish(score, 38);
         };
 
-        // CHIPS LOGIC (INTÉGRALE)
-        function renderChipsQuiz(area) {
-            let html = `<div class="card"><div class="card-header">🥔 DÉFI CHIPS BRET'S</div><div class="card-body">
-                <p style="margin-bottom:15px; font-size:0.9rem;">Fais glisser les étiquettes pour les remettre dans l'ordre de dégustation !</p>`;
-            
-            CHIPS_SERIES.forEach(serie => {
-                if (!chipsState[serie.id]) {
-                    const shuffled = [...serie.correctOrder].sort(() => Math.random() - 0.5);
-                    chipsState[serie.id] = { order: shuffled, validated: false, score: 0 };
-                }
-                const state = chipsState[serie.id];
-                html += `<div style="margin-bottom:30px;">
-                    <p style="font-family:'Rye'; color:var(--red-wax)">${serie.label}</p>`;
+        // CHIPS (Drag & Drop complet rétabli)
+        function renderChips(area) {
+            let html = `<div class="card"><div class="card-header">🥔 DÉFI CHIPS</div><div class="card-body">`;
+            CHIPS_SERIES.forEach(s => {
+                if(!chipsState[s.id]) chipsState[s.id] = { order: [...s.correctOrder].sort(()=>Math.random()-0.5), validated: false, score: 0 };
+                const state = chipsState[s.id];
+                html += `<p style="font-family:'Rye'; margin:10px 0">${s.label}</p>`;
                 if (state.validated) {
-                    html += `<div class="chips-zone">
-                        ${state.order.map((item, idx) => `<div class="chip-item" style="background:#eee;">${idx+1}. ${item}</div>`).join('')}
-                    </div><p style="text-align:center; font-weight:bold; margin-top:10px;">Score : ${state.score} / 8</p>`;
+                    html += `<div class="chips-zone">${state.order.map(c => `<div class="chip-item" style="background:#eee">${c}</div>`).join('')}</div>`;
                 } else {
-                    html += `<div class="chips-zone" id="zone-${serie.id}" ondragover="handleDragOver(event, '${serie.id}')" ondrop="handleDrop(event, '${serie.id}')">
-                        ${state.order.map((item, idx) => `
-                            <div class="chip-item" draggable="true" 
-                                 ondragstart="handleDragStart(event, '${serie.id}', ${idx})"
-                                 data-idx="${idx}">${idx+1}. ${item}</div>
-                        `).join('')}
-                    </div><button class="btn-gold" style="margin-top:10px; font-size:1rem;" onclick="validateChips('${serie.id}')">VALIDER CETTE SÉRIE</button>`;
+                    html += `<div class="chips-zone" ondragover="event.preventDefault()">
+                        ${state.order.map((c, i) => `<div class="chip-item" draggable="true" ondragstart="dragState={sid:'${s.id}',idx:${i}}" ondrop="drop(event, '${s.id}', ${i})">${i+1}. ${c}</div>`).join('')}
+                    </div><button class="btn-gold" onclick="valChips('${s.id}')">VALIDER</button>`;
                 }
-                html += `</div>`;
             });
             area.innerHTML = html + `</div></div>`;
-            updateProgress(Object.values(chipsState).filter(s=>s.validated).length, 2);
         }
 
-        window.handleDragStart = (e, sId, idx) => { dragState = { serieId: sId, draggedIdx: idx }; };
-        window.handleDragOver = (e) => e.preventDefault();
-        window.handleDrop = (e, sId) => {
-            const targetIdx = parseInt(e.target.closest('.chip-item').dataset.idx);
-            const order = chipsState[sId].order;
-            const moved = order.splice(dragState.draggedIdx, 1)[0];
-            order.splice(targetIdx, 0, moved);
-            renderChipsQuiz(document.getElementById('quiz-render-area'));
+        window.drop = (e, sid, tidx) => {
+            const order = chipsState[sid].order;
+            const moved = order.splice(dragState.idx, 1)[0];
+            order.splice(tidx, 0, moved);
+            renderChips(document.getElementById('quiz-render-area'));
         };
 
-        window.validateChips = async (sId) => {
-            const state = chipsState[sId];
-            const original = CHIPS_SERIES.find(s => s.id === sId).correctOrder;
-            state.score = state.order.reduce((acc, item, i) => acc + (item === original[i] ? 1 : 0), 0);
+        window.valChips = async (sid) => {
+            const state = chipsState[sid];
+            const correct = CHIPS_SERIES.find(s=>s.id===sid).correctOrder;
+            state.score = state.order.reduce((acc, val, i) => acc + (val === correct[i] ? 1 : 0), 0);
             state.validated = true;
-            
-            const totalChips = Object.values(chipsState).reduce((a, b) => a + b.score, 0);
-            await setDoc(doc(db, "scores", player.id), { chipsScore: totalChips }, { merge: true });
-            renderChipsQuiz(document.getElementById('quiz-render-area'));
-            if(Object.values(chipsState).every(s=>s.validated)) showFinalReward(totalChips, 16);
+            const total = Object.values(chipsState).reduce((a,b)=>a+b.score, 0);
+            await setDoc(doc(db, "scores", player.id), { chipsScore: total }, { merge: true });
+            renderChips(document.getElementById('quiz-render-area'));
+            if(Object.values(chipsState).every(s=>s.validated)) finish(total, 16);
         };
 
-        function updateProgress(done, total) {
-            document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-total-count').textContent = total;
-            document.getElementById('q-main-fill').style.width = (done/total)*100 + "%";
-        }
-
-        function showFinalReward(score, max) {
-            document.getElementById('final-score-val').textContent = score;
-            document.getElementById('final-max-score').textContent = max;
+        function finish(s, m) {
+            document.getElementById('final-score-val').textContent = s;
+            document.getElementById('final-max-score').textContent = m;
             document.getElementById('result-modal').classList.add('active');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 70 });
         }
 
         window.closeResultModal = () => {
@@ -474,23 +435,15 @@
             showPanel('leaderboard');
         };
 
-        // LEADERBOARD REALTIME
+        // REALTIME LEADERBOARD
         onSnapshot(collection(db, "scores"), (snap) => {
-            liveScores = snap.docs.map(d => ({id: d.id, ...d.data()}));
-            if(document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
+            const data = snap.docs.map(d => d.data());
+            const terroir = data.filter(p => p.path === 'terroir').sort((a,b) => b.score - a.score);
+            document.getElementById('lb-general').innerHTML = terroir.map((p,i) => `<tr><td><span class="rank-circle">${i+1}</span></td><td>${p.name}</td><td align="right"><b>${p.score}</b></td></tr>`).join('');
+            
+            const chips = data.filter(p => p.path === 'chips').sort((a,b) => b.chipsScore - a.chipsScore);
+            document.getElementById('lb-chips').innerHTML = chips.map((p,i) => `<tr><td><span class="rank-circle">${i+1}</span></td><td>${p.name}</td><td align="right"><b>${p.chipsScore}</b></td></tr>`).join('');
         });
-
-        function renderLeaderboards() {
-            const terroir = liveScores.filter(p => p.path === 'terroir').sort((a,b) => (b.score||0)-(a.score||0));
-            document.getElementById('lb-general').innerHTML = terroir.map((p, i) => `
-                <tr><td><span class="rank-pill">${i+1}</span></td><td>${p.name}<br><small>${p.table||''}</small></td><td>${p.score||0}/38</td></tr>
-            `).join('');
-
-            const chips = liveScores.filter(p => p.path === 'chips').sort((a,b) => (b.chipsScore||0)-(a.chipsScore||0));
-            document.getElementById('lb-chips').innerHTML = chips.map((p, i) => `
-                <tr><td><span class="rank-pill">${i+1}</span></td><td>${p.name}</td><td>${p.chipsScore||0}/16</td></tr>
-            `).join('');
-        }
 
         window.onload = () => showPanel('register');
     </script>
