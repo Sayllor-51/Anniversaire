@@ -766,28 +766,28 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
-        const SERIES_TERROIR = [
+const SERIES_TERROIR = [
             {
                 id:'s1', label:'Série 1',
                 questions:[
-                    {id:'f1',type:'fromage',label:'Fromage 1', options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
-                    {id:'f2',type:'fromage',label:'Fromage 2', options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
+                    {id:'f1',type:'fromage',label:'Fromage 1', options:['Salers','Laguiole','Cantal','Tomme d\'Auvergne'],correct:2},
+                    {id:'f2',type:'fromage',label:'Fromage 2', options:['Ossau-Iraty','Tome de brebis','Etorki','Petit Basque'],correct:1},
                     {id:'v1',type:'vin',label:'Vin de la Série 1', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Saint-Joseph Les Granits — Syrah'],correct:0}
                 ]
             },
             {
                 id:'s2', label:'Série 2',
                 questions:[
-                    {id:'f3',type:'fromage',label:'Fromage 3', options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
-                    {id:'f4',type:'fromage',label:'Fromage 4', options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
+                    {id:'f3',type:'fromage',label:'Fromage 3', options:['Briquette du Forez','Pavé d\'Affinois','Briquette de Saint-Nizier','Brillat-Savarin'],correct:2},
+                    {id:'f4',type:'fromage',label:'Fromage 4', options:['Mont d\'Or','Vacherin des Bauges','Saint-Félicien','Comtesse de Vichy'],correct:3},
                     {id:'v2',type:'vin',label:'Vin de la Série 2', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Côtes d\'Auvergne Chanturgue — Pinot Noir'],correct:1}
                 ]
             },
             {
                 id:'s3', label:'Série 3',
                 questions:[
-                    {id:'f5',type:'fromage',label:'Fromage 5', options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
-                    {id:'f6',type:'fromage',label:'Fromage 6', options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
+                    {id:'f5',type:'fromage',label:'Fromage 5', options:['Murol','Savaron','Tomme de Savoie','Saint-Nectaire'],correct:3},
+                    {id:'f6',type:'fromage',label:'Fromage 6', options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Bleu de Gex'],correct:2},
                     {id:'v3',type:'vin',label:'Vin de la Série 3', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Cornas Les Grandes Terrasses — Syrah'],correct:2}
                 ]
             },
@@ -795,7 +795,7 @@
                 id:'s4', label:'Série 4',
                 questions:[
                     {id:'f7',type:'fromage',label:'Fromage 7', options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
-                    {id:'f8',type:'fromage',label:'Fromage 8', options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
+                    {id:'f8',type:'fromage',label:'Fromage 8', options:['Beaufort','Abondance','Emmental de Savoie','Comté 12 mois'],correct:0},
                     {id:'v4',type:'vin',label:'Vin de la Série 4', options:['Saint-Véran — Chardonnay','Grand Ribe Côtes-du-Rhône Blanc — Grenache Blanc, Clairette, Roussanne, Marsanne, Viognier','Roussette de Savoie Marestel — Altesse','Crozes-Hermitage Blanc — Marsanne, Roussanne','Condrieu — Viognier'],correct:0}
                 ]
             }
