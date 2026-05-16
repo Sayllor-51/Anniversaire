@@ -112,7 +112,7 @@
         }
         .header-ornament { display: none; }
 
-        /* ── TOP NAV (SOUS L'EN-TÊTE) ── */
+        /* ── TOP NAV ── */
         .nav {
             background: #0f0904;
             border-bottom: 1px solid var(--ochre);
@@ -290,6 +290,26 @@
         }
         .path-card p { font-size: 0.75rem; color: #666; line-height: 1.4; }
 
+        /* AJOUT: STYLE DES PARCOURS TERMINÉS (GRISÉS) */
+        .path-card.grised {
+            opacity: 0.5;
+            background-color: var(--sand) !important;
+            border-color: var(--sand2) !important;
+            pointer-events: none;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        .badge-valide {
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
         /* ── PROGRESS ── */
         .progress-wrap { margin-bottom: 0.25rem; }
         .progress-meta {
@@ -340,7 +360,6 @@
             line-height: 1.3;
         }
 
-        /* Options : 1 colonne sur mobile pour confort tactile */
         .opt-grid { display: flex; flex-direction: column; gap: 7px; }
 
         .opt-btn {
@@ -646,22 +665,22 @@
                 </div>
                 <div class="card-body">
                     <div class="path-grid">
-                        <div class="path-card" onclick="setPath('terroir')">
+                        <div class="path-card" id="path-card-terroir" onclick="setPath('terroir')">
                             <div class="path-card-emoji">🍷🧀</div>
                             <h3>Terroir</h3>
                             <p>Vins &amp; Fromages<br>28 pts max</p>
                         </div>
-                        <div class="path-card" onclick="setPath('charcuterie')">
+                        <div class="path-card" id="path-card-charcuterie" onclick="setPath('charcuterie')">
                             <div class="path-card-emoji">🥩</div>
                             <h3>Charcuterie</h3>
                             <p>5 charcuteries<br>10 pts max</p>
                         </div>
-                        <div class="path-card" onclick="setPath('chips1')">
+                        <div class="path-card" id="path-card-chips1" onclick="setPath('chips1')">
                             <div class="path-card-emoji">🥔</div>
                             <h3>Chips Série 1</h3>
                             <p>Chips 1 à 8<br>8 pts max</p>
                         </div>
-                        <div class="path-card" onclick="setPath('chips2')">
+                        <div class="path-card" id="path-card-chips2" onclick="setPath('chips2')">
                             <div class="path-card-emoji">🥔</div>
                             <h3>Chips Série 2</h3>
                             <p>Chips 9 à 16<br>8 pts max</p>
@@ -746,6 +765,7 @@
             <p class="wanted-sub">points sur <span id="final-max-score">28</span></p>
             <p id="modal-message" style="font-family:'Rye',serif;font-size:0.88rem;color:var(--rust);margin-top:1rem;letter-spacing:0.06em;line-height:1.5;"></p>
             <button class="btn-primary" onclick="closeResultModal()" style="margin-top:1.5rem;">Voir le classement</button>
+            <button class="btn-primary" style="background:transparent; border:2px solid var(--ochre); color:var(--ochre); margin-top:0.75rem;" onclick="goToHub()">Faire un autre parcours</button>
         </div>
     </div>
 
@@ -818,29 +838,69 @@ const SERIES_TERROIR = [
         let dragState = { serieId: null, draggedIdx: null };
         let touchDrag = { active: false, serieId: null, fromIdx: null, ghost: null };
 
+        // AJOUT: FONCTION POUR GRISER LES CARTES DU HUB
+        window.renderChoiceHub = () => {
+            if (!player) return;
+            if (!player.completedPaths) player.completedPaths = [];
+            
+            ['terroir', 'charcuterie', 'chips1', 'chips2'].forEach(p => {
+                const card = document.getElementById('path-card-' + p);
+                if (card) {
+                    if (player.completedPaths.includes(p)) {
+                        card.classList.add('grised');
+                        if (!card.querySelector('.badge-valide')) {
+                            card.innerHTML += `<div class="badge-valide">Validé ✓</div>`;
+                        }
+                    } else {
+                        card.classList.remove('grised');
+                    }
+                }
+            });
+        };
+
         window.showPanel = id => {
             document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('panel-' + id).classList.add('active');
             const nb = document.getElementById('nav-' + id);
             if (nb) nb.classList.add('active');
+            
+            if (id === 'choice') renderChoiceHub(); // AJOUT
             if (id === 'quiz') renderQuiz();
             if (id === 'leaderboard') renderLeaderboards();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.handleQuizNav = () => {
+            // AJOUT: REDIRIGE SYSTÉMATIQUEMENT SUR LE HUB POUR FAIRE SON CHOIX
             if (!player) showPanel('register');
-            else if (!player.path) showPanel('choice');
-            else showPanel('quiz');
+            else showPanel('choice');
         };
+
+        // AJOUT: NAVIGATION DU BOUTON MODALE VERS LE HUB
+        window.goToHub = () => {
+            document.getElementById('result-modal').classList.remove('active');
+            showPanel('choice');
+        };
+
+        // AJOUT: ENREGISTREMENT DE LA PROGRESSION GLOBALE
+        function markPathCompleted(pathId) {
+            if (!player.completedPaths) player.completedPaths = [];
+            if (!player.completedPaths.includes(pathId)) {
+                player.completedPaths.push(pathId);
+                localStorage.setItem('alex50_p', JSON.stringify(player));
+            }
+        }
 
         window.registerPlayer = () => {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
             if (!name) { alert('Le nom est obligatoire !'); return; }
             const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.floor(Math.random()*10000);
-            player = { id, name, table, path: null };
+            
+            // AJOUT DE L'ARRAY completedPaths À LA CRÉATION
+            player = { id, name, table, path: null, completedPaths: [] };
+            
             localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {}; chipsState = {};
             document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
@@ -1025,12 +1085,14 @@ const SERIES_TERROIR = [
         function fireTerroirReward() {
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
+            markPathCompleted('terroir'); // AJOUT: VERROUILLE L'ACTIVITÉ
             setTimeout(() => showRewardModal(score, 28), 600);
         }
 
         function fireCharcuterieReward() {
             let score = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
+            markPathCompleted('charcuterie'); // AJOUT: VERROUILLE L'ACTIVITÉ
             setTimeout(() => showRewardModal(score, 10), 600);
         }
 
@@ -1174,6 +1236,7 @@ const SERIES_TERROIR = [
                 lastUpdate: Date.now()
             }, {merge:true});
 
+            markPathCompleted(serieId); // AJOUT: VERROUILLE L'ACTIVITÉ
             renderChipsQuiz();
             setTimeout(() => showRewardModal(score, 8), 600);
         };
@@ -1226,7 +1289,19 @@ const SERIES_TERROIR = [
             if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
         });
 
-        window.onload = () => showPanel('register');
+        // AJOUT: CHARGEMENT DU JOUEUR S'IL ACTUALISE LA PAGE (POUR NE PAS PERDRE L'ÉTAT DU HUB)
+        window.onload = () => {
+            const savedData = localStorage.getItem('alex50_p');
+            if (savedData) {
+                player = JSON.parse(savedData);
+                if (!player.completedPaths) player.completedPaths = [];
+                const ansData = localStorage.getItem('alex50_ans_' + player.id);
+                if (ansData) answers = JSON.parse(ansData);
+                showPanel('choice');
+            } else {
+                showPanel('register');
+            }
+        };
     </script>
 </body>
 </html>
