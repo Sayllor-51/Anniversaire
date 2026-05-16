@@ -367,6 +367,18 @@
             cursor: default;
         }
         .opt-btn.locked { cursor: default; }
+        .opt-btn { display: flex; flex-direction: column; gap: 2px; }
+        .opt-name { font-size: 0.9rem; font-weight: 500; line-height: 1.3; }
+        .opt-cepage {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 0.72rem;
+            color: var(--ochre);
+            opacity: 0.85;
+            font-weight: 400;
+            line-height: 1.2;
+        }
+        .opt-btn.selected .opt-cepage { color: var(--ochre-l); opacity: 1; }
 
         .confirmed {
             display: inline-flex; align-items: center; gap: 5px;
@@ -543,7 +555,6 @@
 </head>
 <body>
 
-    <!-- HEADER -->
     <header class="header">
         <div class="header-inner">
             <div class="badge"><span>50</span><small>ans</small></div>
@@ -555,10 +566,8 @@
         </div>
     </header>
 
-    <!-- CONTENU -->
     <div class="main">
 
-        <!-- INSCRIPTION -->
         <div id="panel-register" class="panel active">
             <div class="card">
                 <div class="card-header">
@@ -587,36 +596,34 @@
                 <div class="card-body">
                     <div class="rule-item">
                         <span class="rule-icon">🍷</span>
-                        <span>4 vins — 3 pts chacun</span>
-                        <span class="rule-pts">12 pts</span>
-                    </div>
-                    <div class="rule-item">
-                        <span class="rule-icon">🧀</span>
-                        <span>8 fromages — 2 pts chacun</span>
-                        <span class="rule-pts">16 pts</span>
+                        <span>Parcours Terroir (4 vins + 8 fromages)</span>
+                        <span class="rule-pts">28 pts</span>
                     </div>
                     <div class="rule-item">
                         <span class="rule-icon">🥩</span>
-                        <span>5 charcuteries — 2 pts chacun</span>
+                        <span>Parcours Charcuterie (5 charcuteries)</span>
                         <span class="rule-pts">10 pts</span>
                     </div>
                     <div class="rule-item">
                         <span class="rule-icon">🥔</span>
-                        <span>Chips Bret's — 2 séries de 8 à remettre en ordre <em style="font-size:0.78rem;color:#888;">(parcours enfants)</em></span>
-                        <span class="rule-pts">16 pts</span>
+                        <span>Parcours Chips Série 1 (Remettre dans l'ordre)</span>
+                        <span class="rule-pts">8 pts</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🥔</span>
+                        <span>Parcours Chips Série 2 (Remettre dans l'ordre)</span>
+                        <span class="rule-pts">8 pts</span>
                     </div>
                     <div class="info-box">
-                        <strong>Organisation</strong><br>
+                        <strong>Organisation Terroir</strong><br>
                         4 séries de dégustation : 2 fromages + 1 vin à chaque fois. 
-                        Dégustez les 4 séries une par une. 
-                        À chaque série, devinez quel vin et quels fromages vous avez dans votre verre et dans votre assiette.
+                        Devinez quel vin et quels fromages vous avez dans votre assiette.
                     </div>
                     <div class="rule-warning">Une réponse validée est définitive, dégustez bien avant de cliquer ! </div>
                 </div>
             </div>
         </div>
 
-        <!-- CHOIX PARCOURS -->
         <div id="panel-choice" class="panel">
             <div class="card">
                 <div class="card-header">
@@ -626,21 +633,30 @@
                 <div class="card-body">
                     <div class="path-grid">
                         <div class="path-card" onclick="setPath('terroir')">
-                            <div class="path-card-emoji">🍷🧀🥩</div>
+                            <div class="path-card-emoji">🍷🧀</div>
                             <h3>Terroir</h3>
-                            <p>Vins · Fromages · Charcuterie<br>38 pts max</p>
+                            <p>Vins &amp; Fromages<br>28 pts max</p>
                         </div>
-                        <div class="path-card" onclick="setPath('chips')">
+                        <div class="path-card" onclick="setPath('charcuterie')">
+                            <div class="path-card-emoji">🥩</div>
+                            <h3>Charcuterie</h3>
+                            <p>5 charcuteries<br>10 pts max</p>
+                        </div>
+                        <div class="path-card" onclick="setPath('chips1')">
                             <div class="path-card-emoji">🥔</div>
-                            <h3>Chips Bret's</h3>
-                            <p>Parcours enfants<br>2 séries de 8</p>
+                            <h3>Chips Série 1</h3>
+                            <p>Chips 1 à 8<br>8 pts max</p>
+                        </div>
+                        <div class="path-card" onclick="setPath('chips2')">
+                            <div class="path-card-emoji">🥔</div>
+                            <h3>Chips Série 2</h3>
+                            <p>Chips 9 à 16<br>8 pts max</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- QUIZ -->
         <div id="panel-quiz" class="panel">
             <div class="card">
                 <div class="card-body">
@@ -648,7 +664,7 @@
                     <div class="progress-wrap">
                         <div class="progress-meta">
                             <span>Progression</span>
-                            <span><span id="q-done-count">0</span> / <span id="q-total-count">17</span> &nbsp;·&nbsp; <span id="q-percent">0%</span></span>
+                            <span><span id="q-done-count">0</span> / <span id="q-total-count">0</span> &nbsp;·&nbsp; <span id="q-percent">0%</span></span>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" id="q-main-fill" style="width:0%"></div></div>
                     </div>
@@ -657,12 +673,11 @@
             <div id="quiz-render-area"></div>
         </div>
 
-        <!-- CLASSEMENT -->
         <div id="panel-leaderboard" class="panel">
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-icon">🏆</span>
-                    <span class="card-header-title">Terroir — Adultes</span>
+                    <span class="card-header-title">Classement — Terroir</span>
                 </div>
                 <div class="card-body">
                     <table class="lb-table"><tbody id="lb-general"></tbody></table>
@@ -670,8 +685,17 @@
             </div>
             <div class="card">
                 <div class="card-header">
+                    <span class="card-header-icon">🥩</span>
+                    <span class="card-header-title">Classement — Charcuteries</span>
+                </div>
+                <div class="card-body">
+                    <table class="lb-table"><tbody id="lb-charcuterie"></tbody></table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
                     <span class="card-header-icon">🥔</span>
-                    <span class="card-header-title">Chips Bret's — Série 1 (chips 1 à 8)</span>
+                    <span class="card-header-title">Classement — Chips Série 1</span>
                 </div>
                 <div class="card-body">
                     <table class="lb-table"><tbody id="lb-chips1"></tbody></table>
@@ -680,25 +704,15 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-icon">🥔</span>
-                    <span class="card-header-title">Chips Bret's — Série 2 (chips 9 à 16)</span>
+                    <span class="card-header-title">Classement — Chips Série 2</span>
                 </div>
                 <div class="card-body">
                     <table class="lb-table"><tbody id="lb-chips2"></tbody></table>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-header-icon">🥩</span>
-                    <span class="card-header-title">Charcuteries — Adultes</span>
-                </div>
-                <div class="card-body">
-                    <table class="lb-table"><tbody id="lb-charcuterie"></tbody></table>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- MODALE SCORE SÉRIE (chips intermédiaire) -->
     <div class="modal-overlay" id="serie-modal">
         <div class="wanted">
             <p class="wanted-eyebrow" id="serie-modal-label">Série 1</p>
@@ -710,19 +724,17 @@
         </div>
     </div>
 
-    <!-- MODALE SCORE -->
     <div class="modal-overlay" id="result-modal">
         <div class="wanted">
             <p class="wanted-eyebrow">Wanted — Score final</p>
             <div id="modal-emoji" style="font-size:3rem;line-height:1;margin-bottom:0.5rem;">🤠</div>
             <div class="wanted-score" id="final-score-val">0</div>
-            <p class="wanted-sub">points sur <span id="final-max-score">38</span></p>
+            <p class="wanted-sub">points sur <span id="final-max-score">28</span></p>
             <p id="modal-message" style="font-family:'Rye',serif;font-size:0.88rem;color:var(--rust);margin-top:1rem;letter-spacing:0.06em;line-height:1.5;"></p>
             <button class="btn-primary" onclick="closeResultModal()" style="margin-top:1.5rem;">Voir le classement</button>
         </div>
     </div>
 
-    <!-- BOTTOM NAV -->
     <nav class="nav">
         <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">
             <span class="nav-icon">🐎</span>
@@ -755,82 +767,37 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
-        // ─────────────────────────────────────────────────────────────────────
-        // DONNÉES — Vins avec cépages indiqués
-        // S1/S2/S3 : vins rouges (5 options, dont Grand Ribe en leurre)
-        // S4        : vins blancs (Saint-Véran correct, 4 leurres blancs)
-        // ─────────────────────────────────────────────────────────────────────
         const SERIES_TERROIR = [
             {
                 id:'s1', label:'Série 1',
                 questions:[
-                    {id:'f1',type:'fromage',label:'Fromage 1',
-                     options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
-                    {id:'f2',type:'fromage',label:'Fromage 2',
-                     options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
-                    // ✓ correct : index 0 — 1885 Pineau Noir d'Auvergne (Pinot Noir)
-                    {id:'v1',type:'vin',label:'Vin de la Série 1',
-                     options:[
-                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',             // ✓ correct
-                         'Côte du Forez Senelles — Gamay',
-                         'Crozes-Hermitage L\'Esquisse — Syrah',
-                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
-                         'Saint-Joseph Les Granits — Syrah'
-                     ],correct:0}
+                    {id:'f1',type:'fromage',label:'Fromage 1', options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
+                    {id:'f2',type:'fromage',label:'Fromage 2', options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
+                    {id:'v1',type:'vin',label:'Vin de la Série 1', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Saint-Joseph Les Granits — Syrah'],correct:0}
                 ]
             },
             {
                 id:'s2', label:'Série 2',
                 questions:[
-                    {id:'f3',type:'fromage',label:'Fromage 3',
-                     options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
-                    {id:'f4',type:'fromage',label:'Fromage 4',
-                     options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
-                    // ✓ correct : index 1 — Côte du Forez Senelles (Gamay)
-                    {id:'v2',type:'vin',label:'Vin de la Série 2',
-                     options:[
-                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',
-                         'Côte du Forez Senelles — Gamay',                        // ✓ correct
-                         'Crozes-Hermitage L\'Esquisse — Syrah',
-                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
-                         'Côtes d\'Auvergne Chanturgue — Pinot Noir'
-                     ],correct:1}
+                    {id:'f3',type:'fromage',label:'Fromage 3', options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
+                    {id:'f4',type:'fromage',label:'Fromage 4', options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
+                    {id:'v2',type:'vin',label:'Vin de la Série 2', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Côtes d\'Auvergne Chanturgue — Pinot Noir'],correct:1}
                 ]
             },
             {
                 id:'s3', label:'Série 3',
                 questions:[
-                    {id:'f5',type:'fromage',label:'Fromage 5',
-                     options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
-                    {id:'f6',type:'fromage',label:'Fromage 6',
-                     options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
-                    // ✓ correct : index 2 — Crozes-Hermitage L'Esquisse (Syrah)
-                    {id:'v3',type:'vin',label:'Vin de la Série 3',
-                     options:[
-                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',
-                         'Côte du Forez Senelles — Gamay',
-                         'Crozes-Hermitage L\'Esquisse — Syrah',                  // ✓ correct
-                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
-                         'Cornas Les Grandes Terrasses — Syrah'
-                     ],correct:2}
+                    {id:'f5',type:'fromage',label:'Fromage 5', options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
+                    {id:'f6',type:'fromage',label:'Fromage 6', options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
+                    {id:'v3',type:'vin',label:'Vin de la Série 3', options:['1885 Pineau Noir d\'Auvergne — Pinot Noir','Côte du Forez Senelles — Gamay','Crozes-Hermitage L\'Esquisse — Syrah','Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre','Cornas Les Grandes Terrasses — Syrah'],correct:2}
                 ]
             },
             {
                 id:'s4', label:'Série 4',
                 questions:[
-                    {id:'f7',type:'fromage',label:'Fromage 7',
-                     options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
-                    {id:'f8',type:'fromage',label:'Fromage 8',
-                     options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
-                    // ✓ correct : index 0 — Saint-Véran (Chardonnay, Bourgogne Mâconnais)
-                    {id:'v4',type:'vin',label:'Vin de la Série 4',
-                     options:[
-                         'Saint-Véran — Chardonnay',                              // ✓ correct
-                         'Grand Ribe Côtes-du-Rhône Blanc — Grenache Blanc, Clairette, Roussanne, Marsanne, Viognier',
-                         'Roussette de Savoie Marestel — Altesse',
-                         'Crozes-Hermitage Blanc — Marsanne, Roussanne',
-                         'Condrieu — Viognier'
-                     ],correct:0}
+                    {id:'f7',type:'fromage',label:'Fromage 7', options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
+                    {id:'f8',type:'fromage',label:'Fromage 8', options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
+                    {id:'v4',type:'vin',label:'Vin de la Série 4', options:['Saint-Véran — Chardonnay','Grand Ribe Côtes-du-Rhône Blanc — Grenache Blanc, Clairette, Roussanne, Marsanne, Viognier','Roussette de Savoie Marestel — Altesse','Crozes-Hermitage Blanc — Marsanne, Roussanne','Condrieu — Viognier'],correct:0}
                 ]
             }
         ];
@@ -884,14 +851,26 @@
         window.setPath = async p => {
             player.path = p;
             localStorage.setItem('alex50_p', JSON.stringify(player));
-            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, path:p, score:0 }, { merge:true });
+            // Nettoyer les réponses locales lors du changement de parcours pour éviter les conflits
+            answers = {};
+            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, path:p, score:0, charcScore:0, chips1Score:0, chips2Score:0 }, { merge:true });
             showPanel('quiz');
         };
 
         function renderQuiz() {
             if (!player) return;
-            document.getElementById('q-player-name').textContent = `🤠 ${player.name}`;
-            player.path === 'terroir' ? renderTerroirQuiz() : renderChipsQuiz();
+            document.getElementById('q-player-name').textContent = `🤠 Parcours : ${player.path.toUpperCase()} — ${player.name}`;
+            if (player.path === 'terroir') renderTerroirQuiz();
+            else if (player.path === 'charcuterie') renderCharcuterieQuiz();
+            else renderChipsQuiz();
+        }
+
+        function formatOpt(opt) {
+            const sep = opt.indexOf(' — ');
+            if (sep === -1) return `<span class="opt-name">${opt}</span>`;
+            const nom = opt.slice(0, sep);
+            const cep = opt.slice(sep + 3);
+            return `<span class="opt-name">${nom}</span><span class="opt-cepage">${cep}</span>`;
         }
 
         function renderTerroirQuiz() {
@@ -907,7 +886,7 @@
                     html += `<div class="q-label">${q.label}</div>`;
                     html += `<div class="opt-grid">`;
                     q.options.forEach((opt,idx) => {
-                        html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
+                        html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${formatOpt(opt)}</button>`;
                     });
                     html += `</div>`;
                     if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
@@ -915,25 +894,27 @@
                 });
                 html += `</div></div>`;
             });
+            document.getElementById('quiz-render-area').innerHTML = html;
+            updateTerroirProgress();
+        }
 
-            html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">Charcuteries — 2 pts chacune</span></div><div class="card-body">`;
+        function renderCharcuterieQuiz() {
+            let html = '';
             CHARCUTERIES.forEach((q,qi) => {
                 const ua = answers[q.id], done = ua !== undefined;
+                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">${q.label} — 2 pts</span></div><div class="card-body">`;
                 html += `<div class="q-block">`;
-                if (qi > 0) html += `<div class="section-divider"><div class="section-divider-line"></div></div>`;
                 html += `<span class="q-badge charcuterie">🥩 Charcuterie &nbsp;·&nbsp; 2 pts</span>`;
                 html += `<div class="q-label">${q.label}</div><div class="opt-grid">`;
                 q.options.forEach((opt,idx) => {
-                    html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
+                    html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${formatOpt(opt)}</button>`;
                 });
                 html += `</div>`;
                 if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
-                html += `</div>`;
+                html += `</div></div></div>`;
             });
-            html += `</div></div>`;
-
             document.getElementById('quiz-render-area').innerHTML = html;
-            updateTerroirProgress();
+            updateCharcuterieProgress();
         }
 
         window.handleVote = async (qId, idx) => {
@@ -941,31 +922,55 @@
             answers[qId] = idx;
             localStorage.setItem('alex50_ans_' + player.id, JSON.stringify(answers));
             renderQuiz();
-            await saveTerroirScore();
-            const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0) + CHARCUTERIES.length;
-            if (Object.keys(answers).length === total) fireTerroirReward();
+            
+            if (player.path === 'terroir') {
+                await saveTerroirScore();
+                const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0);
+                if (Object.keys(answers).length === total) fireTerroirReward();
+            } else if (player.path === 'charcuterie') {
+                await saveCharcuterieScore();
+                if (Object.keys(answers).length === CHARCUTERIES.length) fireCharcuterieReward();
+            }
         };
 
         async function saveTerroirScore() {
             let score = 0;
-            let charcScore = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
-            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) { score += 2; charcScore += 2; } });
             await setDoc(doc(db,'scores',player.id), {
                 name: player.name,
                 table: player.table,
-                score,
-                charcScore,
+                score: score,
                 path: 'terroir',
-                done: Object.keys(answers).length,
+                lastUpdate: Date.now()
+            }, {merge:true});
+        }
+
+        async function saveCharcuterieScore() {
+            let charcScore = 0;
+            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) charcScore += 2; });
+            await setDoc(doc(db,'scores',player.id), {
+                name: player.name,
+                table: player.table,
+                charcScore: charcScore,
+                path: 'charcuterie',
                 lastUpdate: Date.now()
             }, {merge:true});
         }
 
         function updateTerroirProgress() {
-            const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0) + CHARCUTERIES.length;
+            const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0);
             const done = Object.keys(answers).length;
-            const pct = Math.round(done/total*100);
+            const pct = Math.round(done/total*100) || 0;
+            document.getElementById('q-done-count').textContent = done;
+            document.getElementById('q-total-count').textContent = total;
+            document.getElementById('q-percent').textContent = pct + '%';
+            document.getElementById('q-main-fill').style.width = pct + '%';
+        }
+
+        function updateCharcuterieProgress() {
+            const total = CHARCUTERIES.length;
+            const done = Object.keys(answers).length;
+            const pct = Math.round(done/total*100) || 0;
             document.getElementById('q-done-count').textContent = done;
             document.getElementById('q-total-count').textContent = total;
             document.getElementById('q-percent').textContent = pct + '%';
@@ -1022,72 +1027,79 @@
         function fireTerroirReward() {
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
+            setTimeout(() => showRewardModal(score, 28), 600);
+        }
+
+        function fireCharcuterieReward() {
+            let score = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
-            setTimeout(() => showRewardModal(score, 38), 600);
+            setTimeout(() => showRewardModal(score, 10), 600);
         }
 
         function renderChipsQuiz() {
-            let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide chaque série.</p></div></div>`;
+            const serieId = player.path; 
+            const serie = CHIPS_SERIES.find(s => s.id === serieId);
+            if (!serie) return;
 
-            CHIPS_SERIES.forEach(serie => {
-                if (!chipsState[serie.id]) {
-                    let shuffled;
-                    do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
-                    while (shuffled.every((v,i) => v === serie.correctOrder[i]));
-                    chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
-                }
-                const state = chipsState[serie.id];
-                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
+            let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide la série.</p></div></div>`;
 
-                if (state.validated) {
-                    html += `<div class="chips-zone">`;
-                    state.order.forEach((item,i) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${i+1}</span><span>${item}</span></div>`);
-                    html += `</div><div class="chips-score-box"><div class="score-n">${state.score}</div><div class="score-lbl">points sur 8</div></div>`;
-                } else {
-                    html += `<div class="chips-zone" id="zone-${serie.id}">`;
-                    state.order.forEach((item,i) => {
-                        html += `<div class="chip-item" draggable="true" data-serie="${serie.id}" data-idx="${i}"
-                            ondragstart="handleDragStart(event,'${serie.id}',${i})"
-                            ondragend="handleDragEnd()"
-                            ontouchstart="handleTouchStart(event,'${serie.id}',${i})"
-                            ontouchmove="handleTouchMove(event,'${serie.id}')"
-                            ontouchend="handleTouchEnd(event,'${serie.id}')">`;
-                        html += `<span class="drag-handle">⠿</span><span class="chip-num">${i+1}</span><span>${item}</span></div>`;
-                    });
-                    html += `</div><button class="btn-danger" onclick="validateChipsSerie('${serie.id}')">Valider cette série</button>`;
-                }
-                html += `</div></div>`;
-            });
+            if (!chipsState[serie.id]) {
+                let shuffled;
+                do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
+                while (shuffled.every((v,i) => v === serie.correctOrder[i]));
+                chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
+            }
+            const state = chipsState[serie.id];
+            html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
+
+            if (state.validated) {
+                html += `<div class="chips-zone">`;
+                state.order.forEach((item,i) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${i+1}</span><span>${item}</span></div>`);
+                html += `</div><div class="chips-score-box"><div class="score-n">${state.score}</div><div class="score-lbl">points sur 8</div></div>`;
+            } else {
+                html += `<div class="chips-zone" id="zone-${serie.id}">`;
+                state.order.forEach((item,i) => {
+                    html += `<div class="chip-item" draggable="true" data-serie="${serie.id}" data-idx="${i}"
+                        ondragstart="handleDragStart(event,'${serie.id}',${i})"
+                        ondragend="handleDragEnd()"
+                        ontouchstart="handleTouchStart(event,'${serie.id}',${i})"
+                        ontouchmove="handleTouchMove(event,'${serie.id}')"
+                        ontouchend="handleTouchEnd(event,'${serie.id}')">`;
+                    html += `<span class="drag-handle">⠿</span><span class="chip-num">${i+1}</span><span>${item}</span></div>`;
+                });
+                html += `</div><button class="btn-danger" onclick="validateChipsSerie('${serie.id}')">Valider cette série</button>`;
+            }
+            html += `</div></div>`;
 
             document.getElementById('quiz-render-area').innerHTML = html;
-            CHIPS_SERIES.forEach(serie => {
-                const zone = document.getElementById('zone-' + serie.id);
-                if (zone) {
-                    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-                    zone.addEventListener('drop', e => handleDrop(e, serie.id));
-                    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-                }
-            });
+            const zone = document.getElementById('zone-' + serie.id);
+            if (zone) {
+                zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+                zone.addEventListener('drop', e => handleDrop(e, serie.id));
+                zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            }
             updateChipsProgress();
         }
 
         function updateChipsProgress() {
-            const done = Object.values(chipsState).filter(s=>s.validated).length;
-            const pct = Math.round(done/2*100);
+            const serieId = player.path;
+            const state = chipsState[serieId];
+            const done = state?.validated ? 1 : 0;
             document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-total-count').textContent = 2;
-            document.getElementById('q-percent').textContent = pct + '%';
-            document.getElementById('q-main-fill').style.width = pct + '%';
+            document.getElementById('q-total-count').textContent = 1;
+            document.getElementById('q-percent').textContent = (done * 100) + '%';
+            document.getElementById('q-main-fill').style.width = (done * 100) + '%';
         }
 
-        // ── Desktop drag ──
         window.handleDragStart = (e,serieId,idx) => { dragState = { serieId, draggedIdx:idx }; };
         window.handleDragEnd = () => document.querySelectorAll('.chips-zone').forEach(el=>el.classList.remove('drag-over'));
+        
         function swapItems(serieId, fromIdx, toIdx) {
             const order = chipsState[serieId].order;
             [order[fromIdx], order[toIdx]] = [order[toIdx], order[fromIdx]];
             renderChipsQuiz();
         }
+        
         function handleDrop(e, serieId) {
             e.preventDefault();
             document.getElementById('zone-'+serieId).classList.remove('drag-over');
@@ -1099,7 +1111,6 @@
             swapItems(serieId, fromIdx, toIdx);
         }
 
-        // ── Touch drag pour mobile ──
         window.handleTouchStart = (e, serieId, idx) => {
             touchDrag.active = true;
             touchDrag.serieId = serieId;
@@ -1144,14 +1155,6 @@
             touchDrag = { active:false, serieId:null, fromIdx:null, ghost:null };
         };
 
-        function getSerieReaction(score) {
-            if (score === 8)  return { emoji:'🏆', msg:'Parfait, cowboy ! 8 sur 8 !' };
-            if (score >= 6)   return { emoji:'🤠', msg:'Beau travail, pistolero !' };
-            if (score >= 4)   return { emoji:'⭐', msg:'Pas mal, partenaire !' };
-            if (score >= 2)   return { emoji:'🌵', msg:'Le ranch t\'attend encore...' };
-            return { emoji:'🐍', msg:'Les serpents ont mangé tes chips !' };
-        }
-
         window.closeSerieModal = () => {
             document.getElementById('serie-modal').classList.remove('active');
         };
@@ -1164,89 +1167,56 @@
             state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
             state.validated = true; state.score = score;
 
-            // Enregistre les scores des deux séries séparément
-            const chips1Score = chipsState['chips1']?.score || 0;
-            const chips2Score = chipsState['chips2']?.score || 0;
-            const total = chips1Score + chips2Score;
+            const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
             await setDoc(doc(db,'scores',player.id), {
                 name: player.name,
                 table: player.table,
-                chipsScore: total,
-                chips1Score,
-                chips2Score,
-                path: 'chips',
+                [chipsScoreKey]: score,
+                path: serieId,
                 lastUpdate: Date.now()
             }, {merge:true});
 
             renderChipsQuiz();
-
-            const allDone = CHIPS_SERIES.every(s=>chipsState[s.id]?.validated);
-
-            if (allDone) {
-                const grandTotal = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
-                setTimeout(() => showRewardModal(grandTotal, 16), 600);
-            } else {
-                const { emoji, msg } = getSerieReaction(score);
-                const modal = document.getElementById('serie-modal');
-                document.getElementById('serie-modal-label').textContent = serie.label + ' — Score';
-                document.getElementById('serie-modal-score').textContent = score;
-                document.getElementById('serie-modal-emoji').textContent = emoji;
-                document.getElementById('serie-modal-message').textContent = msg;
-                modal.classList.remove('active');
-                void modal.offsetWidth;
-                setTimeout(() => {
-                    modal.classList.add('active');
-                    triggerModalAnims(
-                        document.getElementById('serie-modal-score'),
-                        document.getElementById('serie-modal-emoji'),
-                        document.getElementById('serie-modal-message')
-                    );
-                    if (score === 8) {
-                        confetti({ particleCount:120, spread:70, origin:{y:0.6}, colors:['#b8832a','#f5ead6','#ffd700'] });
-                    } else if (score >= 5) {
-                        confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
-                    }
-                }, 400);
-            }
+            setTimeout(() => showRewardModal(score, 8), 600);
         };
 
         function renderLeaderboards() {
             const all = Object.values(liveScores);
 
-            // ── Terroir adultes (score global)
+            // ── 1. Terroir (Affiche uniquement les joueurs du parcours 'terroir')
             const rowTerroir = (p,i) => {
                 const r = i+1;
-                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/38</small></div></td></tr>`;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/28</small></div></td></tr>`;
             };
             document.getElementById('lb-general').innerHTML =
-                all.filter(p=>p.path==='terroir').sort((a,b)=>b.score-a.score).map(rowTerroir).join('') ||
+                all.filter(p=>p.path==='terroir').sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── Chips série 1
-            const rowC1 = (p,i) => {
-                const r = i+1;
-                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
-            };
-            document.getElementById('lb-chips1').innerHTML =
-                all.filter(p=>p.path==='chips' && p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
-                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
-
-            // ── Chips série 2
-            const rowC2 = (p,i) => {
-                const r = i+1;
-                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
-            };
-            document.getElementById('lb-chips2').innerHTML =
-                all.filter(p=>p.path==='chips' && p.chips2Score !== undefined).sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
-                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
-
-            // ── Charcuteries (adultes uniquement, sous-score charcuterie)
+            // ── 2. Charcuteries (Affiche uniquement les joueurs du parcours 'charcuterie')
             const rowCharc = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
             };
             document.getElementById('lb-charcuterie').innerHTML =
-                all.filter(p=>p.path==='terroir').sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
+                all.filter(p=>p.path==='charcuterie').sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+
+            // ── 3. Chips série 1 (Affiche uniquement les joueurs du parcours 'chips1')
+            const rowC1 = (p,i) => {
+                const r = i+1;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
+            };
+            document.getElementById('lb-chips1').innerHTML =
+                all.filter(p=>p.path==='chips1').sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+
+            // ── 4. Chips série 2 (Affiche uniquement les joueurs du parcours 'chips2')
+            const rowC2 = (p,i) => {
+                const r = i+1;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
+            };
+            document.getElementById('lb-chips2').innerHTML =
+                all.filter(p=>p.path==='chips2').sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
         }
 
