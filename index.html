@@ -592,15 +592,6 @@
         .anim-lasso  { animation: lasso 0.6s ease 0.5s both; }
 
         /* ── TROUPEAU DE CHEVAUX ── */
-        #herd-canvas {
-            position: fixed;
-            bottom: calc(var(--nav-h) + 0px);
-            left: 0;
-            width: 100vw;
-            height: 90px;
-            pointer-events: none;
-            z-index: 1500;
-        }
 
         /* ── BOUTON MUSIQUE ── */
         #music-btn {
@@ -642,11 +633,8 @@
     <!-- Bouton musique -->
     <button id="music-btn" title="Musique" aria-label="Musique on/off">🎵</button>
 
-    <!-- Canvas troupeau -->
-    <canvas id="herd-canvas"></canvas>
-
     <audio id="bg-music" loop>
-        <source src="https://cdn.jsdelivr.net/gh/Sayllor-51/Anniversaire@main/positive_sound-spaghetti-western-491538.mp3" type="audio/mpeg">
+        <source src="https://sayllor-51.github.io/Anniversaire/positive_sound-spaghetti-western-491538.mp3" type="audio/mpeg">
     </audio>
 
     <header class="header">
@@ -888,132 +876,6 @@
         });
 
         // ── TROUPEAU DE CHEVAUX ───────────────────────────────────
-        const HORSES = ['🐎','🐴','🐎','🐴','🐎'];
-
-        // ── TROUPEAU CANVAS ───────────────────────────────────────
-        const herdCanvas = document.getElementById('herd-canvas');
-        const hctx = herdCanvas.getContext('2d');
-        let herdAnim = null;
-
-        // Silhouette cheval au galop — 4 frames
-        // Dessin SVG path converti en séquence de paths canvas
-        function drawHorse(ctx, x, y, scale, frame) {
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.scale(scale, scale);
-            ctx.fillStyle = '#1a0a02';
-
-            // Corps principal
-            ctx.beginPath();
-            ctx.ellipse(0, 0, 22, 11, -0.15, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Encolure
-            ctx.beginPath();
-            ctx.ellipse(18, -8, 8, 6, -0.6, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Tête
-            ctx.beginPath();
-            ctx.ellipse(26, -15, 7, 5, -0.3, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Museau
-            ctx.beginPath();
-            ctx.ellipse(32, -13, 4, 3, 0.2, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Crinière
-            ctx.beginPath();
-            ctx.moveTo(14, -12);
-            ctx.quadraticCurveTo(18, -20, 24, -18);
-            ctx.quadraticCurveTo(20, -14, 14, -12);
-            ctx.fill();
-
-            // Queue
-            ctx.beginPath();
-            ctx.moveTo(-20, -2);
-            ctx.quadraticCurveTo(-28, -12, -26, -18);
-            ctx.quadraticCurveTo(-24, -10, -20, -2);
-            ctx.fill();
-
-            // Jambes — 4 frames de galop
-            const legs = [
-                // frame 0 : foulée ouverte
-                [[-8,-1,-14,14],[-2,-1,-4,14],[6,-1,10,14],[12,-1,18,14]],
-                // frame 1 : corps bas
-                [[-8,-1,-16,13],[-2,-1,-2,13],[6,-1,8,13],[12,-1,20,13]],
-                // frame 2 : suspension (jambes regroupées)
-                [[-8,-1,-6,14],[-2,-1,2,14],[6,-1,6,14],[12,-1,12,14]],
-                // frame 3 : foulée inverse
-                [[-8,-1,-4,14],[-2,-1,-12,14],[6,-1,18,14],[12,-1,8,14]],
-            ][frame % 4];
-
-            legs.forEach(([x1,y1,x2,y2]) => {
-                ctx.beginPath();
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#1a0a02';
-                ctx.lineCap = 'round';
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
-            });
-
-            // Sabot
-            legs.forEach(([,, x2, y2]) => {
-                ctx.beginPath();
-                ctx.fillStyle = '#0f0600';
-                ctx.ellipse(x2, y2, 3, 2, 0, 0, Math.PI * 2);
-                ctx.fill();
-            });
-
-            ctx.restore();
-        }
-
-        function lancerTroupeau() {
-            if (herdAnim) cancelAnimationFrame(herdAnim);
-            herdCanvas.width = window.innerWidth;
-            herdCanvas.height = 90;
-
-            const count = 6 + Math.floor(Math.random() * 3);
-            // Chevaux avec décalages verticaux et de taille pour profondeur
-            const horses = Array.from({length: count}, (_, i) => ({
-                x: -60 - i * 55,
-                y: 75 - Math.floor(i / 2) * 6,
-                scale: 1 - (i % 3) * 0.12,
-                frameTimer: 0,
-                frame: (i * 1) % 4,
-            }));
-
-            const speed = window.innerWidth / 180; // traverse en ~180 frames
-            let done = false;
-            let frameCount = 0;
-
-            function step() {
-                hctx.clearRect(0, 0, herdCanvas.width, herdCanvas.height);
-                frameCount++;
-
-                horses.forEach(h => {
-                    h.x += speed;
-                    h.frameTimer++;
-                    if (h.frameTimer % 5 === 0) h.frame = (h.frame + 1) % 4;
-                    drawHorse(hctx, h.x, h.y, h.scale, h.frame);
-                });
-
-                // Fade out à la fin
-                const leading = horses[0].x;
-                if (leading > window.innerWidth + 80) {
-                    done = true;
-                }
-
-                if (!done) {
-                    herdAnim = requestAnimationFrame(step);
-                } else {
-                    hctx.clearRect(0, 0, herdCanvas.width, herdCanvas.height);
-                }
-            }
-            herdAnim = requestAnimationFrame(step);
-        }
 
         // ── DONNÉES ───────────────────────────────────────────────
         const SERIES_TERROIR = [
@@ -1268,9 +1130,6 @@
             answers[qId] = idx;
             localStorage.setItem('alex50_ans_' + player.id + '_' + player.path, JSON.stringify(answers));
 
-            // Troupeau à chaque réponse !
-            lancerTroupeau();
-
             renderQuiz();
             if (player.path === 'terroir') {
                 await saveTerroirScore();
@@ -1359,8 +1218,6 @@
             } else if (pct >= 0.4) {
                 confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
             }
-            // Grand troupeau à la fin du parcours !
-            setTimeout(() => lancerTroupeau(), 800);
         }
 
         function fireTerroirReward() {
