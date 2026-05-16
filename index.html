@@ -3,204 +3,655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤠 Alexandre a 50 ans ! - Le Jeu du Saloon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>Alexandre 50 — Le Grand Jeu du Saloon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
     <style>
         :root {
-            --brown: #4A2F1E; --brown-light: #6B4429; --leather: #8B5A2B;
-            --gold: #D4A017; --gold-light: #F4C95D; --cream: #F5E8C7;
-            --cream-dark: #E8D9B0; --red: #9C2A2A; --text-dark: #2C1F14;
-            --shadow: rgba(0,0,0,0.55);
+            --ink:     #1a1209;
+            --ink2:    #2e1f0e;
+            --ochre:   #b8832a;
+            --ochre-l: #d4a24a;
+            --rust:    #7c2d12;
+            --sand:    #f5ead6;
+            --sand2:   #ede0c4;
+            --parchment: #f8f2e3;
+            --line:    rgba(184,131,42,0.25);
+            --line-s:  rgba(184,131,42,0.5);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── FOND : planches de bois ─────────────────── */
         body {
-            background-color: var(--brown);
-            background-image: linear-gradient(rgba(0,0,0,0.18), rgba(0,0,0,0.18)),
-                url('https://www.transparenttextures.com/patterns/old-wall.png'),
-                repeating-linear-gradient(45deg, rgba(139,90,43,0.09) 0px, rgba(139,90,43,0.09) 4px, transparent 4px, transparent 24px);
-            background-attachment: fixed;
-            font-family: 'Lato', sans-serif;
-            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
             min-height: 100vh;
-            padding-bottom: 60px;
+            padding-bottom: 80px;
+            /* bois sombre avec veinage */
+            background-color: #1c1008;
+            background-image:
+                /* joints entre planches */
+                repeating-linear-gradient(
+                    180deg,
+                    transparent 0, transparent 88px,
+                    rgba(0,0,0,0.55) 88px, rgba(0,0,0,0.55) 93px,
+                    transparent 93px, transparent 181px,
+                    rgba(0,0,0,0.55) 181px, rgba(0,0,0,0.55) 186px
+                ),
+                /* variation de couleur planche à planche */
+                repeating-linear-gradient(
+                    180deg,
+                    #2a1a0a 0, #221408 88px,
+                    #1c1008 93px, #281808 181px,
+                    #1c1008 186px
+                ),
+                /* veinage horizontal fin */
+                repeating-linear-gradient(
+                    178deg,
+                    transparent 0, transparent 8px,
+                    rgba(255,200,100,0.025) 8px, rgba(255,200,100,0.025) 9px
+                );
+            background-attachment: fixed;
         }
-        .header { background: linear-gradient(135deg, var(--red) 0%, var(--leather) 50%, var(--red) 100%); border-bottom: 8px solid var(--gold); text-align: center; padding: 2.2rem 1rem 1.8rem; position: relative; box-shadow: 0 8px 25px var(--shadow); }
-        .header h1 { font-family: 'Rye', serif; font-size: clamp(1.95rem, 8.5vw, 3.8rem); color: var(--gold-light); text-shadow: 3px 3px 0 var(--brown), 6px 6px 12px rgba(0,0,0,0.7); margin-bottom: 6px; letter-spacing: 2.5px; padding-right: 85px; }
-        .header p { color: #f8f1d9; font-family: 'Playfair Display', serif; letter-spacing: 4.5px; font-size: 0.96rem; text-transform: uppercase; opacity: 0.95; }
-        .age-badge { position: absolute; top: 18px; right: 18px; background: var(--gold); color: var(--brown); width: 72px; height: 72px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Rye', serif; border: 4px double #f8f1d9; box-shadow: 0 0 22px rgba(0,0,0,0.65); transform: rotate(12deg); z-index: 10; }
-        .nav { display: flex; justify-content: center; background: linear-gradient(var(--brown), var(--brown-light)); border-bottom: 5px solid var(--gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .nav-btn { background: none; border: none; color: #e8d9b0; font-family: 'Rye', serif; font-size: 0.96rem; font-weight: 700; text-transform: uppercase; padding: 1.3rem 0.8rem; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1.5px; flex: 1; max-width: 220px; }
-        .nav-btn.active { color: var(--gold-light); border-bottom: 5px solid var(--gold-light); background: rgba(255,255,255,0.09); }
-        .main { max-width: 820px; margin: 0 auto; padding: 1.6rem 1rem; }
-        .card { background: var(--cream); border-radius: 18px; border: 3px solid var(--leather); box-shadow: 0 10px 30px var(--shadow); margin-bottom: 2rem; overflow: hidden; }
-        .card-header { background: linear-gradient(90deg, var(--brown) 0%, var(--leather) 100%); color: var(--gold-light); font-family: 'Rye', serif; padding: 1.3rem 1.4rem; font-size: 1.25rem; letter-spacing: 2px; border-bottom: 3px solid var(--gold); }
-        .card-body { padding: 1.6rem; }
+
+        /* ── HEADER ──────────────────────────────────── */
+        .header {
+            background: #0f0904;
+            border-bottom: 1px solid var(--ochre);
+            padding: 3.5rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Ligne décorative haut */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent 0%, var(--ochre) 20%, var(--ochre-l) 50%, var(--ochre) 80%, transparent 100%);
+        }
+        /* Ornement géométrique fond */
+        .header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(ellipse 600px 200px at 50% 50%, rgba(184,131,42,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .header-eyebrow {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--ochre);
+            margin-bottom: 1.4rem;
+        }
+        .header h1 {
+            font-family: 'Rye', serif;
+            font-size: clamp(2.4rem, 7vw, 4.2rem);
+            color: var(--sand);
+            letter-spacing: 0.04em;
+            line-height: 1.05;
+            position: relative;
+            padding-right: 90px;
+        }
+        .header-sub {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--ochre-l);
+            margin-top: 1rem;
+            letter-spacing: 0.08em;
+            opacity: 0.85;
+        }
+
+        /* ornement SVG inline centré */
+        .header-ornament {
+            display: block;
+            margin: 1.4rem auto 0;
+            opacity: 0.5;
+        }
+
+        .badge {
+            position: absolute;
+            top: 2rem; right: 2rem;
+            width: 72px; height: 72px;
+            border: 1.5px solid var(--ochre);
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: var(--ochre-l);
+            font-family: 'Rye', serif;
+            transform: rotate(8deg);
+        }
+        .badge span { font-size: 1.7rem; line-height: 1; }
+        .badge small { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; }
+
+        /* ── NAV ─────────────────────────────────────── */
+        .nav {
+            background: #0f0904;
+            border-bottom: 1px solid var(--line-s);
+            display: flex;
+            justify-content: center;
+            position: sticky; top: 0;
+            z-index: 999;
+        }
+        .nav-btn {
+            background: none; border: none; border-bottom: 2px solid transparent;
+            color: rgba(245,234,214,0.45);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem; font-weight: 500;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            padding: 1.2rem 2rem;
+            cursor: pointer; transition: all 0.25s;
+            flex: 1; max-width: 200px;
+        }
+        .nav-btn:hover { color: var(--sand); }
+        .nav-btn.active { color: var(--ochre-l); border-bottom-color: var(--ochre); }
+
+        /* ── MAIN ────────────────────────────────────── */
+        .main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2.5rem 1.25rem;
+        }
+
+        /* ── PANELS ──────────────────────────────────── */
         .panel { display: none; }
-        .panel.active { display: block; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(12px);} to {opacity: 1; transform: translateY(0);} }
-        .input-group { margin-bottom: 22px; }
-        .input-group label { display: block; font-weight: 900; color: var(--brown); margin-bottom: 8px; text-transform: uppercase; font-size: 0.86rem; letter-spacing: 1px; }
-        .input-field { width: 100%; padding: 14px; border-radius: 10px; border: 2px solid var(--cream-dark); font-size: 1.1rem; outline: none; transition: all 0.3s; }
-        .input-field:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,160,23,0.2); }
-        .btn-gold { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); color: var(--brown); border: none; border-radius: 10px; font-family: 'Rye', serif; padding: 1.25rem; width: 100%; cursor: pointer; font-size: 1.25rem; box-shadow: 0 6px 0 #9c7a1a; transition: all 0.12s; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-gold:active { transform: translateY(4px); box-shadow: 0 2px 0 #9c7a1a; }
-        .choice-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
-        .choice-box { background: #fffaf0; border: 4px solid var(--cream-dark); border-radius: 16px; padding: 26px 16px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .choice-box:hover { border-color: var(--gold); transform: translateY(-6px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
-        .q-title { font-weight: 900; color: var(--brown); margin-bottom: 14px; font-size: 1.02rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media (max-width: 500px) { .opt-grid { grid-template-columns: 1fr; } }
-        .opt-btn { background: #fffaf0; border: 2.5px solid var(--cream-dark); border-radius: 10px; padding: 13px; cursor: pointer; font-weight: 700; font-size: 0.93rem; transition: all 0.2s; text-align: left; }
-        .opt-btn:not(.locked):hover { border-color: var(--gold); background: #fff8e1; }
-        .opt-btn.selected { background: var(--brown) !important; color: white !important; border-color: var(--text-dark); cursor: default; }
+        .panel.active { display: block; animation: fadeUp 0.4s ease; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CARD = parchemin ────────────────────────── */
+        .card {
+            background: var(--parchment);
+            border: 1px solid var(--sand2);
+            border-top: 3px solid var(--ochre);
+            border-radius: 2px;
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--sand2);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card-header-title {
+            font-family: 'Rye', serif;
+            font-size: 0.95rem;
+            color: var(--ink2);
+            letter-spacing: 0.06em;
+        }
+        .card-header-icon { color: var(--ochre); font-size: 1rem; }
+        .card-body { padding: 1.5rem; }
+
+        /* ── INPUTS ──────────────────────────────────── */
+        .field { margin-bottom: 1.25rem; }
+        .field label {
+            display: block;
+            font-size: 0.68rem; font-weight: 600;
+            letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--ink2); opacity: 0.6;
+            margin-bottom: 6px;
+        }
+        .field input {
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--sand2);
+            border-radius: 2px;
+            padding: 12px 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .field input:focus { border-color: var(--ochre); }
+
+        /* ── BOUTON PRINCIPAL ────────────────────────── */
+        .btn-primary {
+            display: block; width: 100%;
+            background: var(--ochre);
+            color: #0f0904;
+            border: none; border-radius: 2px;
+            font-family: 'Rye', serif;
+            font-size: 1rem; letter-spacing: 0.1em;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover { background: var(--ochre-l); }
+        .btn-primary:active { transform: scale(0.99); }
+
+        .btn-danger {
+            display: block; width: 100%;
+            background: var(--rust);
+            color: var(--sand);
+            border: none; border-radius: 2px;
+            font-family: 'Rye', serif;
+            font-size: 0.95rem; letter-spacing: 0.08em;
+            padding: 0.9rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: opacity 0.2s;
+        }
+        .btn-danger:hover { opacity: 0.85; }
+
+        /* ── RÈGLES ──────────────────────────────────── */
+        .rule-item {
+            display: flex; align-items: baseline; gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            font-size: 0.9rem; color: var(--ink2);
+        }
+        .rule-item:last-child { border-bottom: none; }
+        .rule-icon { font-size: 1rem; flex-shrink: 0; }
+        .rule-pts {
+            margin-left: auto;
+            font-family: 'Libre Baskerville', serif;
+            font-weight: 700; font-size: 0.95rem;
+            color: var(--ochre);
+        }
+        .rule-warning {
+            margin-top: 1rem;
+            padding: 10px 14px;
+            border-left: 3px solid var(--rust);
+            background: rgba(124,45,18,0.07);
+            font-size: 0.82rem; font-weight: 500;
+            color: var(--rust); border-radius: 0 2px 2px 0;
+        }
+
+        /* ── CHOIX PARCOURS ──────────────────────────── */
+        .path-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .path-card {
+            background: #fff;
+            border: 1px solid var(--sand2);
+            border-radius: 2px;
+            padding: 2rem 1.25rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.15s;
+        }
+        .path-card:hover { border-color: var(--ochre); transform: translateY(-3px); }
+        .path-card-emoji { font-size: 2rem; }
+        .path-card h3 {
+            font-family: 'Rye', serif;
+            font-size: 1rem; color: var(--ink2);
+            margin: 0.75rem 0 0.4rem; letter-spacing: 0.06em;
+        }
+        .path-card p { font-size: 0.82rem; color: #666; line-height: 1.5; }
+
+        /* ── PROGRESS ────────────────────────────────── */
+        .progress-wrap { margin-bottom: 0.5rem; }
+        .progress-meta {
+            display: flex; justify-content: space-between;
+            font-size: 0.72rem; font-weight: 500;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--ink2); opacity: 0.55; margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 3px;
+            background: var(--sand2);
+            border-radius: 2px; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--ochre);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        .player-label {
+            font-family: 'Rye', serif;
+            font-size: 1.1rem; color: var(--ink2);
+            margin-bottom: 1rem;
+        }
+
+        /* ── QUIZ : questions ────────────────────────── */
+        .q-block { margin-bottom: 2rem; }
+        .q-block:last-child { margin-bottom: 0; }
+
+        .q-badge {
+            display: inline-block;
+            font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 3px 10px; border-radius: 1px;
+            margin-bottom: 10px;
+        }
+        .q-badge.vin { background: rgba(124,45,18,0.1); color: var(--rust); }
+        .q-badge.fromage { background: rgba(184,131,42,0.12); color: #7a5710; }
+        .q-badge.charcuterie { background: rgba(30,18,10,0.08); color: var(--ink2); }
+
+        .q-label {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem; font-weight: 700;
+            color: var(--ink); margin-bottom: 14px;
+        }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        @media (max-width: 480px) { .opt-grid { grid-template-columns: 1fr; } }
+
+        .opt-btn {
+            background: #fff;
+            border: 1px solid var(--sand2);
+            border-radius: 2px;
+            padding: 12px 14px;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem; color: var(--ink2);
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .opt-btn:not(.locked):hover { border-color: var(--ochre); background: rgba(184,131,42,0.05); }
+        .opt-btn.selected {
+            background: var(--ink);
+            color: var(--ochre-l);
+            border-color: var(--ink);
+            font-weight: 600;
+            cursor: default;
+        }
         .opt-btn.locked { cursor: default; }
-        .vote-confirmed { display: inline-flex; align-items: center; gap: 8px; background: #e8f0e8; border: 2px solid #5a8a5a; border-radius: 10px; padding: 10px 16px; margin-top: 10px; font-weight: 900; font-size: 0.9rem; color: #2d5a2d; font-family: 'Rye', serif; }
-        .serie-badge { display: inline-block; background: var(--red); color: var(--gold-light); font-family: 'Rye', serif; font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 1px; }
 
-        /* Chips */
-        .chips-instructions { background: #fffaf0; border: 2px solid var(--gold); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 0.88rem; color: var(--brown); line-height: 1.5; }
-        .chips-zone { display: flex; flex-direction: column; gap: 8px; min-height: 40px; padding: 8px; border-radius: 12px; transition: background 0.2s; }
-        .chips-zone.drag-over { background: rgba(212,160,23,0.15); border: 2px dashed var(--gold); }
-        .chip-item { background: linear-gradient(135deg, #fffaf0, #fff3d6); border: 2.5px solid var(--cream-dark); border-radius: 10px; padding: 12px 16px; cursor: grab; font-weight: 700; font-size: 0.95rem; color: var(--brown); display: flex; align-items: center; gap: 10px; transition: all 0.2s; user-select: none; }
-        .chip-item:hover { border-color: var(--gold); transform: translateX(4px); box-shadow: 2px 4px 12px rgba(0,0,0,0.12); }
-        .chip-item.dragging { opacity: 0.4; cursor: grabbing; }
-        .chip-item.validated-neutral { border-color: var(--leather); background: linear-gradient(135deg, #f5ecd6, #ede0c4); cursor: default; opacity: 0.85; }
-        .chips-validate-btn { background: linear-gradient(135deg, var(--red) 0%, #c0392b 100%); color: var(--gold-light); border: none; border-radius: 10px; font-family: 'Rye', serif; padding: 1rem; width: 100%; cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 0 #5c1a1a; margin-top: 14px; }
-        .chips-score-display { margin-top: 14px; padding: 18px; border-radius: 12px; text-align: center; background: linear-gradient(135deg, var(--brown), var(--leather)); border: 3px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .chips-score-display .score-number { font-family: 'Rye', serif; color: var(--gold-light); font-size: 2.8rem; line-height: 1; }
+        .confirmed {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 10px;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+            color: #3a6b3a; text-transform: uppercase;
+        }
+        .confirmed::before { content: '✓'; }
 
-        .lb-scroll { max-height: 520px; overflow-y: auto; padding-right: 12px; margin: 12px 0; }
+        .section-divider {
+            display: flex; align-items: center; gap: 14px;
+            margin: 0.5rem 0 1.5rem;
+        }
+        .section-divider-line { flex: 1; height: 1px; background: var(--line-s); }
+        .section-divider-label {
+            font-size: 0.65rem; font-weight: 600;
+            letter-spacing: 0.22em; text-transform: uppercase; color: var(--ochre);
+        }
+
+        /* ── CHIPS ───────────────────────────────────── */
+        .chips-hint {
+            font-size: 0.85rem; color: var(--ink2); opacity: 0.7;
+            line-height: 1.6; margin-bottom: 1.25rem;
+        }
+        .chips-zone {
+            display: flex; flex-direction: column; gap: 6px;
+            padding: 4px; border-radius: 2px; transition: background 0.2s;
+        }
+        .chips-zone.drag-over { background: rgba(184,131,42,0.08); outline: 1px dashed var(--ochre); }
+        .chip-item {
+            background: #fff;
+            border: 1px solid var(--sand2);
+            border-radius: 2px;
+            padding: 11px 14px;
+            cursor: grab;
+            font-size: 0.9rem; font-weight: 500; color: var(--ink2);
+            display: flex; align-items: center; gap: 12px;
+            transition: border-color 0.15s, transform 0.1s;
+            user-select: none;
+        }
+        .chip-item:hover { border-color: var(--ochre); }
+        .chip-item.dragging { opacity: 0.35; }
+        .chip-item.validated-neutral { opacity: 0.7; cursor: default; }
+        .chip-num {
+            font-family: 'Rye', serif;
+            font-size: 0.75rem; color: var(--ochre);
+            min-width: 20px; text-align: right;
+        }
+        .drag-handle { color: var(--sand2); font-size: 1rem; }
+        .chips-score-box {
+            margin-top: 1.25rem;
+            padding: 1.5rem;
+            background: var(--ink);
+            border-radius: 2px;
+            text-align: center;
+        }
+        .chips-score-box .score-n {
+            font-family: 'Rye', serif;
+            font-size: 3.5rem; color: var(--ochre-l);
+            line-height: 1;
+        }
+        .chips-score-box .score-lbl {
+            font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(245,234,214,0.5);
+            margin-top: 6px;
+        }
+
+        /* ── LEADERBOARD ─────────────────────────────── */
         .lb-table { width: 100%; border-collapse: collapse; }
-        .rank-pill { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; font-weight: bold; font-family: 'Rye', serif; background: var(--cream-dark); color: var(--brown); }
-        .top1 { background: var(--gold); color: white; border: 2px solid var(--brown); transform: scale(1.1); }
+        .lb-table tbody tr { border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .lb-table td { padding: 12px 8px; vertical-align: middle; }
+        .rank {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: 'Rye', serif; font-size: 0.85rem;
+            background: var(--sand2); color: var(--ink2);
+        }
+        .rank.gold { background: var(--ochre); color: #fff; }
+        .lb-name { font-weight: 600; font-size: 0.92rem; color: var(--ink); }
+        .lb-team { font-size: 0.75rem; color: #888; }
+        .lb-score {
+            font-family: 'Rye', serif; font-size: 1.3rem;
+            color: var(--rust); text-align: right;
+        }
 
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.88); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        /* ── MODALE WANTED ───────────────────────────── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; padding: 2rem;
+        }
         .modal-overlay.active { display: flex; }
-        .wanted-card { background: #e3c08d; background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); padding: 30px 25px; border: 15px solid #5C3A1E; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
-        .wanted-card .score-big { font-family: 'Rye', serif; font-size: 5.8rem; color: var(--red); margin: 15px 0; line-height: 1; }
-        .footer { text-align: center; padding: 25px; color: rgba(255,255,255,0.35); font-size: 0.73rem; letter-spacing: 2.5px; text-transform: uppercase; }
+        .wanted {
+            background: var(--parchment);
+            max-width: 420px; width: 100%;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 4px solid var(--ochre);
+            border-bottom: 4px solid var(--ochre);
+            position: relative;
+        }
+        .wanted::before, .wanted::after {
+            content: '';
+            position: absolute; left: 0; right: 0;
+            height: 1px; background: var(--line-s);
+        }
+        .wanted::before { top: 10px; }
+        .wanted::after  { bottom: 10px; }
+        .wanted-eyebrow {
+            font-size: 0.62rem; font-weight: 600; letter-spacing: 0.35em;
+            text-transform: uppercase; color: var(--ochre);
+            margin-bottom: 1.2rem;
+        }
+        .wanted-score {
+            font-family: 'Rye', serif;
+            font-size: 6rem; line-height: 1;
+            color: var(--ink);
+        }
+        .wanted-sub {
+            font-family: 'Libre Baskerville', serif;
+            font-style: italic; font-size: 0.95rem;
+            color: var(--ink2); opacity: 0.65; margin-top: 0.5rem;
+        }
+        .wanted .btn-primary { margin-top: 2rem; }
+
+        /* ── FOOTER ──────────────────────────────────── */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(184,131,42,0.25);
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="age-badge"><span>50</span><small>ans</small></div>
-        <h1>🤠 Alexandre 50's</h1>
-        <p>Le Grand Jeu du Saloon</p>
-    </div>
+    <!-- ══ HEADER ══ -->
+    <header class="header">
+        <div class="badge"><span>50</span><small>ans</small></div>
 
+        <p class="header-eyebrow">23 mai 2026 &nbsp;·&nbsp; Le Grand Jeu du Saloon</p>
+
+        <h1>Alexandre 50's</h1>
+
+        <!-- Ornement western minimaliste -->
+        <svg class="header-ornament" width="200" height="16" viewBox="0 0 200 16">
+            <line x1="0" y1="8" x2="76" y2="8" stroke="#b8832a" stroke-width="0.75"/>
+            <polygon points="88,2 94,8 88,14 82,8" fill="none" stroke="#b8832a" stroke-width="0.75"/>
+            <polygon points="100,4 106,8 100,12 94,8" fill="#b8832a"/>
+            <polygon points="112,2 118,8 112,14 106,8" fill="none" stroke="#b8832a" stroke-width="0.75"/>
+            <line x1="124" y1="8" x2="200" y2="8" stroke="#b8832a" stroke-width="0.75"/>
+        </svg>
+
+        <p class="header-sub">Vins · Fromages · Charcuteries · Chips Bret's</p>
+    </header>
+
+    <!-- ══ NAV ══ -->
     <nav class="nav">
         <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">L'Équipe</button>
         <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">Dégustation</button>
-        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Les Scores</button>
+        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">Classement</button>
     </nav>
 
+    <!-- ══ CONTENU ══ -->
     <div class="main">
 
-        <!-- === REGISTER === -->
+        <!-- ── INSCRIPTION ── -->
         <div id="panel-register" class="panel active">
             <div class="card">
-                <div class="card-header">🐎 ENREGISTREMENT AU RANCH</div>
+                <div class="card-header">
+                    <span class="card-header-icon">🐎</span>
+                    <span class="card-header-title">Enregistrement au ranch</span>
+                </div>
                 <div class="card-body">
-                    <div class="input-group">
-                        <label>NOM DU COWBOY / COWGIRL</label>
-                        <input type="text" id="p-name" class="input-field" placeholder="Ex: Marie & Gaël">
+                    <div class="field">
+                        <label>Nom du cowboy / cowgirl</label>
+                        <input type="text" id="p-name" placeholder="Ex : Marie & Gaël">
                     </div>
-                    <div class="input-group">
-                        <label>NOM DE VOTRE TABLE / ÉQUIPE (OPTIONNEL)</label>
-                        <input type="text" id="p-table" class="input-field" placeholder="Ex: Table du Grand Canyon">
+                    <div class="field">
+                        <label>Table / Équipe (optionnel)</label>
+                        <input type="text" id="p-table" placeholder="Ex : Table du Grand Canyon">
                     </div>
-                    <button class="btn-gold" onclick="registerPlayer()">🌵 EN SELLE !</button>
-                    <div id="reg-feedback" style="text-align:center; margin-top:15px;"></div>
+                    <button class="btn-primary" onclick="registerPlayer()">En selle 🌵</button>
+                    <div id="reg-feedback" style="margin-top:1rem;font-size:0.85rem;text-align:center;"></div>
                 </div>
             </div>
-            
+
             <div class="card">
-                <div class="card-header">📜 RÈGLES DU SHÉRIF</div>
-                <div class="card-body" style="font-size: 0.9rem; line-height: 1.6;">
-                    <p>🍷 <strong>4 VINS :</strong> 3 points par réponse correcte (12 pts max)</p>
-                    <p>🧀 <strong>8 FROMAGES :</strong> 2 points par réponse correcte (16 pts max)</p>
-                    <p>🥩 <strong>5 CHARCUTERIES :</strong> 2 points par réponse correcte (10 pts max)</p>
-                    <p>🥔 <strong>CHIPS BRET'S :</strong> parcours indépendant enfants — 2 séries de 8</p>
-                    <hr style="margin:10px 0; opacity:0.2;">
-                    <p style="color:var(--red); font-weight:bold; text-align:center;">⚠️ Une fois validée, votre réponse est définitive !</p>
+                <div class="card-header">
+                    <span class="card-header-icon">📜</span>
+                    <span class="card-header-title">Règles du shérif</span>
+                </div>
+                <div class="card-body">
+                    <div class="rule-item">
+                        <span class="rule-icon">🍷</span>
+                        <span>4 vins — 3 pts par bonne réponse</span>
+                        <span class="rule-pts">12 pts max</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🧀</span>
+                        <span>8 fromages — 2 pts par bonne réponse</span>
+                        <span class="rule-pts">16 pts max</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🥩</span>
+                        <span>5 charcuteries — 2 pts par bonne réponse</span>
+                        <span class="rule-pts">10 pts max</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">🥔</span>
+                        <span>Chips Bret's — parcours enfants, 2 séries de 8</span>
+                        <span class="rule-pts">16 pts max</span>
+                    </div>
+                    <div class="rule-warning">Une réponse validée est définitive.</div>
                 </div>
             </div>
         </div>
 
-        <!-- === CHOIX PARCOURS === -->
+        <!-- ── CHOIX PARCOURS ── -->
         <div id="panel-choice" class="panel">
             <div class="card">
-                <div class="card-header">📍 CHOIX DU PARCOURS</div>
+                <div class="card-header">
+                    <span class="card-header-icon">📍</span>
+                    <span class="card-header-title">Choix du parcours</span>
+                </div>
                 <div class="card-body">
-                    <div class="choice-container">
-                        <div class="choice-box" onclick="setPath('terroir')">
-                            <div style="font-size:2.4rem;">🍷🧀🥩</div>
-                            <h3 style="font-family:'Rye'; margin:10px 0 6px;">TERROIR</h3>
-                            <p>Vins • Fromages • Charcuterie<br><small>38 pts max</small></p>
+                    <div class="path-grid">
+                        <div class="path-card" onclick="setPath('terroir')">
+                            <div class="path-card-emoji">🍷🧀🥩</div>
+                            <h3>Terroir</h3>
+                            <p>Vins · Fromages · Charcuterie<br>38 pts max</p>
                         </div>
-                        <div class="choice-box" onclick="setPath('chips')">
-                            <div style="font-size:2.4rem;">🥔</div>
-                            <h3 style="font-family:'Rye'; margin:10px 0 6px;">CHIPS BRET'S</h3>
-                            <p>Parcours enfants<br><small>2 séries de 8</small></p>
+                        <div class="path-card" onclick="setPath('chips')">
+                            <div class="path-card-emoji">🥔</div>
+                            <h3>Chips Bret's</h3>
+                            <p>Parcours enfants<br>2 séries de 8</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- === QUIZ === -->
+        <!-- ── QUIZ ── -->
         <div id="panel-quiz" class="panel">
             <div class="card">
                 <div class="card-body">
-                    <div id="q-player-name" style="font-family:'Rye'; font-size:1.45rem; color:var(--brown); margin-bottom:12px;">🤠 Équipe : ...</div>
-                    <div class="pg-container">
-                        <div class="pg-label"><span>Progression</span><span id="q-percent">0%</span></div>
-                        <div class="pg-bar"><div class="pg-fill" id="q-main-fill" style="width:0%"></div></div>
+                    <div class="player-label" id="q-player-name">🤠 Équipe : …</div>
+                    <div class="progress-wrap">
+                        <div class="progress-meta">
+                            <span>Progression</span>
+                            <span><span id="q-done-count">0</span> / <span id="q-total-count">17</span> &nbsp;·&nbsp; <span id="q-percent">0%</span></span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" id="q-main-fill" style="width:0%"></div></div>
                     </div>
-                    <p style="text-align:right; font-size:0.82rem; font-weight:900; color:var(--brown-light);">
-                        <span id="q-done-count">0</span> / <span id="q-total-count">17</span> questions
-                    </p>
                 </div>
             </div>
             <div id="quiz-render-area"></div>
         </div>
 
-        <!-- === LEADERBOARD === -->
+        <!-- ── CLASSEMENT ── -->
         <div id="panel-leaderboard" class="panel">
             <div class="card">
-                <div class="card-header">🏆 CLASSEMENT GÉNÉRAL - TERROIR (Adultes)</div>
+                <div class="card-header">
+                    <span class="card-header-icon">🏆</span>
+                    <span class="card-header-title">Terroir — Adultes</span>
+                </div>
                 <div class="card-body">
-                    <div class="lb-scroll">
-                        <table class="lb-table" id="lb-general"></table>
-                    </div>
+                    <table class="lb-table"><tbody id="lb-general"></tbody></table>
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">🥔 CLASSEMENT - CHIPS BRET'S (Enfants)</div>
+                <div class="card-header">
+                    <span class="card-header-icon">🥔</span>
+                    <span class="card-header-title">Chips Bret's — Enfants</span>
+                </div>
                 <div class="card-body">
-                    <div class="lb-scroll">
-                        <table class="lb-table" id="lb-chips"></table>
-                    </div>
+                    <table class="lb-table"><tbody id="lb-chips"></tbody></table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODALE -->
+    <!-- ══ MODALE SCORE ══ -->
     <div class="modal-overlay" id="result-modal">
-        <div class="wanted-card">
-            <h2>REWARD</h2>
-            <p style="margin:15px 0 5px;">VOTRE SCORE FINAL EST DE :</p>
-            <div class="score-big" id="final-score-val">0</div>
-            <p>POINTS SUR <span id="final-max-score">38</span></p>
-            <button class="btn-gold" onclick="closeResultModal()" style="margin-top:20px;">VOIR LE CLASSEMENT DU SALOON</button>
+        <div class="wanted">
+            <p class="wanted-eyebrow">Wanted — Score final</p>
+            <div class="wanted-score" id="final-score-val">0</div>
+            <p class="wanted-sub">points sur <span id="final-max-score">38</span></p>
+            <button class="btn-primary" onclick="closeResultModal()">Voir le classement du saloon</button>
         </div>
     </div>
 
-    <div class="footer">🤠 Réalisé pour les 50 ans d'Alexandre — 23/05/2026 🎉</div>
+    <div class="footer">Réalisé pour les 50 ans d'Alexandre &nbsp;·&nbsp; 23 mai 2026</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -214,16 +665,26 @@
             messagingSenderId: "159600747281",
             appId: "1:159600747281:web:09f382f707b2c481a922b0"
         };
-
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db  = getFirestore(app);
 
-        // DONNÉES
-        const SERIES_TERROIR = [ /* tes 4 séries originales */ 
-            {id:'s1',label:'SÉRIE 1',questions:[{id:'f1',type:'fromage',label:'Fromage 1',options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},{id:'f2',type:'fromage',label:'Fromage 2',options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},{id:'v1',type:'vin',label:'Vin de la Série 1',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:0}]},
-            {id:'s2',label:'SÉRIE 2',questions:[{id:'f3',type:'fromage',label:'Fromage 3',options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},{id:'f4',type:'fromage',label:'Fromage 4',options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},{id:'v2',type:'vin',label:'Vin de la Série 2',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:1}]},
-            {id:'s3',label:'SÉRIE 3',questions:[{id:'f5',type:'fromage',label:'Fromage 5',options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},{id:'f6',type:'fromage',label:'Fromage 6',options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},{id:'v3',type:'vin',label:'Vin de la Série 3',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:2}]},
-            {id:'s4',label:'SÉRIE 4',questions:[{id:'f7',type:'fromage',label:'Fromage 7',options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},{id:'f8',type:'fromage',label:'Fromage 8',options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},{id:'v4',type:'vin',label:'Vin de la Série 4',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:3}]}
+        const SERIES_TERROIR = [
+            {id:'s1',label:'Série 1',questions:[
+                {id:'f1',type:'fromage',label:'Fromage 1',options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
+                {id:'f2',type:'fromage',label:'Fromage 2',options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
+                {id:'v1',type:'vin',label:'Vin de la Série 1',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:0}]},
+            {id:'s2',label:'Série 2',questions:[
+                {id:'f3',type:'fromage',label:'Fromage 3',options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
+                {id:'f4',type:'fromage',label:'Fromage 4',options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
+                {id:'v2',type:'vin',label:'Vin de la Série 2',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:1}]},
+            {id:'s3',label:'Série 3',questions:[
+                {id:'f5',type:'fromage',label:'Fromage 5',options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
+                {id:'f6',type:'fromage',label:'Fromage 6',options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
+                {id:'v3',type:'vin',label:'Vin de la Série 3',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:2}]},
+            {id:'s4',label:'Série 4',questions:[
+                {id:'f7',type:'fromage',label:'Fromage 7',options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
+                {id:'f8',type:'fromage',label:'Fromage 8',options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
+                {id:'v4',type:'vin',label:'Vin de la Série 4',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:3}]}
         ];
 
         const CHARCUTERIES = [
@@ -235,22 +696,19 @@
         ];
 
         const CHIPS_SERIES = [
-            {id:'chips1',label:'SÉRIE 1 (chips 1 à 8)',correctOrder:['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
-            {id:'chips2',label:'SÉRIE 2 (chips 9 à 16)',correctOrder:['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
+            {id:'chips1',label:'Série 1 — chips 1 à 8',correctOrder:['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
+            {id:'chips2',label:'Série 2 — chips 9 à 16',correctOrder:['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
         ];
 
-        let player = null;
-        let answers = {};
-        let chipsState = {};
-        let liveScores = {};
+        let player = null, answers = {}, chipsState = {}, liveScores = {};
         let dragState = { serieId: null, draggedIdx: null };
 
-        window.showPanel = (panelId) => {
+        window.showPanel = id => {
             document.querySelectorAll('.panel, .nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('panel-' + panelId).classList.add('active');
-            if (document.getElementById('nav-' + panelId)) document.getElementById('nav-' + panelId).classList.add('active');
-            if (panelId === 'quiz') renderQuiz();
-            if (panelId === 'leaderboard') renderLeaderboards();
+            document.getElementById('panel-' + id).classList.add('active');
+            if (document.getElementById('nav-' + id)) document.getElementById('nav-' + id).classList.add('active');
+            if (id === 'quiz') renderQuiz();
+            if (id === 'leaderboard') renderLeaderboards();
         };
 
         window.handleQuizNav = () => {
@@ -259,71 +717,65 @@
             else showPanel('quiz');
         };
 
-        window.registerPlayer = function() {
+        window.registerPlayer = () => {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
-            if (!name) { alert("Le nom est obligatoire !"); return; }
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, '') + "_" + Math.floor(Math.random() * 10000);
+            if (!name) { alert('Le nom est obligatoire !'); return; }
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.floor(Math.random()*10000);
             player = { id, name, table, path: null };
-            localStorage.setItem('alex_50_p', JSON.stringify(player));
+            localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {}; chipsState = {};
-            document.getElementById('reg-feedback').innerHTML = "<b style='color:green;'>Enregistrement réussi ! 🤠</b>";
-            setTimeout(() => showPanel('choice'), 800);
+            document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
+            setTimeout(() => showPanel('choice'), 900);
         };
 
-        window.setPath = async (p) => {
+        window.setPath = async p => {
             player.path = p;
-            localStorage.setItem('alex_50_p', JSON.stringify(player));
-            await setDoc(doc(db, "scores", player.id), { name: player.name, table: player.table, path: p, score: 0 }, { merge: true });
+            localStorage.setItem('alex50_p', JSON.stringify(player));
+            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, path:p, score:0 }, { merge:true });
             showPanel('quiz');
         };
 
         function renderQuiz() {
             if (!player) return;
             document.getElementById('q-player-name').textContent = `🤠 Équipe : ${player.name}`;
-            if (player.path === 'terroir') renderTerroirQuiz();
-            else renderChipsQuiz();
+            player.path === 'terroir' ? renderTerroirQuiz() : renderChipsQuiz();
         }
 
-        // Terroir + Charcuterie
         function renderTerroirQuiz() {
-            let html = "";
+            let html = '';
             SERIES_TERROIR.forEach(serie => {
-                html += `<div class="card"><div class="card-header">🍽️ ${serie.label} — Fromages & Vin</div><div class="card-body">`;
-                serie.questions.forEach(q => {
-                    const userAns = answers[q.id];
-                    const isAnswered = userAns !== undefined;
+                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🍽️</span><span class="card-header-title">${serie.label} — Fromages &amp; Vin</span></div><div class="card-body">`;
+                serie.questions.forEach((q,qi) => {
+                    const ua = answers[q.id], done = ua !== undefined;
                     const pts = q.type === 'vin' ? 3 : 2;
-                    html += `<div class="q-block"><div style="margin-bottom:6px;"><span class="serie-badge">${q.type==='vin'?'🍷':'🧀'} ${q.type.toUpperCase()} — ${pts} pts</span></div><div class="q-title">${q.label}</div>`;
-                    if (isAnswered) {
-                        html += `<div class="opt-grid">`;
-                        q.options.forEach((opt,idx) => html += `<button class="opt-btn locked${idx===userAns?' selected':''}">${opt}</button>`);
-                        html += `</div><div class="vote-confirmed">✓ Réponse enregistrée</div>`;
-                    } else {
-                        html += `<div class="opt-grid">`;
-                        q.options.forEach((opt,idx) => html += `<button class="opt-btn" onclick="handleVote('${q.id}',${idx})">${opt}</button>`);
-                        html += `</div>`;
-                    }
+                    html += `<div class="q-block">`;
+                    if (qi > 0) html += `<div class="section-divider"><div class="section-divider-line"></div></div>`;
+                    html += `<span class="q-badge ${q.type}">${q.type === 'vin' ? '🍷 Vin' : '🧀 Fromage'} &nbsp;·&nbsp; ${pts} pts</span>`;
+                    html += `<div class="q-label">${q.label}</div>`;
+                    html += `<div class="opt-grid">`;
+                    q.options.forEach((opt,idx) => {
+                        html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
+                    });
+                    html += `</div>`;
+                    if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
                     html += `</div>`;
                 });
                 html += `</div></div>`;
             });
 
-            // Charcuterie
-            html += `<div class="card"><div class="card-header">🥩 LES CHARCUTERIES (2 pts chacune)</div><div class="card-body">`;
-            CHARCUTERIES.forEach(q => {
-                const userAns = answers[q.id];
-                const isAnswered = userAns !== undefined;
-                html += `<div class="q-block"><div class="q-title">${q.label}</div>`;
-                if (isAnswered) {
-                    html += `<div class="opt-grid">`;
-                    q.options.forEach((opt,idx) => html += `<button class="opt-btn locked${idx===userAns?' selected':''}">${opt}</button>`);
-                    html += `</div><div class="vote-confirmed">✓ Réponse enregistrée</div>`;
-                } else {
-                    html += `<div class="opt-grid">`;
-                    q.options.forEach((opt,idx) => html += `<button class="opt-btn" onclick="handleVote('${q.id}',${idx})">${opt}</button>`);
-                    html += `</div>`;
-                }
+            html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">Charcuteries — 2 pts chacune</span></div><div class="card-body">`;
+            CHARCUTERIES.forEach((q,qi) => {
+                const ua = answers[q.id], done = ua !== undefined;
+                html += `<div class="q-block">`;
+                if (qi > 0) html += `<div class="section-divider"><div class="section-divider-line"></div></div>`;
+                html += `<span class="q-badge charcuterie">🥩 Charcuterie &nbsp;·&nbsp; 2 pts</span>`;
+                html += `<div class="q-label">${q.label}</div><div class="opt-grid">`;
+                q.options.forEach((opt,idx) => {
+                    html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
+                });
+                html += `</div>`;
+                if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
                 html += `</div>`;
             });
             html += `</div></div>`;
@@ -332,92 +784,87 @@
             updateTerroirProgress();
         }
 
-        window.handleVote = async (qId, choiceIdx) => {
+        window.handleVote = async (qId, idx) => {
             if (answers[qId] !== undefined) return;
-            answers[qId] = choiceIdx;
-            localStorage.setItem('alex_50_ans_' + player.id, JSON.stringify(answers));
+            answers[qId] = idx;
+            localStorage.setItem('alex50_ans_' + player.id, JSON.stringify(answers));
             renderQuiz();
             await saveTerroirScore();
-
-            const totalQ = SERIES_TERROIR.reduce((acc,s) => acc + s.questions.length, 0) + CHARCUTERIES.length;
-            if (Object.keys(answers).length === totalQ) showRewardModal();
+            const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0) + CHARCUTERIES.length;
+            if (Object.keys(answers).length === total) showRewardModal();
         };
 
         async function saveTerroirScore() {
             let score = 0;
-            SERIES_TERROIR.forEach(serie => serie.questions.forEach(q => {
-                if (answers[q.id] === q.correct) score += (q.type === 'vin' ? 3 : 2);
-            }));
-            CHARCUTERIES.forEach(q => {
-                if (answers[q.id] === q.correct) score += 2;
-            });
-            await setDoc(doc(db, "scores", player.id), {name: player.name, table: player.table, score, path: 'terroir', done: Object.keys(answers).length, lastUpdate: Date.now()}, {merge: true});
+            SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
+            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
+            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, score, path:'terroir', done:Object.keys(answers).length, lastUpdate:Date.now() }, {merge:true});
         }
 
         function updateTerroirProgress() {
-            const total = SERIES_TERROIR.reduce((acc,s)=>acc+s.questions.length,0) + CHARCUTERIES.length;
+            const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0) + CHARCUTERIES.length;
             const done = Object.keys(answers).length;
-            const pct = Math.round((done/total)*100);
+            const pct = Math.round(done/total*100);
             document.getElementById('q-done-count').textContent = done;
             document.getElementById('q-total-count').textContent = total;
-            document.getElementById('q-percent').textContent = pct + "%";
-            document.getElementById('q-main-fill').style.width = pct + "%";
+            document.getElementById('q-percent').textContent = pct + '%';
+            document.getElementById('q-main-fill').style.width = pct + '%';
         }
 
         function showRewardModal() {
             let score = 0;
-            SERIES_TERROIR.forEach(serie => serie.questions.forEach(q => {
-                if (answers[q.id] === q.correct) score += q.type === 'vin' ? 3 : 2;
-            }));
-            CHARCUTERIES.forEach(q => { if (answers[q.id] === q.correct) score += 2; });
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4A017', '#9C2A2A', '#F5E8C7'] });
+            SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
+            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
+            confetti({ particleCount:140, spread:65, origin:{y:0.6}, colors:['#b8832a','#7c2d12','#f5ead6'] });
             document.getElementById('final-score-val').textContent = score;
             document.getElementById('final-max-score').textContent = '38';
             setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
         }
 
-        // ====================== CHIPS ======================
         function renderChipsQuiz() {
-            let html = `<div class="card"><div class="card-header">🥔 CHIPS BRET'S — Remets dans l'ordre !</div><div class="card-body"><div class="chips-instructions"><strong>📋 Consigne :</strong> Tu as goûté les chips dans un certain ordre. Fais glisser les étiquettes pour les remettre dans l'ordre exact de dégustation, puis valide ta série !</div></div></div>`;
+            let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Fais glisser les étiquettes pour remettre les chips dans l'ordre exact de dégustation, puis valide chaque série.</p></div></div>`;
 
             CHIPS_SERIES.forEach(serie => {
                 if (!chipsState[serie.id]) {
-                    const shuffled = [...serie.correctOrder].sort(() => Math.random() - 0.5);
-                    chipsState[serie.id] = {order: shuffled, validated: false, score: 0};
+                    const shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5);
+                    chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
                 }
                 const state = chipsState[serie.id];
-                html += `<div class="card"><div class="card-header">🥔 ${serie.label}</div><div class="card-body">`;
+                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
+
                 if (state.validated) {
                     html += `<div class="chips-zone">`;
-                    state.order.forEach((item,idx) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${idx+1}</span><span>${item}</span></div>`);
-                    html += `</div><div class="chips-score-display"><div class="score-label">🎯 TON SCORE</div><div class="score-number">${state.score}</div><div class="score-max">sur 8</div></div>`;
+                    state.order.forEach((item,i) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${i+1}</span><span>${item}</span></div>`);
+                    html += `</div><div class="chips-score-box"><div class="score-n">${state.score}</div><div class="score-lbl">points sur 8</div></div>`;
                 } else {
                     html += `<div class="chips-zone" id="zone-${serie.id}" ondragover="handleDragOver(event,'${serie.id}')" ondrop="handleDrop(event,'${serie.id}')" ondragleave="handleDragLeave(event,'${serie.id}')">`;
-                    state.order.forEach((item,idx) => {
-                        html += `<div class="chip-item" draggable="true" id="chip-${serie.id}-${idx}" data-serie="${serie.id}" data-idx="${idx}" ondragstart="handleDragStart(event,'${serie.id}',${idx})" ondragend="handleDragEnd(event)">`;
-                        html += `<span class="drag-handle">☰</span><span class="chip-num">${idx+1}</span><span>${item}</span></div>`;
+                    state.order.forEach((item,i) => {
+                        html += `<div class="chip-item" draggable="true" data-serie="${serie.id}" data-idx="${i}" ondragstart="handleDragStart(event,'${serie.id}',${i})" ondragend="handleDragEnd()">`;
+                        html += `<span class="drag-handle">⠿</span><span class="chip-num">${i+1}</span><span>${item}</span></div>`;
                     });
-                    html += `</div><button class="chips-validate-btn" onclick="validateChipsSerie('${serie.id}')">✅ VALIDER MA SÉRIE</button>`;
+                    html += `</div><button class="btn-danger" onclick="validateChipsSerie('${serie.id}')">Valider cette série</button>`;
                 }
                 html += `</div></div>`;
             });
+
             document.getElementById('quiz-render-area').innerHTML = html;
             updateChipsProgress();
         }
 
         function updateChipsProgress() {
-            const done = Object.values(chipsState).filter(s => s.validated).length;
-            const pct = Math.round((done / 2) * 100);
+            const done = Object.values(chipsState).filter(s=>s.validated).length;
+            const pct = Math.round(done/2*100);
             document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-percent').textContent = pct + "%";
-            document.getElementById('q-main-fill').style.width = pct + "%";
+            document.getElementById('q-total-count').textContent = 2;
+            document.getElementById('q-percent').textContent = pct + '%';
+            document.getElementById('q-main-fill').style.width = pct + '%';
         }
 
-        window.handleDragStart = (e, serieId, idx) => { dragState = {serieId, draggedIdx: idx}; };
-        window.handleDragEnd = () => document.querySelectorAll('.chip-item,.chips-zone').forEach(el => el.classList.remove('dragging','drag-over'));
-        window.handleDragOver = (e, serieId) => { e.preventDefault(); document.getElementById('zone-'+serieId).classList.add('drag-over'); };
-        window.handleDragLeave = (e, serieId) => document.getElementById('zone-'+serieId).classList.remove('drag-over');
-        window.handleDrop = (e, serieId) => {
+        window.handleDragStart = (e,serieId,idx) => { dragState = { serieId, draggedIdx:idx }; };
+        window.handleDragEnd = () => document.querySelectorAll('.chips-zone').forEach(el=>el.classList.remove('drag-over'));
+        window.handleDragOver = (e,serieId) => { e.preventDefault(); document.getElementById('zone-'+serieId).classList.add('drag-over'); };
+        window.handleDragLeave = (e,serieId) => document.getElementById('zone-'+serieId).classList.remove('drag-over');
+        window.handleDrop = (e,serieId) => {
             e.preventDefault();
             document.getElementById('zone-'+serieId).classList.remove('drag-over');
             const target = e.target.closest('.chip-item');
@@ -426,27 +873,24 @@
             const fromIdx = dragState.draggedIdx;
             if (fromIdx === toIdx) return;
             const order = chipsState[serieId].order;
-            const moved = order.splice(fromIdx, 1)[0];
-            order.splice(toIdx, 0, moved);
+            const moved = order.splice(fromIdx,1)[0];
+            order.splice(toIdx,0,moved);
             renderChipsQuiz();
         };
 
-        window.validateChipsSerie = async (serieId) => {
+        window.validateChipsSerie = async serieId => {
             const state = chipsState[serieId];
             if (state.validated) return;
-            const serie = CHIPS_SERIES.find(s => s.id === serieId);
+            const serie = CHIPS_SERIES.find(s=>s.id===serieId);
             let score = 0;
-            state.order.forEach((item, idx) => { if (item === serie.correctOrder[idx]) score++; });
-            state.validated = true;
-            state.score = score;
-
-            const totalScore = Object.values(chipsState).reduce((acc,s) => acc + (s.score||0), 0);
-            await setDoc(doc(db, "scores", player.id), {name: player.name, table: player.table, chipsScore: totalScore, path: 'chips', lastUpdate: Date.now()}, {merge: true});
-
+            state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
+            state.validated = true; state.score = score;
+            const total = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
+            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, chipsScore:total, path:'chips', lastUpdate:Date.now() }, {merge:true});
             renderChipsQuiz();
-            if (CHIPS_SERIES.every(s => chipsState[s.id]?.validated)) {
-                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-                document.getElementById('final-score-val').textContent = totalScore;
+            if (CHIPS_SERIES.every(s=>chipsState[s.id]?.validated)) {
+                confetti({ particleCount:120, spread:65, origin:{y:0.6} });
+                document.getElementById('final-score-val').textContent = total;
                 document.getElementById('final-max-score').textContent = '16';
                 setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
             }
@@ -454,26 +898,22 @@
 
         function renderLeaderboards() {
             const all = Object.values(liveScores);
-            // Terroir
-            let html = `<table class="lb-table">`;
-            all.filter(p => p.path === 'terroir').sort((a,b) => b.score - a.score).forEach((p,i) => {
+            const row = (p,i) => {
                 const r = i+1;
-                html += `<tr><td width="50"><span class="rank-pill ${r===1?'top1':''}">${r}</span></td><td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.76rem;">${p.table||''}</div></td><td align="right"><span style="font-family:'Rye';font-size:1.45rem;color:var(--red);">${p.score||0}/38</span></td></tr>`;
-            });
-            document.getElementById('lb-general').innerHTML = html + '</table>';
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.65rem;opacity:0.55;">/38</small></div></td></tr>`;
+            };
+            document.getElementById('lb-general').innerHTML = all.filter(p=>p.path==='terroir').sort((a,b)=>b.score-a.score).map(row).join('') || '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.85rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // Chips
-            html = `<table class="lb-table">`;
-            all.filter(p => p.path === 'chips').sort((a,b) => (b.chipsScore||0) - (a.chipsScore||0)).forEach((p,i) => {
+            const rowC = (p,i) => {
                 const r = i+1;
-                html += `<tr><td width="50"><span class="rank-pill ${r===1?'top1':''}">${r}</span></td><td><div style="font-weight:900;">${p.name}</div><div style="font-size:0.76rem;">${p.table||''}</div></td><td align="right"><span style="font-family:'Rye';font-size:1.45rem;color:var(--red);">${p.chipsScore||0}/16</span></td></tr>`;
-            });
-            document.getElementById('lb-chips').innerHTML = html + '</table>';
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chipsScore||0}<small style="font-size:0.65rem;opacity:0.55;">/16</small></div></td></tr>`;
+            };
+            document.getElementById('lb-chips').innerHTML = all.filter(p=>p.path==='chips').sort((a,b)=>(b.chipsScore||0)-(a.chipsScore||0)).map(rowC).join('') || '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.85rem;">Aucun participant pour l\'instant</td></tr>';
         }
 
         window.closeResultModal = () => { document.getElementById('result-modal').classList.remove('active'); showPanel('leaderboard'); };
 
-        onSnapshot(collection(db, "scores"), (snap) => {
+        onSnapshot(collection(db,'scores'), snap => {
             liveScores = {};
             snap.forEach(d => liveScores[d.id] = d.data());
             if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
