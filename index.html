@@ -56,27 +56,6 @@
             overflow-x: hidden;
         }
 
-        /* ── MUSIC PLAYER ── */
-        .music-btn {
-            position: absolute;
-            top: 50%; left: 0.85rem;
-            transform: translateY(-50%);
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            border: 1.5px solid var(--ochre);
-            background: rgba(184,131,42,0.12);
-            color: var(--ochre-l);
-            font-size: 1rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            -webkit-tap-highlight-color: transparent;
-            z-index: 2;
-        }
-        .music-btn:active { transform: translateY(-50%) scale(0.92); }
-        .music-btn.playing { background: rgba(184,131,42,0.28); }
-        .music-btn .music-icon { line-height: 1; }
-
         /* ── HEADER ── */
         .header {
             background: #0f0904;
@@ -633,15 +612,21 @@
     <!-- Bouton musique -->
     <button id="music-btn" title="Musique" aria-label="Musique on/off">🎵</button>
 
-    <audio id="bg-music" loop>
+    <!-- Canvas troupeau -->
+
+    <audio id="bg-music" loop preload="none">
         <source src="https://sayllor-51.github.io/Anniversaire/positive_sound-spaghetti-western-491538.mp3" type="audio/mpeg">
     </audio>
 
     <header class="header">
         <div class="header-inner">
-            <button class="music-btn" id="music-btn" onclick="toggleMusic()" title="Musique">
-                <span class="music-icon" id="music-icon">🎵</span>
-            </button>
+            <button id="music-btn" onclick="toggleMusic()" title="Musique" style="
+                position:absolute; top:50%; left:0.85rem; transform:translateY(-50%);
+                width:38px; height:38px; border-radius:50%;
+                border:1.5px solid #b8832a; background:rgba(184,131,42,0.12);
+                color:#d4a24a; font-size:1.1rem;
+                display:flex; align-items:center; justify-content:center;
+                cursor:pointer; z-index:2;">🎵</button>
             <div class="badge"><span>50</span><small>ans</small></div>
             <div class="header-text">
                 <p class="header-eyebrow">Le Grand Jeu du Saloon</p>
@@ -1426,26 +1411,18 @@
             if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
         });
 
-        // ── MUSIC ──
-        let musicPlaying = false;
-        const bgMusic = document.getElementById('bg-music');
-        bgMusic.volume = 0.45;
-
-        window.toggleMusic = function() {
-            const btn = document.getElementById('music-btn');
-            const icon = document.getElementById('music-icon');
-            if (musicPlaying) {
-                bgMusic.pause();
-                musicPlaying = false;
-                btn.classList.remove('playing');
-                icon.textContent = '🎵';
+        // ── MUSIQUE ──────────────────────────────────────────────
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const btn   = document.getElementById('music-btn');
+            if (audio.paused) {
+                audio.volume = 0.4;
+                audio.play().then(() => { btn.textContent = '🔇'; }).catch(() => {});
             } else {
-                bgMusic.play().catch(() => {});
-                musicPlaying = true;
-                btn.classList.add('playing');
-                icon.textContent = '🔇';
+                audio.pause();
+                btn.textContent = '🎵';
             }
-        };
+        }
 
         window.onload = () => {
             const savedData = localStorage.getItem('alex50_p');
