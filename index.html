@@ -1021,6 +1021,22 @@
                 }
             } else {
                 renderChipsQuiz();
+                // Vérifier si les chips sont validées mais pas encore marquées
+                const serieId = player.path;
+                const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
+                const saved = localStorage.getItem(chipsKey);
+                if (saved) {
+                    const state = JSON.parse(saved);
+                    if (state.validated && !player.completedPaths.includes(serieId)) {
+                        markPathCompleted(serieId);
+                        const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
+                        setDoc(doc(db,'scores',player.id), {
+                            [chipsScoreKey]: state.score,
+                            completedPaths: player.completedPaths,
+                            lastUpdate: Date.now()
+                        }, {merge:true});
+                    }
+                }
             }
         }
 
