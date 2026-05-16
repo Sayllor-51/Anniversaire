@@ -572,24 +572,22 @@
 
         /* ── TROUPEAU DE CHEVAUX ── */
 
+
         /* ── BOUTON MUSIQUE ── */
-        #music-btn {
-            position: fixed;
-            bottom: calc(var(--nav-h) + 12px);
-            right: 12px;
-            z-index: 1600;
-            background: #0f0904;
-            border: 1.5px solid var(--ochre);
+        .music-btn {
+            position: absolute;
+            top: 50%; left: 0.85rem;
+            transform: translateY(-50%);
+            width: 38px; height: 38px;
             border-radius: 50%;
-            width: 40px; height: 40px;
+            border: 1.5px solid var(--ochre);
+            background: rgba(184,131,42,0.12);
+            color: var(--ochre-l);
             font-size: 1.1rem;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
-        #music-btn:active { background: #1c1008; }
 
         .footer {
             text-align: center;
@@ -604,29 +602,13 @@
 </head>
 <body>
 
-    <!-- Musique country -->
-    <audio id="bg-music" loop>
-        <source src="https://drive.google.com/uc?export=download&id=1c_6tBG3sIaBitjd6zSkQxgR4jCC21mzW" type="audio/mpeg">
-    </audio>
-
-    <!-- Bouton musique -->
-    <button id="music-btn" title="Musique" aria-label="Musique on/off">🎵</button>
-
-    <!-- Canvas troupeau -->
-
     <audio id="bg-music" loop preload="none">
         <source src="https://sayllor-51.github.io/Anniversaire/positive_sound-spaghetti-western-491538.mp3" type="audio/mpeg">
     </audio>
 
     <header class="header">
         <div class="header-inner">
-            <button id="music-btn" onclick="toggleMusic()" title="Musique" style="
-                position:absolute; top:50%; left:0.85rem; transform:translateY(-50%);
-                width:38px; height:38px; border-radius:50%;
-                border:1.5px solid #b8832a; background:rgba(184,131,42,0.12);
-                color:#d4a24a; font-size:1.1rem;
-                display:flex; align-items:center; justify-content:center;
-                cursor:pointer; z-index:2;">🎵</button>
+            <button class="music-btn" id="music-btn" onclick="toggleMusic()">🎵</button>
             <div class="badge"><span>50</span><small>ans</small></div>
             <div class="header-text">
                 <p class="header-eyebrow">Le Grand Jeu du Saloon</p>
@@ -834,34 +816,8 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
-        // ── MUSIQUE ──────────────────────────────────────────────
-        const music = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('music-btn');
-        let musicStarted = false;
-
-        function startMusic() {
-            if (!musicStarted) {
-                music.volume = 0.35;
-                music.play().catch(() => {});
-                musicStarted = true;
-                musicBtn.textContent = '🔊';
-            }
-        }
-
-        musicBtn.addEventListener('click', () => {
-            if (!musicStarted) {
-                startMusic();
-            } else if (music.paused) {
-                music.play();
-                musicBtn.textContent = '🔊';
-            } else {
-                music.pause();
-                musicBtn.textContent = '🔇';
-            }
-        });
-
         // ── TROUPEAU DE CHEVAUX ───────────────────────────────────
-
+        
         // ── DONNÉES ───────────────────────────────────────────────
         const SERIES_TERROIR = [
             {
@@ -1023,8 +979,6 @@
             answers = {};
             chipsState = {};
 
-            // Lance la musique au premier "En selle"
-            startMusic();
 
             document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
             setTimeout(() => {
@@ -1412,17 +1366,17 @@
         });
 
         // ── MUSIQUE ──────────────────────────────────────────────
-        function toggleMusic() {
+        window.toggleMusic = function() {
             const audio = document.getElementById('bg-music');
             const btn   = document.getElementById('music-btn');
             if (audio.paused) {
                 audio.volume = 0.4;
-                audio.play().then(() => { btn.textContent = '🔇'; }).catch(() => {});
+                audio.play().then(() => { btn.textContent = '🔇'; }).catch(e => console.warn('Audio:', e));
             } else {
                 audio.pause();
                 btn.textContent = '🎵';
             }
-        }
+        };
 
         window.onload = () => {
             const savedData = localStorage.getItem('alex50_p');
