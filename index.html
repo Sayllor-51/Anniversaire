@@ -1366,12 +1366,27 @@
         });
 
         // ── MUSIQUE ──────────────────────────────────────────────
+        // Lancer la musique dès le premier interact (contourne le blocage autoplay mobile)
+        let musicStarted = false;
+        function autoStartMusic() {
+            if (musicStarted) return;
+            const audio = document.getElementById('bg-music');
+            const btn   = document.getElementById('music-btn');
+            audio.volume = 0.4;
+            audio.play().then(() => {
+                musicStarted = true;
+                btn.textContent = '🔇';
+            }).catch(() => {});
+        }
+        document.addEventListener('touchstart', autoStartMusic, { once: true });
+        document.addEventListener('click',      autoStartMusic, { once: true });
+
         window.toggleMusic = function() {
             const audio = document.getElementById('bg-music');
             const btn   = document.getElementById('music-btn');
             if (audio.paused) {
                 audio.volume = 0.4;
-                audio.play().then(() => { btn.textContent = '🔇'; }).catch(e => console.warn('Audio:', e));
+                audio.play().then(() => { btn.textContent = '🔇'; }).catch(() => {});
             } else {
                 audio.pause();
                 btn.textContent = '🎵';
