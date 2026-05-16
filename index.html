@@ -32,7 +32,6 @@
             font-family: 'Inter', sans-serif;
             color: var(--ink);
             min-height: 100vh;
-            padding-bottom: calc(var(--nav-h) + 16px);
             background-color: #1c1008;
             background-image:
                 repeating-linear-gradient(
@@ -113,17 +112,17 @@
         }
         .header-ornament { display: none; }
 
-        /* ── BOTTOM NAV ── */
+        /* ── TOP NAV (SOUS L'EN-TÊTE) ── */
         .nav {
             background: #0f0904;
-            border-top: 1px solid var(--ochre);
+            border-bottom: 1px solid var(--ochre);
             display: flex;
             justify-content: space-around;
             align-items: stretch;
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
             z-index: 999;
             height: var(--nav-h);
+            position: sticky;
+            top: 0;
         }
         .nav-btn {
             background: none; border: none;
@@ -139,20 +138,20 @@
             gap: 4px;
             transition: color 0.2s;
             -webkit-tap-highlight-color: transparent;
-            border-top: 2px solid transparent;
+            border-bottom: 2px solid transparent;
         }
         .nav-btn .nav-icon { font-size: 1.25rem; line-height: 1; }
         .nav-btn:active { opacity: 0.7; }
         .nav-btn.active {
             color: var(--ochre-l);
-            border-top-color: var(--ochre);
+            border-bottom-color: var(--ochre);
         }
 
         /* ── MAIN ── */
         .main {
             max-width: 600px;
             margin: 0 auto;
-            padding: 1rem 0.85rem;
+            padding: 1.25rem 0.85rem;
         }
 
         /* ── PANELS ── */
@@ -566,6 +565,21 @@
         </div>
     </header>
 
+    <nav class="nav">
+        <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">
+            <span class="nav-icon">🐎</span>
+            <span>Équipe</span>
+        </button>
+        <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">
+            <span class="nav-icon">🍽️</span>
+            <span>Dégustation</span>
+        </button>
+        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">
+            <span class="nav-icon">🏆</span>
+            <span>Classement</span>
+        </button>
+    </nav>
+
     <div class="main">
 
         <div id="panel-register" class="panel active">
@@ -735,21 +749,6 @@
         </div>
     </div>
 
-    <nav class="nav">
-        <button class="nav-btn active" id="nav-register" onclick="showPanel('register')">
-            <span class="nav-icon">🐎</span>
-            <span>Équipe</span>
-        </button>
-        <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">
-            <span class="nav-icon">🍽️</span>
-            <span>Dégustation</span>
-        </button>
-        <button class="nav-btn" id="nav-leaderboard" onclick="showPanel('leaderboard')">
-            <span class="nav-icon">🏆</span>
-            <span>Classement</span>
-        </button>
-    </nav>
-
     <div class="footer">Réalisé pour les 50 ans d'Alexandre</div>
 
     <script type="module">
@@ -851,7 +850,6 @@
         window.setPath = async p => {
             player.path = p;
             localStorage.setItem('alex50_p', JSON.stringify(player));
-            // Nettoyer les réponses locales lors du changement de parcours pour éviter les conflits
             answers = {};
             await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, path:p, score:0, charcScore:0, chips1Score:0, chips2Score:0 }, { merge:true });
             showPanel('quiz');
@@ -1183,7 +1181,7 @@
         function renderLeaderboards() {
             const all = Object.values(liveScores);
 
-            // ── 1. Terroir (Affiche uniquement les joueurs du parcours 'terroir')
+            // ── 1. Terroir
             const rowTerroir = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/28</small></div></td></tr>`;
@@ -1192,7 +1190,7 @@
                 all.filter(p=>p.path==='terroir').sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 2. Charcuteries (Affiche uniquement les joueurs du parcours 'charcuterie')
+            // ── 2. Charcuteries
             const rowCharc = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
@@ -1201,7 +1199,7 @@
                 all.filter(p=>p.path==='charcuterie').sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 3. Chips série 1 (Affiche uniquement les joueurs du parcours 'chips1')
+            // ── 3. Chips série 1
             const rowC1 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
@@ -1210,7 +1208,7 @@
                 all.filter(p=>p.path==='chips1').sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 4. Chips série 2 (Affiche uniquement les joueurs du parcours 'chips2')
+            // ── 4. Chips série 2
             const rowC2 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
