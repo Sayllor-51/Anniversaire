@@ -1007,9 +1007,21 @@
         function renderQuiz() {
             if (!player) return;
             document.getElementById('q-player-name').textContent = `🤠 Parcours : ${player.path.toUpperCase()} — ${player.name}`;
-            if (player.path === 'terroir') renderTerroirQuiz();
-            else if (player.path === 'charcuterie') renderCharcuterieQuiz();
-            else renderChipsQuiz();
+            if (player.path === 'terroir') {
+                renderTerroirQuiz();
+                // Vérifier si tout est complété mais pas encore marqué
+                const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0);
+                if (Object.keys(answers).length === total && !player.completedPaths.includes('terroir')) {
+                    fireTerroirReward();
+                }
+            } else if (player.path === 'charcuterie') {
+                renderCharcuterieQuiz();
+                if (Object.keys(answers).length === CHARCUTERIES.length && !player.completedPaths.includes('charcuterie')) {
+                    fireCharcuterieReward();
+                }
+            } else {
+                renderChipsQuiz();
+            }
         }
 
         function formatOpt(opt) {
