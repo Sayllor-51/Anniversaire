@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alexandre 50 — Le Grand Jeu du Saloon</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Playfair+Display:ital,wght=0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght=0,400;0,700;1,400&family=Inter:wght=300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -110,7 +110,6 @@
             margin-top: 0.25rem;
             opacity: 0.85;
         }
-        .header-ornament { display: none; }
 
         /* ── TOP NAV ── */
         .nav {
@@ -240,6 +239,21 @@
         }
         .btn-danger:active { opacity: 0.8; }
 
+        .btn-secondary {
+            display: block; width: 100%;
+            background: transparent;
+            color: var(--ink2);
+            border: 1.5px dashed var(--ochre); border-radius: 2px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem; letter-spacing: 0.05em;
+            padding: 0.8rem;
+            cursor: pointer;
+            min-height: 45px;
+            margin-top: 1rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         /* ── RÈGLES ── */
         .rule-item {
             display: flex; align-items: baseline; gap: 8px;
@@ -290,14 +304,12 @@
         }
         .path-card p { font-size: 0.75rem; color: #666; line-height: 1.4; }
 
-        /* AJOUT: STYLE DES PARCOURS TERMINÉS (GRISÉS) */
         .path-card.grised {
             opacity: 0.5;
             background-color: var(--sand) !important;
             border-color: var(--sand2) !important;
             pointer-events: none;
             cursor: not-allowed;
-            transform: none !important;
         }
         .badge-valide {
             background: #27ae60;
@@ -536,7 +548,7 @@
             font-family: 'Rye'; font-size: 0.74rem; letter-spacing: 0.05em;
         }
 
-        /* ── ANIMATION SCORE ── */
+        /* ── ANIMATIONS ── */
         @keyframes lasso {
             0%   { transform: rotate(-15deg) scale(0.3); opacity:0; }
             50%  { transform: rotate(8deg) scale(1.15); opacity:1; }
@@ -553,13 +565,10 @@
             30%     { transform: translateY(-18px) rotate(-8deg); }
             60%     { transform: translateY(-6px) rotate(4deg); }
         }
-        @keyframes scoreCount {
-            from { opacity:0; transform: scale(0.5) rotate(-10deg); }
-            to   { opacity:1; transform: scale(1) rotate(0deg); }
-        }
         .anim-stamp  { animation: stampIn 0.55s cubic-bezier(.22,1,.36,1) both; }
         .anim-bounce { animation: hatBounce 0.9s ease 0.3s both; }
         .anim-lasso  { animation: lasso 0.6s ease 0.5s both; }
+
         .footer {
             text-align: center;
             padding: 1.25rem 1rem;
@@ -589,7 +598,7 @@
             <span class="nav-icon">🐎</span>
             <span>Équipe</span>
         </button>
-        <button class="nav-btn" id="nav-quiz" onclick="handleQuizNav()">
+        <button class="nav-btn" id="nav-choice" onclick="handleQuizNav()">
             <span class="nav-icon">🍽️</span>
             <span>Dégustation</span>
         </button>
@@ -608,15 +617,17 @@
                     <span class="card-header-title">Enregistrement au ranch</span>
                 </div>
                 <div class="card-body">
-                    <div class="field">
-                        <label>Nom du cowboy / cowgirl</label>
-                        <input type="text" id="p-name" placeholder="Ex : Marie & Gaël" autocomplete="off">
+                    <div id="reg-form-area">
+                        <div class="field">
+                            <label>Nom du cowboy / cowgirl</label>
+                            <input type="text" id="p-name" placeholder="Ex : Marie & Gaël" autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label>Table / Équipe (optionnel)</label>
+                            <input type="text" id="p-table" placeholder="Ex : Table du Grand Canyon" autocomplete="off">
+                        </div>
+                        <button class="btn-primary" onclick="registerPlayer()">En selle 🌵</button>
                     </div>
-                    <div class="field">
-                        <label>Table / Équipe (optionnel)</label>
-                        <input type="text" id="p-table" placeholder="Ex : Table du Grand Canyon" autocomplete="off">
-                    </div>
-                    <button class="btn-primary" onclick="registerPlayer()">En selle 🌵</button>
                     <div id="reg-feedback" style="margin-top:0.85rem;font-size:0.82rem;text-align:center;"></div>
                 </div>
             </div>
@@ -664,6 +675,7 @@
                     <span class="card-header-title">Choix du parcours</span>
                 </div>
                 <div class="card-body">
+                    <div class="player-label" id="hub-player-name" style="margin-bottom:1rem; color:var(--ochre); font-weight:bold;">🤠 Session : …</div>
                     <div class="path-grid">
                         <div class="path-card" id="path-card-terroir" onclick="setPath('terroir')">
                             <div class="path-card-emoji">🍷🧀</div>
@@ -686,6 +698,8 @@
                             <p>Chips 9 à 16<br>8 pts max</p>
                         </div>
                     </div>
+                    
+                    <button class="btn-secondary" onclick="logoutPlayer()">🔄 Prêter mon téléphone à un autre Cowboy</button>
                 </div>
             </div>
         </div>
@@ -746,17 +760,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="serie-modal">
-        <div class="wanted">
-            <p class="wanted-eyebrow" id="serie-modal-label">Série 1</p>
-            <div id="serie-modal-emoji" style="font-size:3rem;line-height:1;margin-bottom:0.5rem;">🥔</div>
-            <div class="wanted-score" id="serie-modal-score">0</div>
-            <p class="wanted-sub">points sur 8</p>
-            <p id="serie-modal-message" style="font-family:'Rye',serif;font-size:0.88rem;color:var(--rust);margin-top:1rem;letter-spacing:0.06em;line-height:1.5;"></p>
-            <button class="btn-primary" onclick="closeSerieModal()" style="margin-top:1.5rem;">Continuer 🤠</button>
-        </div>
-    </div>
-
     <div class="modal-overlay" id="result-modal">
         <div class="wanted">
             <p class="wanted-eyebrow">Wanted — Score final</p>
@@ -786,7 +789,7 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
-const SERIES_TERROIR = [
+        const SERIES_TERROIR = [
             {
                 id:'s1', label:'Série 1',
                 questions:[
@@ -836,21 +839,22 @@ const SERIES_TERROIR = [
 
         let player = null, answers = {}, chipsState = {}, liveScores = {};
         let dragState = { serieId: null, draggedIdx: null };
-        let touchDrag = { active: false, serieId: null, fromIdx: null, ghost: null };
+        let touchDrag = { active: false, serieId: null, fromIdx: null };
 
-        // AJOUT: FONCTION POUR GRISER LES CARTES DU HUB
         window.renderChoiceHub = () => {
             if (!player) return;
+            document.getElementById('hub-player-name').textContent = `🤠 Cowboy actif : ${player.name} ${player.table ? '(' + player.table + ')' : ''}`;
             if (!player.completedPaths) player.completedPaths = [];
             
             ['terroir', 'charcuterie', 'chips1', 'chips2'].forEach(p => {
                 const card = document.getElementById('path-card-' + p);
                 if (card) {
+                    const badge = card.querySelector('.badge-valide');
+                    if (badge) badge.remove();
+
                     if (player.completedPaths.includes(p)) {
                         card.classList.add('grised');
-                        if (!card.querySelector('.badge-valide')) {
-                            card.innerHTML += `<div class="badge-valide">Validé ✓</div>`;
-                        }
+                        card.innerHTML += `<div class="badge-valide">Validé ✓</div>`;
                     } else {
                         card.classList.remove('grised');
                     }
@@ -862,28 +866,41 @@ const SERIES_TERROIR = [
             document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('panel-' + id).classList.add('active');
-            const nb = document.getElementById('nav-' + id);
+            
+            let targetNavId = 'nav-' + id;
+            if (id === 'choice') targetNavId = 'nav-choice';
+            const nb = document.getElementById(targetNavId);
             if (nb) nb.classList.add('active');
             
-            if (id === 'choice') renderChoiceHub(); // AJOUT
+            if (id === 'choice') renderChoiceHub();
             if (id === 'quiz') renderQuiz();
             if (id === 'leaderboard') renderLeaderboards();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         window.handleQuizNav = () => {
-            // AJOUT: REDIRIGE SYSTÉMATIQUEMENT SUR LE HUB POUR FAIRE SON CHOIX
             if (!player) showPanel('register');
             else showPanel('choice');
         };
 
-        // AJOUT: NAVIGATION DU BOUTON MODALE VERS LE HUB
         window.goToHub = () => {
             document.getElementById('result-modal').classList.remove('active');
             showPanel('choice');
         };
 
-        // AJOUT: ENREGISTREMENT DE LA PROGRESSION GLOBALE
+        window.logoutPlayer = () => {
+            if (confirm("Voulez-vous libérer le téléphone pour un autre Cowboy ? Vos scores actuels restent enregistrés sur l'écran du Saloon !")) {
+                localStorage.removeItem('alex50_p');
+                player = null;
+                answers = {};
+                chipsState = {};
+                document.getElementById('p-name').value = '';
+                document.getElementById('p-table').value = '';
+                document.getElementById('reg-feedback').innerHTML = '';
+                showPanel('register');
+            }
+        };
+
         function markPathCompleted(pathId) {
             if (!player.completedPaths) player.completedPaths = [];
             if (!player.completedPaths.includes(pathId)) {
@@ -898,11 +915,11 @@ const SERIES_TERROIR = [
             if (!name) { alert('Le nom est obligatoire !'); return; }
             const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.floor(Math.random()*10000);
             
-            // AJOUT DE L'ARRAY completedPaths À LA CRÉATION
             player = { id, name, table, path: null, completedPaths: [] };
-            
             localStorage.setItem('alex50_p', JSON.stringify(player));
-            answers = {}; chipsState = {};
+            answers = {}; 
+            chipsState = {};
+            
             document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
             setTimeout(() => showPanel('choice'), 900);
         };
@@ -911,7 +928,19 @@ const SERIES_TERROIR = [
             player.path = p;
             localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {};
-            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, path:p, score:0, charcScore:0, chips1Score:0, chips2Score:0 }, { merge:true });
+            
+            // Restauration des réponses locales si existantes pour ce joueur
+            const localAns = localStorage.getItem('alex50_ans_' + player.id + '_' + p);
+            if (localAns) answers = JSON.parse(localAns);
+
+            // Création/Mise à jour de la fiche du joueur
+            await setDoc(doc(db,'scores',player.id), { 
+                name: player.name, 
+                table: player.table, 
+                path: p,
+                lastUpdate: Date.now()
+            }, { merge:true });
+            
             showPanel('quiz');
         };
 
@@ -978,7 +1007,7 @@ const SERIES_TERROIR = [
         window.handleVote = async (qId, idx) => {
             if (answers[qId] !== undefined) return;
             answers[qId] = idx;
-            localStorage.setItem('alex50_ans_' + player.id, JSON.stringify(answers));
+            localStorage.setItem('alex50_ans_' + player.id + '_' + player.path, JSON.stringify(answers));
             renderQuiz();
             
             if (player.path === 'terroir') {
@@ -995,10 +1024,7 @@ const SERIES_TERROIR = [
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
             await setDoc(doc(db,'scores',player.id), {
-                name: player.name,
-                table: player.table,
                 score: score,
-                path: 'terroir',
                 lastUpdate: Date.now()
             }, {merge:true});
         }
@@ -1007,10 +1033,7 @@ const SERIES_TERROIR = [
             let charcScore = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) charcScore += 2; });
             await setDoc(doc(db,'scores',player.id), {
-                name: player.name,
-                table: player.table,
                 charcScore: charcScore,
-                path: 'charcuterie',
                 lastUpdate: Date.now()
             }, {merge:true});
         }
@@ -1085,14 +1108,14 @@ const SERIES_TERROIR = [
         function fireTerroirReward() {
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
-            markPathCompleted('terroir'); // AJOUT: VERROUILLE L'ACTIVITÉ
+            markPathCompleted('terroir');
             setTimeout(() => showRewardModal(score, 28), 600);
         }
 
         function fireCharcuterieReward() {
             let score = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
-            markPathCompleted('charcuterie'); // AJOUT: VERROUILLE L'ACTIVITÉ
+            markPathCompleted('charcuterie');
             setTimeout(() => showRewardModal(score, 10), 600);
         }
 
@@ -1103,13 +1126,21 @@ const SERIES_TERROIR = [
 
             let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide la série.</p></div></div>`;
 
-            if (!chipsState[serie.id]) {
+            // Utilisation d'un localstorage par joueur pour ne pas mélanger l'état si on change d'utilisateur
+            const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
+            const savedChipsState = localStorage.getItem(chipsKey);
+
+            if (savedChipsState) {
+                chipsState[serieId] = JSON.parse(savedChipsState);
+            } else if (!chipsState[serieId]) {
                 let shuffled;
                 do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
                 while (shuffled.every((v,i) => v === serie.correctOrder[i]));
-                chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
+                chipsState[serieId] = { order:shuffled, validated:false, score:0 };
+                localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
             }
-            const state = chipsState[serie.id];
+            
+            const state = chipsState[serieId];
             html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
 
             if (state.validated) {
@@ -1157,6 +1188,10 @@ const SERIES_TERROIR = [
         function swapItems(serieId, fromIdx, toIdx) {
             const order = chipsState[serieId].order;
             [order[fromIdx], order[toIdx]] = [order[toIdx], order[fromIdx]];
+            
+            const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
+            localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
+            
             renderChipsQuiz();
         }
         
@@ -1212,11 +1247,7 @@ const SERIES_TERROIR = [
             if (toIdx !== null && toIdx !== touchDrag.fromIdx) {
                 swapItems(serieId, touchDrag.fromIdx, toIdx);
             }
-            touchDrag = { active:false, serieId:null, fromIdx:null, ghost:null };
-        };
-
-        window.closeSerieModal = () => {
-            document.getElementById('serie-modal').classList.remove('active');
+            touchDrag = { active:false, serieId:null, fromIdx:null };
         };
 
         window.validateChipsSerie = async serieId => {
@@ -1227,16 +1258,16 @@ const SERIES_TERROIR = [
             state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
             state.validated = true; state.score = score;
 
+            const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
+            localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
+
             const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
             await setDoc(doc(db,'scores',player.id), {
-                name: player.name,
-                table: player.table,
                 [chipsScoreKey]: score,
-                path: serieId,
                 lastUpdate: Date.now()
             }, {merge:true});
 
-            markPathCompleted(serieId); // AJOUT: VERROUILLE L'ACTIVITÉ
+            markPathCompleted(serieId);
             renderChipsQuiz();
             setTimeout(() => showRewardModal(score, 8), 600);
         };
@@ -1244,40 +1275,40 @@ const SERIES_TERROIR = [
         function renderLeaderboards() {
             const all = Object.values(liveScores);
 
-            // ── 1. Terroir
+            // ── 1. Terroir (Filtré sur l'existence d'un score enregistré)
             const rowTerroir = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/28</small></div></td></tr>`;
             };
             document.getElementById('lb-general').innerHTML =
-                all.filter(p=>p.path==='terroir').sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
+                all.filter(p => p.score !== undefined).sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 2. Charcuteries
+            // ── 2. Charcuteries (Filtré sur l'existence d'un score charcuterie enregistré)
             const rowCharc = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
             };
             document.getElementById('lb-charcuterie').innerHTML =
-                all.filter(p=>p.path==='charcuterie').sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
+                all.filter(p => p.charcScore !== undefined).sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 3. Chips série 1
+            // ── 3. Chips série 1 (Filtré sur l'existence d'un score chips1 enregistré)
             const rowC1 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
             };
             document.getElementById('lb-chips1').innerHTML =
-                all.filter(p=>p.path==='chips1').sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
+                all.filter(p => p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 4. Chips série 2
+            // ── 4. Chips série 2 (Filtré sur l'existence d'un score chips2 enregistré)
             const rowC2 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
             };
             document.getElementById('lb-chips2').innerHTML =
-                all.filter(p=>p.path==='chips2').sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
+                all.filter(p => p.chips2Score !== undefined).sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
         }
 
@@ -1289,14 +1320,17 @@ const SERIES_TERROIR = [
             if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
         });
 
-        // AJOUT: CHARGEMENT DU JOUEUR S'IL ACTUALISE LA PAGE (POUR NE PAS PERDRE L'ÉTAT DU HUB)
         window.onload = () => {
             const savedData = localStorage.getItem('alex50_p');
             if (savedData) {
                 player = JSON.parse(savedData);
                 if (!player.completedPaths) player.completedPaths = [];
-                const ansData = localStorage.getItem('alex50_ans_' + player.id);
-                if (ansData) answers = JSON.parse(ansData);
+                
+                // Restauration dynamique des réponses en fonction du parcours en cours
+                if(player.path) {
+                    const ansData = localStorage.getItem('alex50_ans_' + player.id + '_' + player.path);
+                    if (ansData) answers = JSON.parse(ansData);
+                }
                 showPanel('choice');
             } else {
                 showPanel('register');
