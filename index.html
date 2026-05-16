@@ -56,6 +56,27 @@
             overflow-x: hidden;
         }
 
+        /* ── MUSIC PLAYER ── */
+        .music-btn {
+            position: absolute;
+            top: 50%; left: 0.85rem;
+            transform: translateY(-50%);
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 1.5px solid var(--ochre);
+            background: rgba(184,131,42,0.12);
+            color: var(--ochre-l);
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 2;
+        }
+        .music-btn:active { transform: translateY(-50%) scale(0.92); }
+        .music-btn.playing { background: rgba(184,131,42,0.28); }
+        .music-btn .music-icon { line-height: 1; }
+
         /* ── HEADER ── */
         .header {
             background: #0f0904;
@@ -571,41 +592,14 @@
         .anim-lasso  { animation: lasso 0.6s ease 0.5s both; }
 
         /* ── TROUPEAU DE CHEVAUX ── */
-        #herd-container {
+        #herd-canvas {
             position: fixed;
-            bottom: calc(var(--nav-h) + 4px);
-            left: 0; right: 0;
-            height: 64px;
+            bottom: calc(var(--nav-h) + 0px);
+            left: 0;
+            width: 100vw;
+            height: 90px;
             pointer-events: none;
             z-index: 1500;
-            overflow: hidden;
-        }
-        /* Le groupe entier se déplace ensemble */
-        #herd-group {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            animation: galopGroupe 2.4s cubic-bezier(.4,0,.6,1) forwards;
-            will-change: transform;
-        }
-        .horse {
-            font-size: 1.9rem;
-            line-height: 1;
-            animation: horseGalop 0.35s steps(1) infinite;
-        }
-        .horse:nth-child(even)  { animation-delay: 0.175s; margin-bottom: 4px; }
-        .horse:nth-child(3n)    { font-size: 1.5rem; margin-bottom: 1px; }
-        @keyframes galopGroupe {
-            0%   { transform: translateX(-220px); opacity: 1; }
-            85%  { opacity: 1; }
-            100% { transform: translateX(110vw);  opacity: 0; }
-        }
-        @keyframes horseGalop {
-            0%   { transform: translateY(0px); }
-            50%  { transform: translateY(-5px); }
         }
 
         /* ── BOUTON MUSIQUE ── */
@@ -648,11 +642,18 @@
     <!-- Bouton musique -->
     <button id="music-btn" title="Musique" aria-label="Musique on/off">🎵</button>
 
-    <!-- Conteneur troupeau -->
-    <div id="herd-container"></div>
+    <!-- Canvas troupeau -->
+    <canvas id="herd-canvas"></canvas>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.dropbox.com/scl/fi/atb15ou9lqhckfnl0j6wf/positive_sound-spaghetti-western-491538.mp3?rlkey=8wmtjed6ocd1nfn697oouhcjc&st=n42ccj5s&dl=1" type="audio/mpeg">
+    </audio>
 
     <header class="header">
         <div class="header-inner">
+            <button class="music-btn" id="music-btn" onclick="toggleMusic()" title="Musique">
+                <span class="music-icon" id="music-icon">🎵</span>
+            </button>
             <div class="badge"><span>50</span><small>ans</small></div>
             <div class="header-text">
                 <p class="header-eyebrow">Le Grand Jeu du Saloon</p>
@@ -889,24 +890,129 @@
         // ── TROUPEAU DE CHEVAUX ───────────────────────────────────
         const HORSES = ['🐎','🐴','🐎','🐴','🐎'];
 
+        // ── TROUPEAU CANVAS ───────────────────────────────────────
+        const herdCanvas = document.getElementById('herd-canvas');
+        const hctx = herdCanvas.getContext('2d');
+        let herdAnim = null;
+
+        // Silhouette cheval au galop — 4 frames
+        // Dessin SVG path converti en séquence de paths canvas
+        function drawHorse(ctx, x, y, scale, frame) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+            ctx.fillStyle = '#1a0a02';
+
+            // Corps principal
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 22, 11, -0.15, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Encolure
+            ctx.beginPath();
+            ctx.ellipse(18, -8, 8, 6, -0.6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Tête
+            ctx.beginPath();
+            ctx.ellipse(26, -15, 7, 5, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Museau
+            ctx.beginPath();
+            ctx.ellipse(32, -13, 4, 3, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Crinière
+            ctx.beginPath();
+            ctx.moveTo(14, -12);
+            ctx.quadraticCurveTo(18, -20, 24, -18);
+            ctx.quadraticCurveTo(20, -14, 14, -12);
+            ctx.fill();
+
+            // Queue
+            ctx.beginPath();
+            ctx.moveTo(-20, -2);
+            ctx.quadraticCurveTo(-28, -12, -26, -18);
+            ctx.quadraticCurveTo(-24, -10, -20, -2);
+            ctx.fill();
+
+            // Jambes — 4 frames de galop
+            const legs = [
+                // frame 0 : foulée ouverte
+                [[-8,-1,-14,14],[-2,-1,-4,14],[6,-1,10,14],[12,-1,18,14]],
+                // frame 1 : corps bas
+                [[-8,-1,-16,13],[-2,-1,-2,13],[6,-1,8,13],[12,-1,20,13]],
+                // frame 2 : suspension (jambes regroupées)
+                [[-8,-1,-6,14],[-2,-1,2,14],[6,-1,6,14],[12,-1,12,14]],
+                // frame 3 : foulée inverse
+                [[-8,-1,-4,14],[-2,-1,-12,14],[6,-1,18,14],[12,-1,8,14]],
+            ][frame % 4];
+
+            legs.forEach(([x1,y1,x2,y2]) => {
+                ctx.beginPath();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#1a0a02';
+                ctx.lineCap = 'round';
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            });
+
+            // Sabot
+            legs.forEach(([,, x2, y2]) => {
+                ctx.beginPath();
+                ctx.fillStyle = '#0f0600';
+                ctx.ellipse(x2, y2, 3, 2, 0, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.restore();
+        }
+
         function lancerTroupeau() {
-            const container = document.getElementById('herd-container');
-            container.innerHTML = '';
+            if (herdAnim) cancelAnimationFrame(herdAnim);
+            herdCanvas.width = window.innerWidth;
+            herdCanvas.height = 90;
 
-            const group = document.createElement('div');
-            group.id = 'herd-group';
+            const count = 6 + Math.floor(Math.random() * 3);
+            // Chevaux avec décalages verticaux et de taille pour profondeur
+            const horses = Array.from({length: count}, (_, i) => ({
+                x: -60 - i * 55,
+                y: 75 - Math.floor(i / 2) * 6,
+                scale: 1 - (i % 3) * 0.12,
+                frameTimer: 0,
+                frame: (i * 1) % 4,
+            }));
 
-            const count = 6 + Math.floor(Math.random() * 4); // 6 à 9 chevaux
-            const emojis = ['🐎','🐴','🐎','🐎','🐴','🐎','🐴','🐎','🐎'];
-            for (let i = 0; i < count; i++) {
-                const horse = document.createElement('div');
-                horse.className = 'horse';
-                horse.textContent = emojis[i % emojis.length];
-                group.appendChild(horse);
+            const speed = window.innerWidth / 55; // traverse en ~55 frames
+            let done = false;
+            let frameCount = 0;
+
+            function step() {
+                hctx.clearRect(0, 0, herdCanvas.width, herdCanvas.height);
+                frameCount++;
+
+                horses.forEach(h => {
+                    h.x += speed;
+                    h.frameTimer++;
+                    if (h.frameTimer % 5 === 0) h.frame = (h.frame + 1) % 4;
+                    drawHorse(hctx, h.x, h.y, h.scale, h.frame);
+                });
+
+                // Fade out à la fin
+                const leading = horses[0].x;
+                if (leading > window.innerWidth + 80) {
+                    done = true;
+                }
+
+                if (!done) {
+                    herdAnim = requestAnimationFrame(step);
+                } else {
+                    hctx.clearRect(0, 0, herdCanvas.width, herdCanvas.height);
+                }
             }
-
-            container.appendChild(group);
-            setTimeout(() => group.remove(), 2800);
+            herdAnim = requestAnimationFrame(step);
         }
 
         // ── DONNÉES ───────────────────────────────────────────────
@@ -1462,6 +1568,27 @@
             snap.forEach(d => liveScores[d.id] = d.data());
             if (document.getElementById('panel-leaderboard').classList.contains('active')) renderLeaderboards();
         });
+
+        // ── MUSIC ──
+        let musicPlaying = false;
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.volume = 0.45;
+
+        window.toggleMusic = function() {
+            const btn = document.getElementById('music-btn');
+            const icon = document.getElementById('music-icon');
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+                btn.classList.remove('playing');
+                icon.textContent = '🎵';
+            } else {
+                bgMusic.play().catch(() => {});
+                musicPlaying = true;
+                btn.classList.add('playing');
+                icon.textContent = '🔇';
+            }
+        };
 
         window.onload = () => {
             const savedData = localStorage.getItem('alex50_p');
