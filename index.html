@@ -626,7 +626,7 @@
                             <label>Table / Équipe (optionnel)</label>
                             <input type="text" id="p-table" placeholder="Ex : Table du Grand Canyon" autocomplete="off">
                         </div>
-                        <button class="btn-primary" onclick="registerPlayer()">En selle 🌵</button>
+                        <button class="btn-primary" id="btn-reg-submit" onclick="registerPlayer()">En selle 🌵</button>
                     </div>
                     <div id="reg-feedback" style="margin-top:0.85rem;font-size:0.82rem;text-align:center;"></div>
                 </div>
@@ -776,7 +776,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDdYbVOIyhQvHpzL2CbL9sCtoM5YJWLeuY",
@@ -909,19 +909,55 @@
             }
         }
 
-        window.registerPlayer = () => {
+        window.registerPlayer = async () => {
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
             if (!name) { alert('Le nom est obligatoire !'); return; }
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + Math.floor(Math.random()*10000);
             
-            player = { id, name, table, path: null, completedPaths: [] };
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g,'');
+            if (!id) { alert('Nom invalide !'); return; }
+            
+            const btnSubmit = document.getElementById('btn-reg-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Recherche en cours...";
+
+            try {
+                // Vérification anti-doublon en temps réel sur Firebase
+                const docSnap = await getDoc(doc(db, 'scores', id));
+                if (docSnap.exists()) {
+                    const onlineData = docSnap.data();
+                    
+                    // Alerte doublon : on demande si c'est le même joueur qui revient
+                    const isSameUser = confirm(`🌵 Le pseudo "${name}" est déjà inscrit dans la base.\n\n-> Cliquez sur OK s'il s'agit de VOUS (pour continuer vos parcours).\n-> Cliquez sur ANNULER si vous êtes quelqu'un d'autre (pour choisir un autre nom unique).`);
+                    
+                    if (!isSameUser) {
+                        alert("Pour éviter de mélanger vos réponses, merci de rajouter un chiffre, un nom ou une initiale à votre pseudo ! 🤠");
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerText = "En selle 🌵";
+                        return;
+                    }
+                    
+                    // Si c'est lui, on restaure son profil et ses parcours validés
+                    player = { id, name: onlineData.name || name, table: onlineData.table || table, path: null, completedPaths: onlineData.completedPaths || [] };
+                } else {
+                    // Nouveau joueur totalement unique
+                    player = { id, name, table, path: null, completedPaths: [] };
+                }
+            } catch(e) { 
+                console.error(e);
+                player = { id, name, table, path: null, completedPaths: [] };
+            }
+
             localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {}; 
             chipsState = {};
             
             document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
-            setTimeout(() => showPanel('choice'), 900);
+            setTimeout(() => {
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "En selle 🌵";
+                showPanel('choice');
+            }, 900);
         };
 
         window.setPath = async p => {
@@ -929,15 +965,14 @@
             localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {};
             
-            // Restauration des réponses locales si existantes pour ce joueur
             const localAns = localStorage.getItem('alex50_ans_' + player.id + '_' + p);
             if (localAns) answers = JSON.parse(localAns);
 
-            // Création/Mise à jour de la fiche du joueur
             await setDoc(doc(db,'scores',player.id), { 
                 name: player.name, 
                 table: player.table, 
                 path: p,
+                completedPaths: player.completedPaths || [],
                 lastUpdate: Date.now()
             }, { merge:true });
             
@@ -1025,6 +1060,7 @@
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
             await setDoc(doc(db,'scores',player.id), {
                 score: score,
+                completedPaths: player.completedPaths || [],
                 lastUpdate: Date.now()
             }, {merge:true});
         }
@@ -1034,6 +1070,7 @@
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) charcScore += 2; });
             await setDoc(doc(db,'scores',player.id), {
                 charcScore: charcScore,
+                completedPaths: player.completedPaths || [],
                 lastUpdate: Date.now()
             }, {merge:true});
         }
@@ -1109,6 +1146,7 @@
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
             markPathCompleted('terroir');
+            setDoc(doc(db,'scores',player.id), { completedPaths: player.completedPaths }, {merge:true});
             setTimeout(() => showRewardModal(score, 28), 600);
         }
 
@@ -1116,6 +1154,7 @@
             let score = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
             markPathCompleted('charcuterie');
+            setDoc(doc(db,'scores',player.id), { completedPaths: player.completedPaths }, {merge:true});
             setTimeout(() => showRewardModal(score, 10), 600);
         }
 
@@ -1126,7 +1165,6 @@
 
             let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide la série.</p></div></div>`;
 
-            // Utilisation d'un localstorage par joueur pour ne pas mélanger l'état si on change d'utilisateur
             const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
             const savedChipsState = localStorage.getItem(chipsKey);
 
@@ -1262,12 +1300,14 @@
             localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
 
             const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
+            markPathCompleted(serieId);
+
             await setDoc(doc(db,'scores',player.id), {
                 [chipsScoreKey]: score,
+                completedPaths: player.completedPaths,
                 lastUpdate: Date.now()
             }, {merge:true});
 
-            markPathCompleted(serieId);
             renderChipsQuiz();
             setTimeout(() => showRewardModal(score, 8), 600);
         };
@@ -1275,7 +1315,7 @@
         function renderLeaderboards() {
             const all = Object.values(liveScores);
 
-            // ── 1. Terroir (Filtré sur l'existence d'un score enregistré)
+            // ── 1. Terroir
             const rowTerroir = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/28</small></div></td></tr>`;
@@ -1284,7 +1324,7 @@
                 all.filter(p => p.score !== undefined).sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 2. Charcuteries (Filtré sur l'existence d'un score charcuterie enregistré)
+            // ── 2. Charcuteries
             const rowCharc = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
@@ -1293,7 +1333,7 @@
                 all.filter(p => p.charcScore !== undefined).sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 3. Chips série 1 (Filtré sur l'existence d'un score chips1 enregistré)
+            // ── 3. Chips série 1
             const rowC1 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
@@ -1302,7 +1342,7 @@
                 all.filter(p => p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 4. Chips série 2 (Filtré sur l'existence d'un score chips2 enregistré)
+            // ── 4. Chips série 2
             const rowC2 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
@@ -1326,7 +1366,6 @@
                 player = JSON.parse(savedData);
                 if (!player.completedPaths) player.completedPaths = [];
                 
-                // Restauration dynamique des réponses en fonction du parcours en cours
                 if(player.path) {
                     const ansData = localStorage.getItem('alex50_ans_' + player.id + '_' + player.path);
                     if (ansData) answers = JSON.parse(ansData);
