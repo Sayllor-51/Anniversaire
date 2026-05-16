@@ -60,8 +60,7 @@
         .header {
             background: #0f0904;
             border-bottom: 1px solid var(--ochre);
-            padding: 1.6rem 1rem 1.4rem;
-            padding-right: 70px;
+            padding: 1.2rem 4rem 1.1rem 1rem;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -73,17 +72,33 @@
             height: 3px;
             background: linear-gradient(90deg, transparent 0%, var(--ochre) 20%, var(--ochre-l) 50%, var(--ochre) 80%, transparent 100%);
         }
+        .header-inner { display: contents; }
+        .header-text { display: contents; }
+        .badge {
+            position: absolute;
+            top: 50%; right: 0.85rem;
+            transform: translateY(-50%) rotate(8deg);
+            width: 48px; height: 48px;
+            border: 1.5px solid var(--ochre);
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: var(--ochre-l);
+            font-family: 'Rye', serif;
+        }
+        .badge span { font-size: 1.2rem; line-height: 1; }
+        .badge small { font-size: 0.46rem; letter-spacing: 0.15em; text-transform: uppercase; }
         .header-eyebrow {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 500;
-            letter-spacing: 0.28em;
+            letter-spacing: 0.24em;
             text-transform: uppercase;
             color: var(--ochre);
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.25rem;
         }
         .header h1 {
             font-family: 'Rye', serif;
-            font-size: clamp(1.8rem, 8vw, 2.6rem);
+            font-size: clamp(1.5rem, 6vw, 2rem);
             color: var(--sand);
             letter-spacing: 0.04em;
             line-height: 1.05;
@@ -91,31 +106,12 @@
         .header-sub {
             font-family: 'Libre Baskerville', serif;
             font-style: italic;
-            font-size: 0.78rem;
+            font-size: clamp(0.6rem, 2.2vw, 0.75rem);
             color: var(--ochre-l);
-            margin-top: 0.6rem;
-            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
             opacity: 0.85;
         }
-        .header-ornament {
-            display: block;
-            margin: 0.9rem auto 0;
-            opacity: 0.5;
-        }
-        .badge {
-            position: absolute;
-            top: 1rem; right: 1rem;
-            width: 52px; height: 52px;
-            border: 1.5px solid var(--ochre);
-            border-radius: 50%;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            color: var(--ochre-l);
-            font-family: 'Rye', serif;
-            transform: rotate(8deg);
-        }
-        .badge span { font-size: 1.3rem; line-height: 1; }
-        .badge small { font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; }
+        .header-ornament { display: none; }
 
         /* ── BOTTOM NAV ── */
         .nav {
@@ -526,17 +522,14 @@
 
     <!-- HEADER -->
     <header class="header">
-        <div class="badge"><span>50</span><small>ans</small></div>
-        <p class="header-eyebrow">Le Grand Jeu du Saloon</p>
-        <h1>Alexandre 50's</h1>
-        <svg class="header-ornament" width="160" height="14" viewBox="0 0 160 14">
-            <line x1="0" y1="7" x2="58" y2="7" stroke="#b8832a" stroke-width="0.75"/>
-            <polygon points="68,2 74,7 68,12 62,7" fill="none" stroke="#b8832a" stroke-width="0.75"/>
-            <polygon points="80,3 86,7 80,11 74,7" fill="#b8832a"/>
-            <polygon points="92,2 98,7 92,12 86,7" fill="none" stroke="#b8832a" stroke-width="0.75"/>
-            <line x1="102" y1="7" x2="160" y2="7" stroke="#b8832a" stroke-width="0.75"/>
-        </svg>
-        <p class="header-sub">Vins · Fromages · Charcuteries · Chips Bret's</p>
+        <div class="header-inner">
+            <div class="badge"><span>50</span><small>ans</small></div>
+            <div class="header-text">
+                <p class="header-eyebrow">Le Grand Jeu du Saloon</p>
+                <h1>Alexandre 50's</h1>
+                <p class="header-sub">Vins · Fromages · Charcuteries · Chips Bret's</p>
+            </div>
+        </div>
     </header>
 
     <!-- CONTENU -->
@@ -586,7 +579,7 @@
                     </div>
                     <div class="rule-item">
                         <span class="rule-icon">🥔</span>
-                        <span>Chips Bret's — 2 séries de 8 à remettre en ordre</span>
+                        <span>Chips Bret's — 2 séries de 8 à remettre en ordre <em style="font-size:0.78rem;color:#888;">(parcours enfants)</em></span>
                         <span class="rule-pts">16 pts</span>
                     </div>
                     <div class="info-box">
@@ -920,6 +913,11 @@
         // ── Desktop drag ──
         window.handleDragStart = (e,serieId,idx) => { dragState = { serieId, draggedIdx:idx }; };
         window.handleDragEnd = () => document.querySelectorAll('.chips-zone').forEach(el=>el.classList.remove('drag-over'));
+        function swapItems(serieId, fromIdx, toIdx) {
+            const order = chipsState[serieId].order;
+            [order[fromIdx], order[toIdx]] = [order[toIdx], order[fromIdx]];
+            renderChipsQuiz();
+        }
         function handleDrop(e, serieId) {
             e.preventDefault();
             document.getElementById('zone-'+serieId).classList.remove('drag-over');
@@ -928,10 +926,7 @@
             const toIdx = parseInt(target.dataset.idx);
             const fromIdx = dragState.draggedIdx;
             if (fromIdx === toIdx || fromIdx === null) return;
-            const order = chipsState[serieId].order;
-            const moved = order.splice(fromIdx,1)[0];
-            order.splice(toIdx,0,moved);
-            renderChipsQuiz();
+            swapItems(serieId, fromIdx, toIdx);
         }
 
         // ── Touch drag pour mobile ──
@@ -947,15 +942,15 @@
             const zone = document.getElementById('zone-' + serieId);
             if (!zone) return;
             zone.classList.add('drag-over');
-            // highlight nearest chip
             const items = zone.querySelectorAll('.chip-item');
-            items.forEach(item => item.style.opacity = '1');
+            items.forEach(item => item.style.background = '');
             const nearest = [...items].find(item => {
                 const rect = item.getBoundingClientRect();
                 return touch.clientY >= rect.top && touch.clientY <= rect.bottom;
             });
             if (nearest && parseInt(nearest.dataset.idx) !== touchDrag.fromIdx) {
-                nearest.style.opacity = '0.4';
+                nearest.style.background = 'rgba(184,131,42,0.15)';
+                nearest.style.borderColor = 'var(--ochre)';
             }
         };
         window.handleTouchEnd = (e, serieId) => {
@@ -966,17 +961,15 @@
             const items = zone ? zone.querySelectorAll('.chip-item') : [];
             let toIdx = null;
             items.forEach(item => {
-                item.style.opacity = '1';
+                item.style.background = '';
+                item.style.borderColor = '';
                 const rect = item.getBoundingClientRect();
                 if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
                     toIdx = parseInt(item.dataset.idx);
                 }
             });
             if (toIdx !== null && toIdx !== touchDrag.fromIdx) {
-                const order = chipsState[serieId].order;
-                const moved = order.splice(touchDrag.fromIdx, 1)[0];
-                order.splice(toIdx, 0, moved);
-                renderChipsQuiz();
+                swapItems(serieId, touchDrag.fromIdx, toIdx);
             }
             touchDrag = { active:false, serieId:null, fromIdx:null, ghost:null };
         };
