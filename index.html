@@ -53,6 +53,7 @@
                     rgba(255,200,100,0.025) 8px, rgba(255,200,100,0.025) 9px
                 );
             background-attachment: fixed;
+            overflow-x: hidden;
         }
 
         /* ── HEADER ── */
@@ -569,6 +570,48 @@
         .anim-bounce { animation: hatBounce 0.9s ease 0.3s both; }
         .anim-lasso  { animation: lasso 0.6s ease 0.5s both; }
 
+        /* ── TROUPEAU DE CHEVAUX ── */
+        #herd-container {
+            position: fixed;
+            bottom: calc(var(--nav-h) + 4px);
+            left: 0; right: 0;
+            height: 52px;
+            pointer-events: none;
+            z-index: 1500;
+            overflow: hidden;
+        }
+        .horse {
+            position: absolute;
+            bottom: 0;
+            font-size: 1.8rem;
+            animation: galop linear forwards;
+            will-change: transform;
+        }
+        @keyframes galop {
+            0%   { transform: translateX(110vw) scaleX(-1); opacity: 1; }
+            95%  { opacity: 1; }
+            100% { transform: translateX(-15vw) scaleX(-1); opacity: 0; }
+        }
+
+        /* ── BOUTON MUSIQUE ── */
+        #music-btn {
+            position: fixed;
+            bottom: calc(var(--nav-h) + 12px);
+            right: 12px;
+            z-index: 1600;
+            background: #0f0904;
+            border: 1.5px solid var(--ochre);
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            font-size: 1.1rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        #music-btn:active { background: #1c1008; }
+
         .footer {
             text-align: center;
             padding: 1.25rem 1rem;
@@ -581,6 +624,17 @@
     </style>
 </head>
 <body>
+
+    <!-- Musique country -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Bouton musique -->
+    <button id="music-btn" title="Musique" aria-label="Musique on/off">🎵</button>
+
+    <!-- Conteneur troupeau -->
+    <div id="herd-container"></div>
 
     <header class="header">
         <div class="header-inner">
@@ -659,8 +713,8 @@
                         <span class="rule-pts">8 pts</span>
                     </div>
                     <div class="info-box">
-<strong>Organisation du parcours Terroir : </strong><br>
-                        4 séries de dégustation : 2 fromages + 1 vin à chaque fois. 
+                        <strong>Organisation Terroir</strong><br>
+                        4 séries de dégustation : 2 fromages + 1 vin à chaque fois.
                         Devinez quel vin et quels fromages vous avez dans votre assiette !
                     </div>
                     <div class="rule-warning">
@@ -701,7 +755,6 @@
                             <p>Chips 9 à 16<br>8 pts max</p>
                         </div>
                     </div>
-                    
                     <button class="btn-secondary" onclick="logoutPlayer()">🔄 Prêter mon téléphone à un autre Cowboy</button>
                 </div>
             </div>
@@ -775,7 +828,7 @@
         </div>
     </div>
 
-    <div class="footer">Réalisé pour les 50 ans d'Alexandre</div>
+    <div class="footer">☆ Réalisé pour les 50 ans d'Alexandre ☆</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -792,6 +845,69 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
+        // ── MUSIQUE ──────────────────────────────────────────────
+        const music = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        let musicStarted = false;
+
+        function startMusic() {
+            if (!musicStarted) {
+                music.volume = 0.35;
+                music.play().catch(() => {});
+                musicStarted = true;
+                musicBtn.textContent = '🔊';
+            }
+        }
+
+        musicBtn.addEventListener('click', () => {
+            if (!musicStarted) {
+                startMusic();
+            } else if (music.paused) {
+                music.play();
+                musicBtn.textContent = '🔊';
+            } else {
+                music.pause();
+                musicBtn.textContent = '🔇';
+            }
+        });
+
+        // ── TROUPEAU DE CHEVAUX ───────────────────────────────────
+        const HORSES = ['🐎','🐴','🐎','🐴','🐎'];
+
+        function lancerTroupeau() {
+            const container = document.getElementById('herd-container');
+            // Nettoie les anciens chevaux
+            container.innerHTML = '';
+
+            const count = 5 + Math.floor(Math.random() * 4); // 5 à 8 chevaux
+            const duree = 2200; // ms pour traverser l'écran
+
+            for (let i = 0; i < count; i++) {
+                const horse = document.createElement('div');
+                horse.className = 'horse';
+                horse.textContent = HORSES[i % HORSES.length];
+
+                // Décalage vertical léger pour donner du relief
+                const bottomOffset = Math.floor(Math.random() * 18);
+                horse.style.bottom = bottomOffset + 'px';
+
+                // Délai échelonné entre chaque cheval
+                const delay = i * 120;
+                horse.style.animationDuration = (duree + Math.random() * 300) + 'ms';
+                horse.style.animationDelay = delay + 'ms';
+
+                // Taille légèrement variable
+                const size = 1.5 + Math.random() * 0.6;
+                horse.style.fontSize = size + 'rem';
+
+                container.appendChild(horse);
+
+                // Supprime l'élément après l'animation
+                setTimeout(() => horse.remove(), duree + delay + 400);
+            }
+        }
+
+        // ── DONNÉES ───────────────────────────────────────────────
         const SERIES_TERROIR = [
             {
                 id:'s1', label:'Série 1',
@@ -827,13 +943,14 @@
             }
         ];
 
-const CHARCUTERIES = [
-    {id:'c1',label:'Charcuterie 1',options:['Rosette de Lyon','Jésus de Lyon','Saucisson sec','Saucisson d\'Auvergne'],correct:2},
-    {id:'c2',label:'Charcuterie 2',options:['Rosette','Saucisson de Lyon','Saucisson d\'Arles','Saucisson de l\'Ardèche'],correct:0},
-    {id:'c3',label:'Charcuterie 3',options:['Jambon de Parme','Jambon de Bayonne','Jambon Serrano','Speck'],correct:1},
-    {id:'c4',label:'Charcuterie 4',options:['Andouillette','Jambonnette','Jambon persillé','Jambonette Forézienne'],correct:3},
-    {id:'c5',label:'Charcuterie 5',options:['Terrine de campagne','Pâté de campagne','Pâté de foie','Rillettes'],correct:1}
-];
+        const CHARCUTERIES = [
+            {id:'c1',label:'Charcuterie 1',options:['Rosette de Lyon','Jésus de Lyon','Saucisson sec','Saucisson d\'Auvergne'],correct:2},
+            {id:'c2',label:'Charcuterie 2',options:['Rosette','Saucisson de Lyon','Saucisson d\'Arles','Saucisson de l\'Ardèche'],correct:0},
+            {id:'c3',label:'Charcuterie 3',options:['Jambon de Parme','Jambon de Bayonne','Jambon Serrano','Speck'],correct:1},
+            {id:'c4',label:'Charcuterie 4',options:['Andouillette','Jambonnette','Jambon persillé','Jambonette Forézienne'],correct:3},
+            {id:'c5',label:'Charcuterie 5',options:['Terrine de campagne','Pâté de campagne','Pâté de foie','Rillettes'],correct:1}
+        ];
+
         const CHIPS_SERIES = [
             {id:'chips1',label:'Série 1 — chips 1 à 8',correctOrder:['Cheddar Oignon de Roscoff','Barbecue','Camembert et Truffes','Aïoli','Fromage du Jura','BBQ Flambé au Whisky','Beurre Persillé','Chèvre Piment d\'Espelette']},
             {id:'chips2',label:'Série 2 — chips 9 à 16',correctOrder:['Cheddar Jalapeño','Bleu d\'Auvergne','Tajine','Tartiflette','Falafel','Kebab','Côte de Bœuf Grillé','Cheddar Bière']}
@@ -853,7 +970,6 @@ const CHARCUTERIES = [
                 if (card) {
                     const badge = card.querySelector('.badge-valide');
                     if (badge) badge.remove();
-
                     if (player.completedPaths.includes(p)) {
                         card.classList.add('grised');
                         card.innerHTML += `<div class="badge-valide">Validé ✓</div>`;
@@ -868,12 +984,10 @@ const CHARCUTERIES = [
             document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('panel-' + id).classList.add('active');
-            
             let targetNavId = 'nav-' + id;
             if (id === 'choice') targetNavId = 'nav-choice';
             const nb = document.getElementById(targetNavId);
             if (nb) nb.classList.add('active');
-            
             if (id === 'choice') renderChoiceHub();
             if (id === 'quiz') renderQuiz();
             if (id === 'leaderboard') renderLeaderboards();
@@ -915,41 +1029,29 @@ const CHARCUTERIES = [
             const name = document.getElementById('p-name').value.trim();
             const table = document.getElementById('p-table').value.trim();
             if (!name) { alert('Le nom est obligatoire !'); return; }
-            
             const id = name.toLowerCase().replace(/[^a-z0-9]/g,'');
             if (!id) { alert('Nom invalide !'); return; }
-            
             const btnSubmit = document.getElementById('btn-reg-submit');
             btnSubmit.disabled = true;
             btnSubmit.innerText = "Recherche en cours...";
 
-            // Vérification stricte de la mémoire locale du téléphone actuel
             const currentSavedLocalPlayer = localStorage.getItem('alex50_p');
             let currentLocalId = null;
-            if (currentSavedLocalPlayer) {
-                currentLocalId = JSON.parse(currentSavedLocalPlayer).id;
-            }
+            if (currentSavedLocalPlayer) currentLocalId = JSON.parse(currentSavedLocalPlayer).id;
 
             try {
                 const docSnap = await getDoc(doc(db, 'scores', id));
-                
-                // Si l'id existe en ligne ET qu'il n'est pas lié à la session locale actuelle du téléphone
                 if (docSnap.exists() && currentLocalId !== id) {
                     const onlineData = docSnap.data();
-                    
-                    // On vérifie s'il s'agit d'une reprise de session volontaire (le joueur a accidentellement fermé sa page)
                     const isSameUser = confirm(`🌵 Le pseudo "${name}" est déjà utilisé.\n\n-> Cliquez sur OK s'il s'agit de VOUS (pour reprendre vos parcours).\n-> Cliquez sur ANNULER si vous êtes quelqu'un d'autre.`);
-                    
                     if (!isSameUser) {
                         document.getElementById('reg-feedback').innerHTML = "<span style='color:#e74c3c;font-weight:600;'>❌ Ce nom est déjà pris par un autre Cowboy ! Merci d'ajouter une initiale ou un chiffre.</span>";
                         btnSubmit.disabled = false;
                         btnSubmit.innerText = "En selle 🌵";
                         return;
                     }
-                    
                     player = { id, name: onlineData.name || name, table: onlineData.table || table, path: null, completedPaths: onlineData.completedPaths || [] };
                 } else {
-                    // C'est soit le même utilisateur local, soit un tout nouveau joueur unique
                     if (docSnap.exists()) {
                         const onlineData = docSnap.data();
                         player = { id, name: onlineData.name || name, table: onlineData.table || table, path: null, completedPaths: onlineData.completedPaths || [] };
@@ -957,15 +1059,18 @@ const CHARCUTERIES = [
                         player = { id, name, table, path: null, completedPaths: [] };
                     }
                 }
-            } catch(e) { 
+            } catch(e) {
                 console.error(e);
                 player = { id, name, table, path: null, completedPaths: [] };
             }
 
             localStorage.setItem('alex50_p', JSON.stringify(player));
-            answers = {}; 
+            answers = {};
             chipsState = {};
-            
+
+            // Lance la musique au premier "En selle"
+            startMusic();
+
             document.getElementById('reg-feedback').innerHTML = "<span style='color:#3a6b3a;font-weight:600;'>Enregistrement réussi — en selle ! 🤠</span>";
             setTimeout(() => {
                 btnSubmit.disabled = false;
@@ -978,18 +1083,15 @@ const CHARCUTERIES = [
             player.path = p;
             localStorage.setItem('alex50_p', JSON.stringify(player));
             answers = {};
-            
             const localAns = localStorage.getItem('alex50_ans_' + player.id + '_' + p);
             if (localAns) answers = JSON.parse(localAns);
-
-            await setDoc(doc(db,'scores',player.id), { 
-                name: player.name, 
-                table: player.table, 
+            await setDoc(doc(db,'scores',player.id), {
+                name: player.name,
+                table: player.table,
                 path: p,
                 completedPaths: player.completedPaths || [],
                 lastUpdate: Date.now()
             }, { merge:true });
-            
             showPanel('quiz');
         };
 
@@ -1036,7 +1138,7 @@ const CHARCUTERIES = [
 
         function renderCharcuterieQuiz() {
             let html = '';
-            CHARCUTERIES.forEach((q,qi) => {
+            CHARCUTERIES.forEach((q) => {
                 const ua = answers[q.id], done = ua !== undefined;
                 html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">${q.label} — 2 pts</span></div><div class="card-body">`;
                 html += `<div class="q-block">`;
@@ -1057,8 +1159,11 @@ const CHARCUTERIES = [
             if (answers[qId] !== undefined) return;
             answers[qId] = idx;
             localStorage.setItem('alex50_ans_' + player.id + '_' + player.path, JSON.stringify(answers));
+
+            // Troupeau à chaque réponse !
+            lancerTroupeau();
+
             renderQuiz();
-            
             if (player.path === 'terroir') {
                 await saveTerroirScore();
                 const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0);
@@ -1073,9 +1178,7 @@ const CHARCUTERIES = [
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
             await setDoc(doc(db,'scores',player.id), {
-                score: score,
-                completedPaths: player.completedPaths || [],
-                lastUpdate: Date.now()
+                score, completedPaths: player.completedPaths || [], lastUpdate: Date.now()
             }, {merge:true});
         }
 
@@ -1083,9 +1186,7 @@ const CHARCUTERIES = [
             let charcScore = 0;
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) charcScore += 2; });
             await setDoc(doc(db,'scores',player.id), {
-                charcScore: charcScore,
-                completedPaths: player.completedPaths || [],
-                lastUpdate: Date.now()
+                charcScore, completedPaths: player.completedPaths || [], lastUpdate: Date.now()
             }, {merge:true});
         }
 
@@ -1111,11 +1212,11 @@ const CHARCUTERIES = [
 
         function getScoreReaction(score, max) {
             const pct = score / max;
-            if (pct === 1)    return { emoji:'🏆', msg:'Parfait, cowboy ! T\'es le roi du ranch !' };
-            if (pct >= 0.85)  return { emoji:'🤠', msg:'Sacré pistolero ! Chapeau bas !' };
-            if (pct >= 0.70)  return { emoji:'⭐', msg:'Pas mal, cow-boy ! T\'as du flair !' };
-            if (pct >= 0.50)  return { emoji:'🐴', msg:'Dans la bonne direction, partenaire !' };
-            if (pct >= 0.30)  return { emoji:'🌵', msg:'Le désert t\'a eu... mais t\'es encore debout !' };
+            if (pct === 1)   return { emoji:'🏆', msg:'Parfait, cowboy ! T\'es le roi du ranch !' };
+            if (pct >= 0.85) return { emoji:'🤠', msg:'Sacré pistolero ! Chapeau bas !' };
+            if (pct >= 0.70) return { emoji:'⭐', msg:'Pas mal, cow-boy ! T\'as du flair !' };
+            if (pct >= 0.50) return { emoji:'🐴', msg:'Dans la bonne direction, partenaire !' };
+            if (pct >= 0.30) return { emoji:'🌵', msg:'Le désert t\'a eu... mais t\'es encore debout !' };
             return { emoji:'🐍', msg:'Les serpents du canyon ont eu raison de toi !' };
         }
 
@@ -1135,16 +1236,12 @@ const CHARCUTERIES = [
             document.getElementById('final-max-score').textContent = max;
             document.getElementById('modal-emoji').textContent = emoji;
             document.getElementById('modal-message').textContent = msg;
-
-            const modal = document.getElementById('result-modal');
-            modal.classList.add('active');
-
+            document.getElementById('result-modal').classList.add('active');
             triggerModalAnims(
                 document.getElementById('final-score-val'),
                 document.getElementById('modal-emoji'),
                 document.getElementById('modal-message')
             );
-
             const pct = score / max;
             if (pct === 1) {
                 confetti({ particleCount:200, spread:80, origin:{y:0.6}, colors:['#b8832a','#f5ead6','#ffd700'] });
@@ -1154,6 +1251,8 @@ const CHARCUTERIES = [
             } else if (pct >= 0.4) {
                 confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
             }
+            // Grand troupeau à la fin du parcours !
+            setTimeout(() => lancerTroupeau(), 800);
         }
 
         function fireTerroirReward() {
@@ -1173,7 +1272,7 @@ const CHARCUTERIES = [
         }
 
         function renderChipsQuiz() {
-            const serieId = player.path; 
+            const serieId = player.path;
             const serie = CHIPS_SERIES.find(s => s.id === serieId);
             if (!serie) return;
 
@@ -1181,7 +1280,6 @@ const CHARCUTERIES = [
 
             const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
             const savedChipsState = localStorage.getItem(chipsKey);
-
             if (savedChipsState) {
                 chipsState[serieId] = JSON.parse(savedChipsState);
             } else if (!chipsState[serieId]) {
@@ -1191,7 +1289,7 @@ const CHARCUTERIES = [
                 chipsState[serieId] = { order:shuffled, validated:false, score:0 };
                 localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
             }
-            
+
             const state = chipsState[serieId];
             html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
 
@@ -1236,17 +1334,15 @@ const CHARCUTERIES = [
 
         window.handleDragStart = (e,serieId,idx) => { dragState = { serieId, draggedIdx:idx }; };
         window.handleDragEnd = () => document.querySelectorAll('.chips-zone').forEach(el=>el.classList.remove('drag-over'));
-        
+
         function swapItems(serieId, fromIdx, toIdx) {
             const order = chipsState[serieId].order;
             [order[fromIdx], order[toIdx]] = [order[toIdx], order[fromIdx]];
-            
             const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
             localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
-            
             renderChipsQuiz();
         }
-        
+
         function handleDrop(e, serieId) {
             e.preventDefault();
             document.getElementById('zone-'+serieId).classList.remove('drag-over');
@@ -1292,13 +1388,9 @@ const CHARCUTERIES = [
                 item.style.background = '';
                 item.style.borderColor = '';
                 const rect = item.getBoundingClientRect();
-                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-                    toIdx = parseInt(item.dataset.idx);
-                }
+                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) toIdx = parseInt(item.dataset.idx);
             });
-            if (toIdx !== null && toIdx !== touchDrag.fromIdx) {
-                swapItems(serieId, touchDrag.fromIdx, toIdx);
-            }
+            if (toIdx !== null && toIdx !== touchDrag.fromIdx) swapItems(serieId, touchDrag.fromIdx, toIdx);
             touchDrag = { active:false, serieId:null, fromIdx:null };
         };
 
@@ -1309,19 +1401,15 @@ const CHARCUTERIES = [
             let score = 0;
             state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
             state.validated = true; state.score = score;
-
             const chipsKey = 'alex50_chips_' + player.id + '_' + serieId;
             localStorage.setItem(chipsKey, JSON.stringify(chipsState[serieId]));
-
             const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
             markPathCompleted(serieId);
-
             await setDoc(doc(db,'scores',player.id), {
                 [chipsScoreKey]: score,
                 completedPaths: player.completedPaths,
                 lastUpdate: Date.now()
             }, {merge:true});
-
             renderChipsQuiz();
             setTimeout(() => showRewardModal(score, 8), 600);
         };
@@ -1329,7 +1417,6 @@ const CHARCUTERIES = [
         function renderLeaderboards() {
             const all = Object.values(liveScores);
 
-            // ── 1. Terroir
             const rowTerroir = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/28</small></div></td></tr>`;
@@ -1338,7 +1425,6 @@ const CHARCUTERIES = [
                 all.filter(p => p.score !== undefined).sort((a,b)=>(b.score||0)-(a.score||0)).map(rowTerroir).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 2. Charcuteries
             const rowCharc = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
@@ -1347,7 +1433,6 @@ const CHARCUTERIES = [
                 all.filter(p => p.charcScore !== undefined).sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 3. Chips série 1
             const rowC1 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
@@ -1356,7 +1441,6 @@ const CHARCUTERIES = [
                 all.filter(p => p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            // ── 4. Chips série 2
             const rowC2 = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
@@ -1366,7 +1450,10 @@ const CHARCUTERIES = [
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
         }
 
-        window.closeResultModal = () => { document.getElementById('result-modal').classList.remove('active'); showPanel('leaderboard'); };
+        window.closeResultModal = () => {
+            document.getElementById('result-modal').classList.remove('active');
+            showPanel('leaderboard');
+        };
 
         onSnapshot(collection(db,'scores'), snap => {
             liveScores = {};
@@ -1379,8 +1466,7 @@ const CHARCUTERIES = [
             if (savedData) {
                 player = JSON.parse(savedData);
                 if (!player.completedPaths) player.completedPaths = [];
-                
-                if(player.path) {
+                if (player.path) {
                     const ansData = localStorage.getItem('alex50_ans_' + player.id + '_' + player.path);
                     if (ansData) answers = JSON.parse(ansData);
                 }
