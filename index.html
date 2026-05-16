@@ -527,15 +527,9 @@
             from { opacity:0; transform: scale(0.5) rotate(-10deg); }
             to   { opacity:1; transform: scale(1) rotate(0deg); }
         }
-        .modal-overlay.active .wanted-score {
-            animation: stampIn 0.55s cubic-bezier(.22,1,.36,1) both;
-        }
-        .modal-overlay.active #modal-emoji {
-            animation: hatBounce 0.9s ease 0.3s both;
-        }
-        .modal-overlay.active #modal-message {
-            animation: lasso 0.6s ease 0.5s both;
-        }
+        .anim-stamp  { animation: stampIn 0.55s cubic-bezier(.22,1,.36,1) both; }
+        .anim-bounce { animation: hatBounce 0.9s ease 0.3s both; }
+        .anim-lasso  { animation: lasso 0.6s ease 0.5s both; }
         .footer {
             text-align: center;
             padding: 1.25rem 1rem;
@@ -681,6 +675,18 @@
                     <table class="lb-table"><tbody id="lb-chips"></tbody></table>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- MODALE SCORE SÉRIE (chips intermédiaire) -->
+    <div class="modal-overlay" id="serie-modal">
+        <div class="wanted">
+            <p class="wanted-eyebrow" id="serie-modal-label">Série 1</p>
+            <div id="serie-modal-emoji" style="font-size:3rem;line-height:1;margin-bottom:0.5rem;">🥔</div>
+            <div class="wanted-score" id="serie-modal-score">0</div>
+            <p class="wanted-sub">points sur 8</p>
+            <p id="serie-modal-message" style="font-family:'Rye',serif;font-size:0.88rem;color:var(--rust);margin-top:1rem;letter-spacing:0.06em;line-height:1.5;"></p>
+            <button class="btn-primary" onclick="closeSerieModal()" style="margin-top:1.5rem;">Continuer 🤠</button>
         </div>
     </div>
 
@@ -888,6 +894,16 @@
             return { emoji:'🐍', msg:'Les serpents du canyon ont eu raison de toi !' };
         }
 
+        function triggerModalAnims(scoreEl, emojiEl, msgEl) {
+            [scoreEl, emojiEl, msgEl].forEach(el => {
+                el.classList.remove('anim-stamp','anim-bounce','anim-lasso');
+                void el.offsetWidth;
+            });
+            scoreEl.classList.add('anim-stamp');
+            emojiEl.classList.add('anim-bounce');
+            msgEl.classList.add('anim-lasso');
+        }
+
         function showRewardModal(score, max) {
             const { emoji, msg } = getScoreReaction(score, max);
             document.getElementById('final-score-val').textContent = score;
@@ -896,9 +912,13 @@
             document.getElementById('modal-message').textContent = msg;
 
             const modal = document.getElementById('result-modal');
-            modal.classList.remove('active');
-            void modal.offsetWidth; // reset animations
             modal.classList.add('active');
+
+            triggerModalAnims(
+                document.getElementById('final-score-val'),
+                document.getElementById('modal-emoji'),
+                document.getElementById('modal-message')
+            );
 
             const pct = score / max;
             if (pct === 1) {
@@ -1037,6 +1057,18 @@
             touchDrag = { active:false, serieId:null, fromIdx:null, ghost:null };
         };
 
+        function getSerieReaction(score) {
+            if (score === 8)  return { emoji:'🏆', msg:'Parfait, cowboy ! 8 sur 8 !' };
+            if (score >= 6)   return { emoji:'🤠', msg:'Beau travail, pistolero !' };
+            if (score >= 4)   return { emoji:'⭐', msg:'Pas mal, partenaire !' };
+            if (score >= 2)   return { emoji:'🌵', msg:'Le ranch t\'attend encore...' };
+            return { emoji:'🐍', msg:'Les serpents ont mangé tes chips !' };
+        }
+
+        window.closeSerieModal = () => {
+            document.getElementById('serie-modal').classList.remove('active');
+        };
+
         window.validateChipsSerie = async serieId => {
             const state = chipsState[serieId];
             if (state.validated) return;
@@ -1047,9 +1079,35 @@
             const total = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
             await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, chipsScore:total, path:'chips', lastUpdate:Date.now() }, {merge:true});
             renderChipsQuiz();
-            if (CHIPS_SERIES.every(s=>chipsState[s.id]?.validated)) {
-                const total = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
-                setTimeout(() => showRewardModal(total, 16), 600);
+
+            const allDone = CHIPS_SERIES.every(s=>chipsState[s.id]?.validated);
+
+            if (allDone) {
+                const grandTotal = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
+                setTimeout(() => showRewardModal(grandTotal, 16), 600);
+            } else {
+                // mini modale intermédiaire pour la série 1
+                const { emoji, msg } = getSerieReaction(score);
+                const modal = document.getElementById('serie-modal');
+                document.getElementById('serie-modal-label').textContent = serie.label + ' — Score';
+                document.getElementById('serie-modal-score').textContent = score;
+                document.getElementById('serie-modal-emoji').textContent = emoji;
+                document.getElementById('serie-modal-message').textContent = msg;
+                modal.classList.remove('active');
+                void modal.offsetWidth;
+                setTimeout(() => {
+                    modal.classList.add('active');
+                    triggerModalAnims(
+                        document.getElementById('serie-modal-score'),
+                        document.getElementById('serie-modal-emoji'),
+                        document.getElementById('serie-modal-message')
+                    );
+                    if (score === 8) {
+                        confetti({ particleCount:120, spread:70, origin:{y:0.6}, colors:['#b8832a','#f5ead6','#ffd700'] });
+                    } else if (score >= 5) {
+                        confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
+                    }
+                }, 400);
             }
         };
 
