@@ -506,7 +506,36 @@
             font-family: 'Rye'; font-size: 0.74rem; letter-spacing: 0.05em;
         }
 
-        /* ── FOOTER ── */
+        /* ── ANIMATION SCORE ── */
+        @keyframes lasso {
+            0%   { transform: rotate(-15deg) scale(0.3); opacity:0; }
+            50%  { transform: rotate(8deg) scale(1.15); opacity:1; }
+            70%  { transform: rotate(-4deg) scale(0.95); }
+            100% { transform: rotate(0deg) scale(1); opacity:1; }
+        }
+        @keyframes stampIn {
+            0%   { transform: scale(2.5); opacity:0; }
+            60%  { transform: scale(0.9); opacity:1; }
+            100% { transform: scale(1); opacity:1; }
+        }
+        @keyframes hatBounce {
+            0%,100% { transform: translateY(0); }
+            30%     { transform: translateY(-18px) rotate(-8deg); }
+            60%     { transform: translateY(-6px) rotate(4deg); }
+        }
+        @keyframes scoreCount {
+            from { opacity:0; transform: scale(0.5) rotate(-10deg); }
+            to   { opacity:1; transform: scale(1) rotate(0deg); }
+        }
+        .modal-overlay.active .wanted-score {
+            animation: stampIn 0.55s cubic-bezier(.22,1,.36,1) both;
+        }
+        .modal-overlay.active #modal-emoji {
+            animation: hatBounce 0.9s ease 0.3s both;
+        }
+        .modal-overlay.active #modal-message {
+            animation: lasso 0.6s ease 0.5s both;
+        }
         .footer {
             text-align: center;
             padding: 1.25rem 1rem;
@@ -659,9 +688,11 @@
     <div class="modal-overlay" id="result-modal">
         <div class="wanted">
             <p class="wanted-eyebrow">Wanted — Score final</p>
+            <div id="modal-emoji" style="font-size:3rem;line-height:1;margin-bottom:0.5rem;">🤠</div>
             <div class="wanted-score" id="final-score-val">0</div>
             <p class="wanted-sub">points sur <span id="final-max-score">38</span></p>
-            <button class="btn-primary" onclick="closeResultModal()">Voir le classement</button>
+            <p id="modal-message" style="font-family:'Rye',serif;font-size:0.88rem;color:var(--rust);margin-top:1rem;letter-spacing:0.06em;line-height:1.5;"></p>
+            <button class="btn-primary" onclick="closeResultModal()" style="margin-top:1.5rem;">Voir le classement</button>
         </div>
     </div>
 
@@ -827,7 +858,7 @@
             renderQuiz();
             await saveTerroirScore();
             const total = SERIES_TERROIR.reduce((a,s)=>a+s.questions.length,0) + CHARCUTERIES.length;
-            if (Object.keys(answers).length === total) showRewardModal();
+            if (Object.keys(answers).length === total) fireTerroirReward();
         };
 
         async function saveTerroirScore() {
@@ -847,14 +878,44 @@
             document.getElementById('q-main-fill').style.width = pct + '%';
         }
 
-        function showRewardModal() {
+        function getScoreReaction(score, max) {
+            const pct = score / max;
+            if (pct === 1)    return { emoji:'🏆', msg:'Parfait, cowboy ! T\'es le roi du ranch !' };
+            if (pct >= 0.85)  return { emoji:'🤠', msg:'Sacré pistolero ! Chapeau bas !' };
+            if (pct >= 0.70)  return { emoji:'⭐', msg:'Pas mal, cow-boy ! T\'as du flair !' };
+            if (pct >= 0.50)  return { emoji:'🐴', msg:'Dans la bonne direction, partenaire !' };
+            if (pct >= 0.30)  return { emoji:'🌵', msg:'Le désert t\'a eu... mais t\'es encore debout !' };
+            return { emoji:'🐍', msg:'Les serpents du canyon ont eu raison de toi !' };
+        }
+
+        function showRewardModal(score, max) {
+            const { emoji, msg } = getScoreReaction(score, max);
+            document.getElementById('final-score-val').textContent = score;
+            document.getElementById('final-max-score').textContent = max;
+            document.getElementById('modal-emoji').textContent = emoji;
+            document.getElementById('modal-message').textContent = msg;
+
+            const modal = document.getElementById('result-modal');
+            modal.classList.remove('active');
+            void modal.offsetWidth; // reset animations
+            modal.classList.add('active');
+
+            const pct = score / max;
+            if (pct === 1) {
+                confetti({ particleCount:200, spread:80, origin:{y:0.6}, colors:['#b8832a','#f5ead6','#ffd700'] });
+                setTimeout(() => confetti({ particleCount:100, spread:120, origin:{y:0.4}, colors:['#b8832a','#7c2d12'] }), 400);
+            } else if (pct >= 0.7) {
+                confetti({ particleCount:140, spread:65, origin:{y:0.6}, colors:['#b8832a','#7c2d12','#f5ead6'] });
+            } else if (pct >= 0.4) {
+                confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
+            }
+        }
+
+        function fireTerroirReward() {
             let score = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
             CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
-            confetti({ particleCount:140, spread:65, origin:{y:0.6}, colors:['#b8832a','#7c2d12','#f5ead6'] });
-            document.getElementById('final-score-val').textContent = score;
-            document.getElementById('final-max-score').textContent = '38';
-            setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
+            setTimeout(() => showRewardModal(score, 38), 600);
         }
 
         function renderChipsQuiz() {
@@ -862,7 +923,9 @@
 
             CHIPS_SERIES.forEach(serie => {
                 if (!chipsState[serie.id]) {
-                    const shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5);
+                    let shuffled;
+                    do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
+                    while (shuffled.every((v,i) => v === serie.correctOrder[i]));
                     chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
                 }
                 const state = chipsState[serie.id];
@@ -985,10 +1048,8 @@
             await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, chipsScore:total, path:'chips', lastUpdate:Date.now() }, {merge:true});
             renderChipsQuiz();
             if (CHIPS_SERIES.every(s=>chipsState[s.id]?.validated)) {
-                confetti({ particleCount:120, spread:65, origin:{y:0.6} });
-                document.getElementById('final-score-val').textContent = total;
-                document.getElementById('final-max-score').textContent = '16';
-                setTimeout(() => document.getElementById('result-modal').classList.add('active'), 600);
+                const total = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
+                setTimeout(() => showRewardModal(total, 16), 600);
             }
         };
 
