@@ -921,27 +921,39 @@
             btnSubmit.disabled = true;
             btnSubmit.innerText = "Recherche en cours...";
 
+            // Vérification stricte de la mémoire locale du téléphone actuel
+            const currentSavedLocalPlayer = localStorage.getItem('alex50_p');
+            let currentLocalId = null;
+            if (currentSavedLocalPlayer) {
+                currentLocalId = JSON.parse(currentSavedLocalPlayer).id;
+            }
+
             try {
-                // Vérification anti-doublon en temps réel sur Firebase
                 const docSnap = await getDoc(doc(db, 'scores', id));
-                if (docSnap.exists()) {
+                
+                // Si l'id existe en ligne ET qu'il n'est pas lié à la session locale actuelle du téléphone
+                if (docSnap.exists() && currentLocalId !== id) {
                     const onlineData = docSnap.data();
                     
-                    // Alerte doublon : on demande si c'est le même joueur qui revient
-                    const isSameUser = confirm(`🌵 Le pseudo "${name}" est déjà inscrit dans la base.\n\n-> Cliquez sur OK s'il s'agit de VOUS (pour continuer vos parcours).\n-> Cliquez sur ANNULER si vous êtes quelqu'un d'autre (pour choisir un autre nom unique).`);
+                    // On vérifie s'il s'agit d'une reprise de session volontaire (le joueur a accidentellement fermé sa page)
+                    const isSameUser = confirm(`🌵 Le pseudo "${name}" est déjà utilisé.\n\n-> Cliquez sur OK s'il s'agit de VOUS (pour reprendre vos parcours).\n-> Cliquez sur ANNULER si vous êtes quelqu'un d'autre.`);
                     
                     if (!isSameUser) {
-                        alert("Pour éviter de mélanger vos réponses, merci de rajouter un chiffre, un nom ou une initiale à votre pseudo ! 🤠");
+                        document.getElementById('reg-feedback').innerHTML = "<span style='color:#e74c3c;font-weight:600;'>❌ Ce nom est déjà pris par un autre Cowboy ! Merci d'ajouter une initiale ou un chiffre.</span>";
                         btnSubmit.disabled = false;
                         btnSubmit.innerText = "En selle 🌵";
                         return;
                     }
                     
-                    // Si c'est lui, on restaure son profil et ses parcours validés
                     player = { id, name: onlineData.name || name, table: onlineData.table || table, path: null, completedPaths: onlineData.completedPaths || [] };
                 } else {
-                    // Nouveau joueur totalement unique
-                    player = { id, name, table, path: null, completedPaths: [] };
+                    // C'est soit le même utilisateur local, soit un tout nouveau joueur unique
+                    if (docSnap.exists()) {
+                        const onlineData = docSnap.data();
+                        player = { id, name: onlineData.name || name, table: onlineData.table || table, path: null, completedPaths: onlineData.completedPaths || [] };
+                    } else {
+                        player = { id, name, table, path: null, completedPaths: [] };
+                    }
                 }
             } catch(e) { 
                 console.error(e);
