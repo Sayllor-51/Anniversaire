@@ -575,22 +575,37 @@
             position: fixed;
             bottom: calc(var(--nav-h) + 4px);
             left: 0; right: 0;
-            height: 52px;
+            height: 64px;
             pointer-events: none;
             z-index: 1500;
             overflow: hidden;
         }
-        .horse {
+        /* Le groupe entier se déplace ensemble */
+        #herd-group {
             position: absolute;
             bottom: 0;
-            font-size: 1.8rem;
-            animation: galop linear forwards;
+            left: 0;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            animation: galopGroupe 2.4s cubic-bezier(.4,0,.6,1) forwards;
             will-change: transform;
         }
-        @keyframes galop {
-            0%   { transform: translateX(-15vw); opacity: 1; }
-            95%  { opacity: 1; }
-            100% { transform: translateX(110vw); opacity: 0; }
+        .horse {
+            font-size: 1.9rem;
+            line-height: 1;
+            animation: horseGalop 0.35s steps(1) infinite;
+        }
+        .horse:nth-child(even)  { animation-delay: 0.175s; margin-bottom: 4px; }
+        .horse:nth-child(3n)    { font-size: 1.5rem; margin-bottom: 1px; }
+        @keyframes galopGroupe {
+            0%   { transform: translateX(-220px); opacity: 1; }
+            85%  { opacity: 1; }
+            100% { transform: translateX(110vw);  opacity: 0; }
+        }
+        @keyframes horseGalop {
+            0%   { transform: translateY(0px); }
+            50%  { transform: translateY(-5px); }
         }
 
         /* ── BOUTON MUSIQUE ── */
@@ -627,7 +642,7 @@
 
     <!-- Musique country -->
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/audio/2025/02/28/audio_3f7f4b7071.mp3" type="audio/mpeg">
+        <source src="https://drive.google.com/uc?export=download&id=1c_6tBG3sIaBitjd6zSkQxgR4jCC21mzW" type="audio/mpeg">
     </audio>
 
     <!-- Bouton musique -->
@@ -876,35 +891,22 @@
 
         function lancerTroupeau() {
             const container = document.getElementById('herd-container');
-            // Nettoie les anciens chevaux
             container.innerHTML = '';
 
-            const count = 5 + Math.floor(Math.random() * 4); // 5 à 8 chevaux
-            const duree = 2200; // ms pour traverser l'écran
+            const group = document.createElement('div');
+            group.id = 'herd-group';
 
+            const count = 6 + Math.floor(Math.random() * 4); // 6 à 9 chevaux
+            const emojis = ['🐎','🐴','🐎','🐎','🐴','🐎','🐴','🐎','🐎'];
             for (let i = 0; i < count; i++) {
                 const horse = document.createElement('div');
                 horse.className = 'horse';
-                horse.textContent = HORSES[i % HORSES.length];
-
-                // Décalage vertical léger pour donner du relief
-                const bottomOffset = Math.floor(Math.random() * 18);
-                horse.style.bottom = bottomOffset + 'px';
-
-                // Délai échelonné entre chaque cheval
-                const delay = i * 120;
-                horse.style.animationDuration = (duree + Math.random() * 300) + 'ms';
-                horse.style.animationDelay = delay + 'ms';
-
-                // Taille légèrement variable
-                const size = 1.5 + Math.random() * 0.6;
-                horse.style.fontSize = size + 'rem';
-
-                container.appendChild(horse);
-
-                // Supprime l'élément après l'animation
-                setTimeout(() => horse.remove(), duree + delay + 400);
+                horse.textContent = emojis[i % emojis.length];
+                group.appendChild(horse);
             }
+
+            container.appendChild(group);
+            setTimeout(() => group.remove(), 2800);
         }
 
         // ── DONNÉES ───────────────────────────────────────────────
