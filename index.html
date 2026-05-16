@@ -671,10 +671,28 @@
             <div class="card">
                 <div class="card-header">
                     <span class="card-header-icon">🥔</span>
-                    <span class="card-header-title">Chips Bret's — Enfants</span>
+                    <span class="card-header-title">Chips Bret's — Série 1 (chips 1 à 8)</span>
                 </div>
                 <div class="card-body">
-                    <table class="lb-table"><tbody id="lb-chips"></tbody></table>
+                    <table class="lb-table"><tbody id="lb-chips1"></tbody></table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">🥔</span>
+                    <span class="card-header-title">Chips Bret's — Série 2 (chips 9 à 16)</span>
+                </div>
+                <div class="card-body">
+                    <table class="lb-table"><tbody id="lb-chips2"></tbody></table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-header-icon">🥩</span>
+                    <span class="card-header-title">Charcuteries — Adultes</span>
+                </div>
+                <div class="card-body">
+                    <table class="lb-table"><tbody id="lb-charcuterie"></tbody></table>
                 </div>
             </div>
         </div>
@@ -737,23 +755,84 @@
         const app = initializeApp(firebaseConfig);
         const db  = getFirestore(app);
 
+        // ─────────────────────────────────────────────────────────────────────
+        // DONNÉES — Vins avec cépages indiqués
+        // S1/S2/S3 : vins rouges (5 options, dont Grand Ribe en leurre)
+        // S4        : vins blancs (Saint-Véran correct, 4 leurres blancs)
+        // ─────────────────────────────────────────────────────────────────────
         const SERIES_TERROIR = [
-            {id:'s1',label:'Série 1',questions:[
-                {id:'f1',type:'fromage',label:'Fromage 1',options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
-                {id:'f2',type:'fromage',label:'Fromage 2',options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
-                {id:'v1',type:'vin',label:'Vin de la Série 1',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:0}]},
-            {id:'s2',label:'Série 2',questions:[
-                {id:'f3',type:'fromage',label:'Fromage 3',options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
-                {id:'f4',type:'fromage',label:'Fromage 4',options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
-                {id:'v2',type:'vin',label:'Vin de la Série 2',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:1}]},
-            {id:'s3',label:'Série 3',questions:[
-                {id:'f5',type:'fromage',label:'Fromage 5',options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
-                {id:'f6',type:'fromage',label:'Fromage 6',options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
-                {id:'v3',type:'vin',label:'Vin de la Série 3',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:2}]},
-            {id:'s4',label:'Série 4',questions:[
-                {id:'f7',type:'fromage',label:'Fromage 7',options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
-                {id:'f8',type:'fromage',label:'Fromage 8',options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
-                {id:'v4',type:'vin',label:'Vin de la Série 4',options:['1885 Pineau Noir d\'Auvergne','Côte du Forez Senelles','Croze Hermitage L\'Esquisse','Bourgogne Saint-Véran'],correct:3}]}
+            {
+                id:'s1', label:'Série 1',
+                questions:[
+                    {id:'f1',type:'fromage',label:'Fromage 1',
+                     options:['Salers','Laguiole','Cantal','Fourme d\'Ambert'],correct:2},
+                    {id:'f2',type:'fromage',label:'Fromage 2',
+                     options:['Ossau-Iraty','Tome de brebis','Tomme de Savoie','Pecorino'],correct:1},
+                    // ✓ correct : index 0 — 1885 Pineau Noir d'Auvergne (Pinot Noir)
+                    {id:'v1',type:'vin',label:'Vin de la Série 1',
+                     options:[
+                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',             // ✓ correct
+                         'Côte du Forez Senelles — Gamay',
+                         'Crozes-Hermitage L\'Esquisse — Syrah',
+                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
+                         'Saint-Joseph Les Granits — Syrah'
+                     ],correct:0}
+                ]
+            },
+            {
+                id:'s2', label:'Série 2',
+                questions:[
+                    {id:'f3',type:'fromage',label:'Fromage 3',
+                     options:['Crottin de Chavignol','Briquette du Forez','Briquette de Saint-Nizier','Picodon'],correct:2},
+                    {id:'f4',type:'fromage',label:'Fromage 4',
+                     options:['Camembert de Normandie','Chabichou du Poitou','Comté 12 mois','Comtesse de Vichy'],correct:3},
+                    // ✓ correct : index 1 — Côte du Forez Senelles (Gamay)
+                    {id:'v2',type:'vin',label:'Vin de la Série 2',
+                     options:[
+                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',
+                         'Côte du Forez Senelles — Gamay',                        // ✓ correct
+                         'Crozes-Hermitage L\'Esquisse — Syrah',
+                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
+                         'Côtes d\'Auvergne Chanturgue — Pinot Noir'
+                     ],correct:1}
+                ]
+            },
+            {
+                id:'s3', label:'Série 3',
+                questions:[
+                    {id:'f5',type:'fromage',label:'Fromage 5',
+                     options:['Murol','Reblochon','Saint-Félicien','Saint-Nectaire'],correct:3},
+                    {id:'f6',type:'fromage',label:'Fromage 6',
+                     options:['Bleu d\'Auvergne','Fourme d\'Ambert','Fourme de Montbrison','Roquefort'],correct:2},
+                    // ✓ correct : index 2 — Crozes-Hermitage L'Esquisse (Syrah)
+                    {id:'v3',type:'vin',label:'Vin de la Série 3',
+                     options:[
+                         '1885 Pineau Noir d\'Auvergne — Pinot Noir',
+                         'Côte du Forez Senelles — Gamay',
+                         'Crozes-Hermitage L\'Esquisse — Syrah',                  // ✓ correct
+                         'Grand Ribe Côtes-du-Rhône — Grenache, Syrah, Mourvèdre',  // leurre (vin du soir !)
+                         'Cornas Les Grandes Terrasses — Syrah'
+                     ],correct:2}
+                ]
+            },
+            {
+                id:'s4', label:'Série 4',
+                questions:[
+                    {id:'f7',type:'fromage',label:'Fromage 7',
+                     options:['Abondance','Beaufort','Comté 18 mois','Gruyère de Savoie'],correct:2},
+                    {id:'f8',type:'fromage',label:'Fromage 8',
+                     options:['Beaufort','Abondance','Emmental de Savoie','Tomme de Chartreuse'],correct:0},
+                    // ✓ correct : index 0 — Saint-Véran (Chardonnay, Bourgogne Mâconnais)
+                    {id:'v4',type:'vin',label:'Vin de la Série 4',
+                     options:[
+                         'Saint-Véran — Chardonnay',                              // ✓ correct
+                         'Grand Ribe Côtes-du-Rhône Blanc — Grenache Blanc, Clairette, Roussanne, Marsanne, Viognier',
+                         'Roussette de Savoie Marestel — Altesse',
+                         'Crozes-Hermitage Blanc — Marsanne, Roussanne',
+                         'Condrieu — Viognier'
+                     ],correct:0}
+                ]
+            }
         ];
 
         const CHARCUTERIES = [
@@ -771,8 +850,6 @@
 
         let player = null, answers = {}, chipsState = {}, liveScores = {};
         let dragState = { serieId: null, draggedIdx: null };
-
-        // ── Touch drag pour mobile ──
         let touchDrag = { active: false, serieId: null, fromIdx: null, ghost: null };
 
         window.showPanel = id => {
@@ -871,9 +948,18 @@
 
         async function saveTerroirScore() {
             let score = 0;
+            let charcScore = 0;
             SERIES_TERROIR.forEach(s => s.questions.forEach(q => { if (answers[q.id]===q.correct) score += q.type==='vin'?3:2; }));
-            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) score += 2; });
-            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, score, path:'terroir', done:Object.keys(answers).length, lastUpdate:Date.now() }, {merge:true});
+            CHARCUTERIES.forEach(q => { if (answers[q.id]===q.correct) { score += 2; charcScore += 2; } });
+            await setDoc(doc(db,'scores',player.id), {
+                name: player.name,
+                table: player.table,
+                score,
+                charcScore,
+                path: 'terroir',
+                done: Object.keys(answers).length,
+                lastUpdate: Date.now()
+            }, {merge:true});
         }
 
         function updateTerroirProgress() {
@@ -973,7 +1059,6 @@
                 html += `</div></div>`;
             });
 
-            // Setup drag-over on zones after render
             document.getElementById('quiz-render-area').innerHTML = html;
             CHIPS_SERIES.forEach(serie => {
                 const zone = document.getElementById('zone-' + serie.id);
@@ -1078,8 +1163,21 @@
             let score = 0;
             state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
             state.validated = true; state.score = score;
-            const total = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
-            await setDoc(doc(db,'scores',player.id), { name:player.name, table:player.table, chipsScore:total, path:'chips', lastUpdate:Date.now() }, {merge:true});
+
+            // Enregistre les scores des deux séries séparément
+            const chips1Score = chipsState['chips1']?.score || 0;
+            const chips2Score = chipsState['chips2']?.score || 0;
+            const total = chips1Score + chips2Score;
+            await setDoc(doc(db,'scores',player.id), {
+                name: player.name,
+                table: player.table,
+                chipsScore: total,
+                chips1Score,
+                chips2Score,
+                path: 'chips',
+                lastUpdate: Date.now()
+            }, {merge:true});
+
             renderChipsQuiz();
 
             const allDone = CHIPS_SERIES.every(s=>chipsState[s.id]?.validated);
@@ -1088,7 +1186,6 @@
                 const grandTotal = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
                 setTimeout(() => showRewardModal(grandTotal, 16), 600);
             } else {
-                // mini modale intermédiaire pour la série 1
                 const { emoji, msg } = getSerieReaction(score);
                 const modal = document.getElementById('serie-modal');
                 document.getElementById('serie-modal-label').textContent = serie.label + ' — Score';
@@ -1115,17 +1212,42 @@
 
         function renderLeaderboards() {
             const all = Object.values(liveScores);
-            const row = (p,i) => {
+
+            // ── Terroir adultes (score global)
+            const rowTerroir = (p,i) => {
                 const r = i+1;
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.score||0}<small style="font-size:0.6rem;opacity:0.5;">/38</small></div></td></tr>`;
             };
-            document.getElementById('lb-general').innerHTML = all.filter(p=>p.path==='terroir').sort((a,b)=>b.score-a.score).map(row).join('') || '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+            document.getElementById('lb-general').innerHTML =
+                all.filter(p=>p.path==='terroir').sort((a,b)=>b.score-a.score).map(rowTerroir).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
-            const rowC = (p,i) => {
+            // ── Chips série 1
+            const rowC1 = (p,i) => {
                 const r = i+1;
-                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chipsScore||0}<small style="font-size:0.6rem;opacity:0.5;">/16</small></div></td></tr>`;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
             };
-            document.getElementById('lb-chips').innerHTML = all.filter(p=>p.path==='chips').sort((a,b)=>(b.chipsScore||0)-(a.chipsScore||0)).map(rowC).join('') || '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+            document.getElementById('lb-chips1').innerHTML =
+                all.filter(p=>p.path==='chips' && p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+
+            // ── Chips série 2
+            const rowC2 = (p,i) => {
+                const r = i+1;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
+            };
+            document.getElementById('lb-chips2').innerHTML =
+                all.filter(p=>p.path==='chips' && p.chips2Score !== undefined).sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
+
+            // ── Charcuteries (adultes uniquement, sous-score charcuterie)
+            const rowCharc = (p,i) => {
+                const r = i+1;
+                return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.charcScore||0}<small style="font-size:0.6rem;opacity:0.5;">/10</small></div></td></tr>`;
+            };
+            document.getElementById('lb-charcuterie').innerHTML =
+                all.filter(p=>p.path==='terroir').sort((a,b)=>(b.charcScore||0)-(a.charcScore||0)).map(rowCharc).join('') ||
+                '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
         }
 
         window.closeResultModal = () => { document.getElementById('result-modal').classList.remove('active'); showPanel('leaderboard'); };
