@@ -367,18 +367,6 @@
             cursor: default;
         }
         .opt-btn.locked { cursor: default; }
-        .opt-btn { display: flex; flex-direction: column; gap: 2px; }
-        .opt-name { font-size: 0.9rem; font-weight: 500; line-height: 1.3; }
-        .opt-cepage {
-            font-family: 'Libre Baskerville', serif;
-            font-style: italic;
-            font-size: 0.72rem;
-            color: var(--ochre);
-            opacity: 0.85;
-            font-weight: 400;
-            line-height: 1.2;
-        }
-        .opt-btn.selected .opt-cepage { color: var(--ochre-l); opacity: 1; }
 
         .confirmed {
             display: inline-flex; align-items: center; gap: 5px;
@@ -638,24 +626,14 @@
                 <div class="card-body">
                     <div class="path-grid">
                         <div class="path-card" onclick="setPath('terroir')">
-                            <div class="path-card-emoji">🍷🧀</div>
+                            <div class="path-card-emoji">🍷🧀🥩</div>
                             <h3>Terroir</h3>
-                            <p>Vins &amp; Fromages<br>28 pts max</p>
+                            <p>Vins · Fromages · Charcuterie<br>38 pts max</p>
                         </div>
-                        <div class="path-card" onclick="setPath('charcuterie')">
-                            <div class="path-card-emoji">🥩</div>
-                            <h3>Charcuterie</h3>
-                            <p>5 charcuteries<br>10 pts max</p>
-                        </div>
-                        <div class="path-card" onclick="setPath('chips1')">
+                        <div class="path-card" onclick="setPath('chips')">
                             <div class="path-card-emoji">🥔</div>
-                            <h3>Chips Série 1</h3>
-                            <p>Chips 1 à 8<br>8 pts max</p>
-                        </div>
-                        <div class="path-card" onclick="setPath('chips2')">
-                            <div class="path-card-emoji">🥔</div>
-                            <h3>Chips Série 2</h3>
-                            <p>Chips 9 à 16<br>8 pts max</p>
+                            <h3>Chips Bret's</h3>
+                            <p>Parcours enfants<br>2 séries de 8</p>
                         </div>
                     </div>
                 </div>
@@ -913,18 +891,7 @@
         function renderQuiz() {
             if (!player) return;
             document.getElementById('q-player-name').textContent = `🤠 ${player.name}`;
-            if (player.path === 'terroir') renderTerroirQuiz();
-            else if (player.path === 'charcuterie') renderCharcuterieQuiz();
-            else renderChipsQuiz();
-        }
-
-        // Formate une option : si elle contient " — ", affiche le cépage en italique sous le nom
-        function formatOpt(opt) {
-            const sep = opt.indexOf(' — ');
-            if (sep === -1) return `<span class="opt-name">${opt}</span>`;
-            const nom = opt.slice(0, sep);
-            const cep = opt.slice(sep + 3);
-            return `<span class="opt-name">${nom}</span><span class="opt-cepage">${cep}</span>`;
+            player.path === 'terroir' ? renderTerroirQuiz() : renderChipsQuiz();
         }
 
         function renderTerroirQuiz() {
@@ -940,7 +907,7 @@
                     html += `<div class="q-label">${q.label}</div>`;
                     html += `<div class="opt-grid">`;
                     q.options.forEach((opt,idx) => {
-                        html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${formatOpt(opt)}</button>`;
+                        html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
                     });
                     html += `</div>`;
                     if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
@@ -948,28 +915,22 @@
                 });
                 html += `</div></div>`;
             });
-            document.getElementById('quiz-render-area').innerHTML = html;
-            updateTerroirProgress();
-        }
 
-        function renderCharcuterieQuiz() {
-            let html = '';
+            html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">Charcuteries — 2 pts chacune</span></div><div class="card-body">`;
             CHARCUTERIES.forEach((q,qi) => {
                 const ua = answers[q.id], done = ua !== undefined;
-                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥩</span><span class="card-header-title">${q.label} — 2 pts</span></div><div class="card-body">`;
                 html += `<div class="q-block">`;
+                if (qi > 0) html += `<div class="section-divider"><div class="section-divider-line"></div></div>`;
                 html += `<span class="q-badge charcuterie">🥩 Charcuterie &nbsp;·&nbsp; 2 pts</span>`;
                 html += `<div class="q-label">${q.label}</div><div class="opt-grid">`;
                 q.options.forEach((opt,idx) => {
-                    html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${formatOpt(opt)}</button>`;
+                    html += `<button class="opt-btn${done ? ' locked' + (idx===ua?' selected':'') : ''}" ${done?'':` onclick="handleVote('${q.id}',${idx})"`}>${opt}</button>`;
                 });
                 html += `</div>`;
                 if (done) html += `<div class="confirmed">Réponse enregistrée</div>`;
-                html += `</div></div></div>`;
+                html += `</div>`;
             });
-            document.getElementById('quiz-render-area').innerHTML = html;
-            updateCharcuterieProgress();
-        }
+            html += `</div></div>`;
 
             document.getElementById('quiz-render-area').innerHTML = html;
             updateTerroirProgress();
@@ -1066,59 +1027,57 @@
         }
 
         function renderChipsQuiz() {
-            // Determine which series to show based on path
-            const serieId = player.path; // 'chips1' or 'chips2'
-            const serie = CHIPS_SERIES.find(s => s.id === serieId);
-            if (!serie) return;
+            let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide chaque série.</p></div></div>`;
 
-            let html = `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">Chips Bret's — Remets dans l'ordre !</span></div><div class="card-body"><p class="chips-hint">Appuie longuement et fais glisser les étiquettes pour remettre les chips dans l'ordre exact, puis valide la série.</p></div></div>`;
+            CHIPS_SERIES.forEach(serie => {
+                if (!chipsState[serie.id]) {
+                    let shuffled;
+                    do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
+                    while (shuffled.every((v,i) => v === serie.correctOrder[i]));
+                    chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
+                }
+                const state = chipsState[serie.id];
+                html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
 
-            if (!chipsState[serie.id]) {
-                let shuffled;
-                do { shuffled = [...serie.correctOrder].sort(()=>Math.random()-0.5); }
-                while (shuffled.every((v,i) => v === serie.correctOrder[i]));
-                chipsState[serie.id] = { order:shuffled, validated:false, score:0 };
-            }
-            const state = chipsState[serie.id];
-            html += `<div class="card"><div class="card-header"><span class="card-header-icon">🥔</span><span class="card-header-title">${serie.label}</span></div><div class="card-body">`;
-
-            if (state.validated) {
-                html += `<div class="chips-zone">`;
-                state.order.forEach((item,i) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${i+1}</span><span>${item}</span></div>`);
-                html += `</div><div class="chips-score-box"><div class="score-n">${state.score}</div><div class="score-lbl">points sur 8</div></div>`;
-            } else {
-                html += `<div class="chips-zone" id="zone-${serie.id}">`;
-                state.order.forEach((item,i) => {
-                    html += `<div class="chip-item" draggable="true" data-serie="${serie.id}" data-idx="${i}"
-                        ondragstart="handleDragStart(event,'${serie.id}',${i})"
-                        ondragend="handleDragEnd()"
-                        ontouchstart="handleTouchStart(event,'${serie.id}',${i})"
-                        ontouchmove="handleTouchMove(event,'${serie.id}')"
-                        ontouchend="handleTouchEnd(event,'${serie.id}')">`;
-                    html += `<span class="drag-handle">⠿</span><span class="chip-num">${i+1}</span><span>${item}</span></div>`;
-                });
-                html += `</div><button class="btn-danger" onclick="validateChipsSerie('${serie.id}')">Valider cette série</button>`;
-            }
-            html += `</div></div>`;
+                if (state.validated) {
+                    html += `<div class="chips-zone">`;
+                    state.order.forEach((item,i) => html += `<div class="chip-item validated-neutral"><span class="chip-num">${i+1}</span><span>${item}</span></div>`);
+                    html += `</div><div class="chips-score-box"><div class="score-n">${state.score}</div><div class="score-lbl">points sur 8</div></div>`;
+                } else {
+                    html += `<div class="chips-zone" id="zone-${serie.id}">`;
+                    state.order.forEach((item,i) => {
+                        html += `<div class="chip-item" draggable="true" data-serie="${serie.id}" data-idx="${i}"
+                            ondragstart="handleDragStart(event,'${serie.id}',${i})"
+                            ondragend="handleDragEnd()"
+                            ontouchstart="handleTouchStart(event,'${serie.id}',${i})"
+                            ontouchmove="handleTouchMove(event,'${serie.id}')"
+                            ontouchend="handleTouchEnd(event,'${serie.id}')">`;
+                        html += `<span class="drag-handle">⠿</span><span class="chip-num">${i+1}</span><span>${item}</span></div>`;
+                    });
+                    html += `</div><button class="btn-danger" onclick="validateChipsSerie('${serie.id}')">Valider cette série</button>`;
+                }
+                html += `</div></div>`;
+            });
 
             document.getElementById('quiz-render-area').innerHTML = html;
-            const zone = document.getElementById('zone-' + serie.id);
-            if (zone) {
-                zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-                zone.addEventListener('drop', e => handleDrop(e, serie.id));
-                zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-            }
+            CHIPS_SERIES.forEach(serie => {
+                const zone = document.getElementById('zone-' + serie.id);
+                if (zone) {
+                    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+                    zone.addEventListener('drop', e => handleDrop(e, serie.id));
+                    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+                }
+            });
             updateChipsProgress();
         }
 
         function updateChipsProgress() {
-            const serieId = player.path;
-            const state = chipsState[serieId];
-            const done = state?.validated ? 1 : 0;
+            const done = Object.values(chipsState).filter(s=>s.validated).length;
+            const pct = Math.round(done/2*100);
             document.getElementById('q-done-count').textContent = done;
-            document.getElementById('q-total-count').textContent = 1;
-            document.getElementById('q-percent').textContent = (done * 100) + '%';
-            document.getElementById('q-main-fill').style.width = (done * 100) + '%';
+            document.getElementById('q-total-count').textContent = 2;
+            document.getElementById('q-percent').textContent = pct + '%';
+            document.getElementById('q-main-fill').style.width = pct + '%';
         }
 
         // ── Desktop drag ──
@@ -1205,20 +1164,50 @@
             state.order.forEach((item,i) => { if (item===serie.correctOrder[i]) score++; });
             state.validated = true; state.score = score;
 
+            // Enregistre les scores des deux séries séparément
             const chips1Score = chipsState['chips1']?.score || 0;
             const chips2Score = chipsState['chips2']?.score || 0;
-            const chipsScoreKey = serieId === 'chips1' ? 'chips1Score' : 'chips2Score';
+            const total = chips1Score + chips2Score;
             await setDoc(doc(db,'scores',player.id), {
                 name: player.name,
                 table: player.table,
-                [chipsScoreKey]: score,
-                path: serieId,
+                chipsScore: total,
+                chips1Score,
+                chips2Score,
+                path: 'chips',
                 lastUpdate: Date.now()
             }, {merge:true});
 
             renderChipsQuiz();
-            // Toujours afficher la modale finale (chaque série est indépendante)
-            setTimeout(() => showRewardModal(score, 8), 600);
+
+            const allDone = CHIPS_SERIES.every(s=>chipsState[s.id]?.validated);
+
+            if (allDone) {
+                const grandTotal = Object.values(chipsState).reduce((a,s)=>a+(s.score||0),0);
+                setTimeout(() => showRewardModal(grandTotal, 16), 600);
+            } else {
+                const { emoji, msg } = getSerieReaction(score);
+                const modal = document.getElementById('serie-modal');
+                document.getElementById('serie-modal-label').textContent = serie.label + ' — Score';
+                document.getElementById('serie-modal-score').textContent = score;
+                document.getElementById('serie-modal-emoji').textContent = emoji;
+                document.getElementById('serie-modal-message').textContent = msg;
+                modal.classList.remove('active');
+                void modal.offsetWidth;
+                setTimeout(() => {
+                    modal.classList.add('active');
+                    triggerModalAnims(
+                        document.getElementById('serie-modal-score'),
+                        document.getElementById('serie-modal-emoji'),
+                        document.getElementById('serie-modal-message')
+                    );
+                    if (score === 8) {
+                        confetti({ particleCount:120, spread:70, origin:{y:0.6}, colors:['#b8832a','#f5ead6','#ffd700'] });
+                    } else if (score >= 5) {
+                        confetti({ particleCount:60, spread:50, origin:{y:0.6}, colors:['#b8832a','#7c2d12'] });
+                    }
+                }, 400);
+            }
         };
 
         function renderLeaderboards() {
@@ -1239,7 +1228,7 @@
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips1Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
             };
             document.getElementById('lb-chips1').innerHTML =
-                all.filter(p=>p.path==='chips1').sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
+                all.filter(p=>p.path==='chips' && p.chips1Score !== undefined).sort((a,b)=>(b.chips1Score||0)-(a.chips1Score||0)).map(rowC1).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
             // ── Chips série 2
@@ -1248,7 +1237,7 @@
                 return `<tr><td><span class="rank${r===1?' gold':''}">${r}</span></td><td><div class="lb-name">${p.name}</div><div class="lb-team">${p.table||''}</div></td><td><div class="lb-score">${p.chips2Score||0}<small style="font-size:0.6rem;opacity:0.5;">/8</small></div></td></tr>`;
             };
             document.getElementById('lb-chips2').innerHTML =
-                all.filter(p=>p.path==='chips2').sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
+                all.filter(p=>p.path==='chips' && p.chips2Score !== undefined).sort((a,b)=>(b.chips2Score||0)-(a.chips2Score||0)).map(rowC2).join('') ||
                 '<tr><td colspan="3" style="text-align:center;opacity:0.5;padding:1rem;font-size:0.82rem;">Aucun participant pour l\'instant</td></tr>';
 
             // ── Charcuteries (adultes uniquement, sous-score charcuterie)
